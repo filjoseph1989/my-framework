@@ -1,0 +1,7 @@
+User-agent: proximic
+User-agent: grapeshot
+Disallow: /
+User-agent: *
+Allow: /$
+Allow: /rank-checker$
+Disallow: /login

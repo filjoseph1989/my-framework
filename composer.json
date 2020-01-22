@@ -1,0 +1,12 @@
+{
+    "name": "personal/project",
+    "require": {
+        "eftec/bladeone": "^3.33",
+        "vlucas/phpdotenv": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\Model\\": "core/model/"
+        }
+    }
+}

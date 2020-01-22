@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    RewriteRule ^([-\w]+)/([-\w]+)/([-\w]+)/([-\w]+)?$ /index.php?view=$1&mode=$2&id=$3&other=$4 [L,QSA]
+    RewriteRule ^([-\w]+)/([-\w]+)/([-\w]+)/?$ /index.php?view=$1&mode=$2&id=$3 [L,QSA]
+    RewriteRule ^([-\w]+)/([-\w]+)/?$ /index.php?view=$1&mode=$2 [L,QSA]
+    RewriteRule ^([-\w]+)/?$ /index.php?view=$1 [L,QSA]
+</IfModule>
