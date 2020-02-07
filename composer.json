@@ -6,7 +6,9 @@
     },
     "autoload": {
         "psr-4": {
-            "Core\\Model\\": "core/model/"
+            "App\\": "app/",
+            "Core\\": "core/",
+            "Core\\Exceptions\\": "core/Exceptions/"
         }
     }
 }

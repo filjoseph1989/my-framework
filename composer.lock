@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "eftec/bladeone",
-            "version": "3.33",
+            "version": "3.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/EFTEC/BladeOne.git",
-                "reference": "9f58d25858850dd64164a7486c2fe45e2b652867"
+                "reference": "257b1b4cd4e8ac3298918f0ec9938bc103232718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/9f58d25858850dd64164a7486c2fe45e2b652867",
-                "reference": "9f58d25858850dd64164a7486c2fe45e2b652867",
+                "url": "https://api.github.com/repos/EFTEC/BladeOne/zipball/257b1b4cd4e8ac3298918f0ec9938bc103232718",
+                "reference": "257b1b4cd4e8ac3298918f0ec9938bc103232718",
                 "shasum": ""
             },
             "require": {
@@ -35,7 +35,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.33-dev"
+                    "dev-master": "3.34-dev"
                 }
             },
             "autoload": {
@@ -62,7 +62,7 @@
                 "templating",
                 "view"
             ],
-            "time": "2019-12-21T12:33:13+00:00"
+            "time": "2020-01-27T15:07:00+00:00"
         },
         {
             "name": "phpoption/phpoption",
