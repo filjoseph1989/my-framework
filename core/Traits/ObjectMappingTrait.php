@@ -21,7 +21,7 @@ trait ObjectMappingTrait
             $rows = $this->database
                 ->select(strtolower($this->table), ['*'])
                 ->whereArray([
-                    "column"    => $this->PrimaryKey,
+                    "column"    => $this->primaryKey,
                     "value"     => $arguments[0],
                     "condition" => "=",
                 ])

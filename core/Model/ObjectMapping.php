@@ -17,9 +17,9 @@ class ObjectMapping implements ObjectMappingInterface
 
     public object $model;
 
-    protected string $table = '';
-    protected string $PrimaryKey = '';
-    protected array  $ForeignKeys = [];
+    protected string $table      = '';
+    protected string $primaryKey  = '';
+    protected array $foreignKeys = [];
     protected object $database;
 
     /**
@@ -33,8 +33,8 @@ class ObjectMapping implements ObjectMappingInterface
         $this->table = $this->model->table;
 
         $this->database    = new Database();
-        $this->PrimaryKey  = $this->database->getPrimaryKey(strtolower($this->table));
-        $this->ForeignKeys = $this->database->getForeignKey(strtolower($this->table));
+        $this->primaryKey  = $this->database->getPrimaryKey(strtolower($this->table));
+        $this->foreignKeys = $this->database->getForeignKey(strtolower($this->table));
     }
 
     /**
@@ -94,7 +94,8 @@ class ObjectMapping implements ObjectMappingInterface
     private function relation(array $rows)
     {
         $relations = [];
-        foreach ($this->ForeignKeys as $key => $foreignKey) {
+
+        foreach ($this->foreignKeys as $key => $foreignKey) {
             $relations[$foreignKey] = $rows[0][$foreignKey];
         }
 
