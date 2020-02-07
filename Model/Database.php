@@ -12,15 +12,20 @@ class Database
      * @var [string] $User
      * @var [string] $Password
      * @var [mysqli] $Instance
+     * @var boolean  $connected
      */
-    protected string $Host = '';
-    protected string $Port = '';
-    protected string $Database = '';
-    protected string $User = '';
-    protected string $Password = '';
+    protected string $Host      = '';
+    protected string $Port      = '';
+    protected string $Database  = '';
+    protected string $User      = '';
+    protected string $Password  = '';
     protected object $Instance;
-    protected string $sql = '';
+    protected string $sql       = '';
+    protected bool   $connected = false;
 
+    /**
+     * Initiate database
+     */
     public function __construct()
     {
         // Task 1: Used enironment variable here
@@ -31,6 +36,8 @@ class Database
         $this->Password = getenv("DB_PASSWORD");
         $this->Database = getenv("DB_DATABASE");
         $this->Port     = getenv("DB_PORT");
+
+        self::connect();
     }
 
     /**
@@ -41,15 +48,29 @@ class Database
      */
     public function connect()
     {
-        $con = mysqli_connect($this->Host, $this->User, $this->Password, $this->Database, $this->Port);
+        $con = mysqli_connect(
+            $this->Host,
+            $this->User,
+            $this->Password,
+            $this->Database,
+            $this->Port
+        );
 
         if (mysqli_connect_errno()) {
             die($this->getError());
         } else {
             $this->Instance = $con;
+            $this->connected = true;
         }
+    }
 
-        return $this->Instance;
+    /**
+     * Check if database connected
+     * @return boolean
+     */
+    public function isConnected()
+    {
+        return $this->connected;
     }
 
     /**
@@ -73,12 +94,15 @@ class Database
      */
     public function getPrimaryKey(string $table)
     {
-        self::connect();
-        $this->sql = "SHOW COLUMNS FROM " . $table . ";";
+        $this->sql = "SHOW COLUMNS FROM {$table};";
         $results   = $this->Instance->query($this->sql);
+
+        if ($results === false) {
+            return false;
+        }
+
         foreach ($results as $row) {
             if ($row["Key"] == "PRI") {
-                self::unconnect();
                 return $row["Field"];
             }
         }
@@ -99,6 +123,10 @@ class Database
         $this->sql = "SHOW CREATE TABLE " . $table;
         $results   = $this->Instance->query($this->sql);
 
+        if ($results === false) {
+            return false;
+        }
+
         while ($row = $results->fetch_assoc()) {
             $fk_array[] = $row;
         }
@@ -112,7 +140,6 @@ class Database
             }
         }
 
-        self::unconnect();
         return $return;
     }
 
@@ -127,11 +154,14 @@ class Database
         return $this;
     }
 
+    /**
+     * Return query result
+     *
+     * @return mixed
+     */
     public function get()
     {
         $this->sql .= ";";
-
-        self::connect();
 
         $results = $this->Instance->query($this->sql);
 
@@ -146,8 +176,6 @@ class Database
         array_walk_recursive($return, function (&$item, $key) {
             $item = html_entity_decode(utf8_decode($item));
         });
-
-        self::unconnect();
 
         return $return;
     }
@@ -168,6 +196,7 @@ class Database
         $where["value"] = "{$where["value"]}";
         $where["value"] = htmlentities(utf8_encode($where["value"]));
         $this->sql     .= " WHERE {$where["column"]} {$where["condition"]} {$where["value"]}";
+
         return $this;
     }
 
