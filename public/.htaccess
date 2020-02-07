@@ -1,9 +1,19 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
 
-    RewriteRule ^([-\w]+)/([-\w]+)/([-\w]+)/([-\w]+)?$ /index.php?view=$1&mode=$2&id=$3&other=$4 [L,QSA]
-    RewriteRule ^([-\w]+)/([-\w]+)/([-\w]+)/?$ /index.php?view=$1&mode=$2&id=$3 [L,QSA]
-    RewriteRule ^([-\w]+)/([-\w]+)/?$ /index.php?view=$1&mode=$2 [L,QSA]
-    RewriteRule ^([-\w]+)/?$ /index.php?view=$1 [L,QSA]
+    Options +FollowSymlinks
+
+    RewriteEngine On
+
+    # Redirect Trailing Slashes If Not A Folder...
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} (.+)/$
+    RewriteRule ^ %1 [L,R=301]
+
+    # Any uri pattern will be handled by index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
 </IfModule>
