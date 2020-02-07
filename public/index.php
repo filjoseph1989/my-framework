@@ -8,11 +8,14 @@ define('START', microtime(true));
 
 require __DIR__ . '/../vendor/autoload.php';
 
-Use eftec\bladeone\BladeOne;
+putenv('DB_HOST=127.0.0.1');
+putenv('DB_USERNAME=root');
+putenv('DB_PASSWORD=password');
+putenv('DB_DATABASE=crateclub2');
+putenv('DB_PORT=3306');
 
-$views = __DIR__ . '/../views';
-$cache = __DIR__ . '/../cache';
+$app = new Core\App;
 
-$blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
+$app->get('/', ['HomeController', 'index']);
 
-echo $blade->run("index", array("name" => "Fil Joseph"));
+$app->run();
