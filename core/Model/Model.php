@@ -3,6 +3,7 @@
 namespace Core\model;
 
 use Core\Model\ObjectMapping;
+use Core\Traits\DebugTrait;
 use Core\Traits\ModelTrait;
 
 /**
@@ -13,6 +14,7 @@ use Core\Traits\ModelTrait;
 class Model
 {
     use ModelTrait;
+    use DebugTrait;
 
     /**
      * The mapping object
