@@ -1,0 +1,33 @@
+.card {
+    @apply p-3;
+    @apply rounded;
+    @apply shadow;
+    @apply border;
+    @apply border-gray-500;
+    @apply bg-white;
+
+    .card-container {
+        display: grid;
+        grid-template-columns: 25px 1fr;
+        @apply h-full;
+        @apply w-full;
+    }
+
+    .card-left {
+        @apply border-r;
+    }
+
+    .card-right {
+        @apply pl-2;
+
+        .card-footer {
+            a {
+                svg {
+                    @apply text-teal-600;
+                    position: relative;
+                }
+            }
+        }
+    }
+
+}

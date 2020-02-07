@@ -1,0 +1,23 @@
+.content {
+    background-color: #f7f7f7;    
+}
+
+.content-container {
+    display: grid;
+
+    @media (min-width: 960px) {
+        grid-template-columns: 70% 30%;
+    }
+
+    .menu {
+        position: relative;
+
+        @media (max-width: 959px) {
+            display: none;
+        }
+    }
+
+    & > div {
+        margin-top: 20px;
+    }
+}
