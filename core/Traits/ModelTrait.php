@@ -20,6 +20,7 @@ trait ModelTrait
     public function where($columnName, $value)
     {
         $this->wheres[$columnName] = $value;
+
         return $this;
     }
 
@@ -40,8 +41,6 @@ trait ModelTrait
      */
     public function get()
     {
-        # mao ni motawag og query builder tapos ipasa ang query
-        # sa object mapper
         return $this->mapper->get($this->wheres);
     }
 }
