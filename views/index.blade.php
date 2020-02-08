@@ -53,6 +53,9 @@
                                     <a class="text-teal-500" target="_blank" href="https://www.php.net/">php 7.4</a>
                                 </li>
                                 <li class="list-decimal ml-4">
+                                    <a class="text-teal-500" target="_blank" href="https://xdebug.org/">xdebug</a>
+                                </li>
+                                <li class="list-decimal ml-4">
                                     <a class="text-teal-500" target="_blank" href="https://nodejs.org/en/">nodejs</a>
                                 </li>
                                 <li class="list-decimal ml-4">
@@ -77,9 +80,10 @@
                         </div>
 
                         <div class="bg-gray-100 card p-3 mt-3 rounded shadow">
-                            <h2 class="text-2xl">Wanted features:</h2>
+                            <h2 class="text-2xl">Wanted to have with in the documentation:</h2>
                             <ul>
                                 <li class="list-decimal ml-4">Dynamically update this doc</li>
+                                <li class="list-decimal ml-4">Guide for installing xdebug in ubuntu</li>
                             </ul>
                         </div>
 
