@@ -23,6 +23,12 @@ class ObjectMapping implements ObjectMappingInterface
     protected object $database;
 
     /**
+     * Rows container
+     * @var array
+     */
+    protected array $rows = [];
+
+    /**
      * Initiate object mapping
      *
      * @param object $object The model object
