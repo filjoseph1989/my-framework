@@ -14,14 +14,15 @@ class Database
      * @var [mysqli] $Instance
      * @var boolean  $connected
      */
-    protected string $Host      = '';
-    protected string $Port      = '';
-    protected string $Database  = '';
-    protected string $User      = '';
-    protected string $Password  = '';
+    protected string $Host     = '';
+    protected string $Port     = '';
+    protected string $Database = '';
+    protected string $User     = '';
+    protected string $Password = '';
     protected object $Instance;
-    protected string $sql       = '';
-    protected bool   $connected = false;
+    protected string $sql      = '';
+    protected bool $connected  = false;
+    protected int $rows_count  = 0;
 
     /**
      * Initiate database
@@ -38,6 +39,33 @@ class Database
         $this->Port     = getenv("DB_PORT");
 
         self::connect();
+    }
+
+    /**
+     * Run direct query
+     *
+     * @param  string $query
+     * @return mixed
+     */
+    public function query(string $query)
+    {
+        $results = $this->Instance->query($query);
+
+        if ($results !== false) {
+            return $results;
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the count of rows from previous query
+     *
+     * @return int
+     */
+    public function count()
+    {
+        return $this->Instance->affected_rows;
     }
 
     /**
@@ -116,8 +144,6 @@ class Database
      */
     public function getForeignKey(string $table)
     {
-        self::connect();
-
         $fk_array  = [];
         $return    = [];
         $this->sql = "SHOW CREATE TABLE " . $table;
@@ -143,6 +169,13 @@ class Database
         return $return;
     }
 
+    /**
+     * Generate a select string
+     *
+     * @param  string $table
+     * @param  array  $columns
+     * @return object
+     */
     public function select(string $table, array $columns)
     {
         $this->sql = "SELECT ";
@@ -180,7 +213,6 @@ class Database
         return $return;
     }
 
-
     /**
      * Implements where condition
      *
@@ -200,6 +232,9 @@ class Database
         return $this;
     }
 
+    /**
+     * Issue 24: Is this being used?
+     */
     private function getError()
     {
         return "<br/>" . $this->sql . "<br/> SQL Exception #" . $this->Instance->errno . " : " . $this->Instance->error . "<br/>";
