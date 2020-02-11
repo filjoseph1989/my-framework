@@ -58,14 +58,12 @@ trait ObjectMappingTrait
     {
         if ($this->database->isConnected()) {
             $wheres  = self::prepareWhere($wheres);
-            $query   = "select * from {$this->table} where {$wheres};";
+            $query   = self::prepareSelect($wheres);
             $results = $this->database->query($query);
 
             $count = $this->database->count();
 
             if ($count == -1 || $count == 0) {
-                // Issue 25: redirect to 500 and throw new \Exception("Error Processing Request", 1);
-                echo "Not found exception";
                 return null;
             }
 
@@ -73,6 +71,17 @@ trait ObjectMappingTrait
                 $this->rows[] = (object) $row;
             }
         }
+    }
+
+    /**
+     * Prepare select
+     *
+     * @param  string $wheres
+     * @return string
+     */
+    private function prepareSelect(string $wheres)
+    {
+        return "select * from {$this->table} where {$wheres};";
     }
 
     /**
