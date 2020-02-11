@@ -2,11 +2,19 @@
 
 namespace Core;
 
+use Core\Exceptions\InvalidRouteArgumentException;
+use Core\Request\Request;
+use Core\Traits\DebugTrait;
+
 /**
  * @author Fil Beluan
  */
 class App extends Core
 {
+    use DebugTrait;
+
+    private object $container;
+
     /**
      * Initiate app instance
      */
@@ -31,6 +39,8 @@ class App extends Core
      */
     public function run()
     {
+        session_start();
+
         $router = $this->container->router;
 
         $router->setUri($_SERVER['REQUEST_URI']);
@@ -39,10 +49,7 @@ class App extends Core
 
         $handler = $router->getHandler();
 
-        $response = $this->route($handler);
-
-        # Task 20: Study more on this especially for api, and post method
-        // echo $this->respond($response);
+        self::route($handler);
     }
 
     /**
@@ -58,6 +65,18 @@ class App extends Core
     }
 
     /**
+     * Register a post route
+     *
+     * @param  string $uri
+     * @param  array  $handler
+     * @return void
+     */
+    public function post($uri, $handler)
+    {
+        $this->container->router->registerRoute($uri, $handler, 'POST');
+    }
+
+    /**
      * call the controller
      *
      * @param  array $handler
@@ -70,13 +89,19 @@ class App extends Core
             $handler[0] = new $class($this);
         }
 
+        /*
         if ( ! is_callable($handler)) {
+            # Issue 26: Should specify the kind of error message
             throw new InvalidRouteArgumentException;
         }
+         */
 
         # Call the controller and passed parameters
         # Task 22: Check first what method is the request
-        return call_user_func($handler, $this);
+        # Issue 27: here nag pass ko og request instance, pero, what daghan parameter required sa method?
+        # Issue 28: can be use call_user_func_array instead
+        # Issue 29: There should be a function that determined of the router required parameters
+        return call_user_func($handler, (new Request));
     }
 
     /**
@@ -88,6 +113,9 @@ class App extends Core
      */
     public function view(string $view, $data = [])
     {
+        $user = $_SESSION['user'] ?? null;
+        $data['user'] = $user;
+
         return $this->container->response->view($view, $data);
     }
 }
