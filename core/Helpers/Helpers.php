@@ -1,7 +1,25 @@
 <?php
 
 /**
- | Display the lines traverse by php execution
+ * Check if the user is login
+ *
+ * @return boolean
+ */
+if (!function_exists('isLogin')) {
+    function isLogin()
+    {
+        if (isset($_SESSION['login'])) {
+            return true;
+        }
+
+        return false;
+    }
+}
+
+/**
+ * Display the lines traverse by php execution
+ *
+ * @param boolean $return
  */
 if (! function_exists('trace')) {
     function trace($return = false)
