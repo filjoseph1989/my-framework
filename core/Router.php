@@ -3,12 +3,15 @@
 namespace Core;
 
 use Core\Exceptions\RouteNotFoundException;
+use Core\Traits\DebugTrait;
 
 /**
  * @author Fil Beluan
  */
 class Router
 {
+    use DebugTrait;
+
     /**
      * URI string
      * @var string
@@ -67,6 +70,16 @@ class Router
     public function setAction($action)
     {
         $this->requestMethod = $action;
+    }
+
+    /**
+     * Return request method
+     *
+     * @param string
+     */
+    public function getAction()
+    {
+        return $this->requestMethod;
     }
 
     /**
