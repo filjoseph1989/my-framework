@@ -53,7 +53,12 @@ trait DebugTrait
      */
     public function dumpWheres()
     {
-        var_dump($this->wheres);
+        if (isset($this->wheres)) {
+            var_dump($this->wheres);
+            exit;
+        }
+
+        echo "Not found exception";
         exit;
     }
 }
