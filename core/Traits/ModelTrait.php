@@ -43,4 +43,15 @@ trait ModelTrait
     {
         return $this->mapper->get($this->wheres);
     }
+
+    /**
+     * Return the first index of the array
+     *
+     * @return object
+     */
+    public function first()
+    {
+        $data = self::get();
+        return array_shift($data);
+    }
 }
