@@ -95,6 +95,9 @@ trait ObjectMappingTrait
         $whereQuery = [];
 
         foreach ($wheres as $key => $value) {
+            $value = trim($value, " \t\n\r\0\x0B");
+            $value = $this->database->scape($value);
+
             $whereQuery[] = "$key='$value'";
         }
 
