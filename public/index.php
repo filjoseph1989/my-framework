@@ -16,6 +16,6 @@ putenv('DB_PORT=3306');
 
 $app = new Core\App;
 
-$app->get('/', ['HomeController', 'index']);
+require __DIR__ . '/../route/route.php';
 
 $app->run();
