@@ -59,6 +59,17 @@ class Database
     }
 
     /**
+     * Scape given
+     *
+     * @param  string $value
+     * @return string
+     */
+    public function scape(string $value = '')
+    {
+        return $this->Instance->real_escape_string($value);
+    }
+
+    /**
      * Return the count of rows from previous query
      *
      * @return int
