@@ -30,7 +30,6 @@ class Request
         # Task 2:
         # Todo 1:
         # validate, trim, sanitize and scape mysql string
-
         $this->postData = $_POST;
 
         self::setProperty();
