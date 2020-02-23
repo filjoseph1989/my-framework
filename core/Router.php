@@ -3,6 +3,7 @@
 namespace Core;
 
 use Core\Exceptions\RouteNotFoundException;
+use Core\Exceptions\MethodNotAllowedException;
 use Core\Traits\DebugTrait;
 
 /**

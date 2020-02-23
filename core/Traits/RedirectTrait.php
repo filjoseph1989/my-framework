@@ -21,11 +21,13 @@ trait RedirectTrait
             return $this;
         }
 
-        self::to($to);
+        return self::to($to);
     }
 
     /**
      * Set session
+     *
+     * Issue 31
      *
      * @param  array  $withs
      * @return void
@@ -47,6 +49,10 @@ trait RedirectTrait
      */
     protected function to($to = '/')
     {
+        if ($this->app()->isTest()) {
+            return $_SESSION;
+        }
+
         ob_start();
         header('Location: ' . $to);
         ob_end_flush();

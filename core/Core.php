@@ -29,7 +29,7 @@ class Core {
      * Task 21: Review this, if this is really working
      */
     private function set_reporting() {
-        if ('127.0.0.1' == $_SERVER["REMOTE_ADDR"] || '::1' == $_SERVER["REMOTE_ADDR"]) {
+        if (isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])) {
             error_reporting(E_ALL);
             ini_set('display_errors','On');
             defined('ERROR_REPORTING') or define('ERROR_REPORTING', 'ON');
@@ -37,7 +37,7 @@ class Core {
             error_reporting(E_ALL);
             ini_set('display_errors','Off');
             ini_set('log_errors', 'On');
-            ini_set('error_log', ROOT_PATH . DS .'log'); # Task 19 Defined ROOT_PATH and DS contants
+            // ini_set('error_log', ROOT_PATH . DS .'log'); # Task 19 Defined ROOT_PATH and DS contants
             defined('ERROR_REPORTING') or define('ERROR_REPORTING', 'OFF');
         }
     }

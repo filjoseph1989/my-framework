@@ -8,12 +8,6 @@ define('START', microtime(true));
 
 require __DIR__ . '/../vendor/autoload.php';
 
-putenv('DB_HOST=127.0.0.1');
-putenv('DB_USERNAME=root');
-putenv('DB_PASSWORD=password');
-putenv('DB_DATABASE=crateclub2');
-putenv('DB_PORT=3306');
-
 $app = new Core\App;
 
 require __DIR__ . '/../route/route.php';

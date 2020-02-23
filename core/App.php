@@ -13,7 +13,29 @@ class App extends Core
 {
     use DebugTrait;
 
+    /**
+     * Application container
+     * @var object
+     */
     private object $container;
+
+    /**
+     * Setting for testing mode
+     * @var boolean
+     */
+    private $test;
+
+    /**
+     * URI Container
+     * @var string
+     */
+    private string $uri = '';
+
+    /**
+     * Container for request method (get/post) to be call
+     * @var string
+     */
+    private string $action = '';
 
     /**
      * Initiate app instance
@@ -39,17 +61,69 @@ class App extends Core
      */
     public function run()
     {
-        session_start();
-
         $router = $this->container->router;
 
-        $router->setUri($_SERVER['REQUEST_URI']);
+        $router->setUri(self::getUri());
 
-        $router->setAction($_SERVER['REQUEST_METHOD']);
+        $router->setAction(self::getAction());
 
         $handler = $router->getHandler();
 
-        self::route($handler);
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+
+        self::setEnv();
+
+        return self::route($handler);
+    }
+
+    /**
+     * Set URI, used by testing
+     *
+     * @param string $uri
+     */
+    public function setUri(string $uri = '')
+    {
+        $this->uri = $uri;
+    }
+
+    /**
+     * Return URI
+     *
+     * @return string
+     */
+    public function getUri()
+    {
+        if (empty($this->uri)) {
+            return $_SERVER['REQUEST_URI'] ?? '/';
+        }
+
+        return $this->uri;
+    }
+
+    /**
+     * Set the request method
+     *
+     * @param string $action
+     */
+    public function setAction(string $action = '')
+    {
+        $this->action = $action;
+    }
+
+    /**
+     * Return action
+     *
+     * @return string
+     */
+    public function getAction()
+    {
+        if (empty($this->action)) {
+            return $_SERVER['REQUEST_METHOD'] ?? 'index';
+        }
+
+        return $this->action;
     }
 
     /**
@@ -61,6 +135,10 @@ class App extends Core
      */
     public function get($uri, $handler)
     {
+        if (self::isTest()) {
+            self::setAction('GET');
+        }
+
         $this->container->router->registerRoute($uri, $handler, 'GET');
     }
 
@@ -73,6 +151,10 @@ class App extends Core
      */
     public function post($uri, $handler)
     {
+        if (self::isTest()) {
+            self::setAction('POST');
+        }
+
         $this->container->router->registerRoute($uri, $handler, 'POST');
     }
 
@@ -113,9 +195,75 @@ class App extends Core
      */
     public function view(string $view, $data = [])
     {
-        $user = $_SESSION['user'] ?? null;
-        $data['user'] = $user;
+        self::setAuth($data);
+
+        if (self::isTest()) {
+            return $data;
+        }
 
         return $this->container->response->view($view, $data);
+    }
+
+    /**
+     * Set mode
+     *
+     * @param  boolean $testing
+     * @return void
+     */
+    public function mode($mode = '')
+    {
+        if ($mode == 'testing') {
+            $this->test = true;
+        }
+    }
+
+    /**
+     * Visit route
+     *
+     * @param  string $uri
+     * @param  string $action
+     * @return void
+     */
+    public function visit(string $uri = '')
+    {
+        self::setUri($uri);
+    }
+
+    /**
+     * Set auth data
+     *
+     * @param void
+     */
+    private function setAuth(&$data)
+    {
+        $data['user'] = $_SESSION['user'] ?? null;;
+    }
+
+    /**
+     * Check if environment is testing
+     *
+     * @return boolean
+     */
+    public function isTest()
+    {
+        if ($this->test === true) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Set database setting
+     *
+     * Issue 30
+     */
+    private function setEnv()
+    {
+        putenv('DB_HOST=127.0.0.1');
+        putenv('DB_USERNAME=root');
+        putenv('DB_PASSWORD=password');
+        putenv('DB_DATABASE=crateclub2');
+        putenv('DB_PORT=3306');
     }
 }
