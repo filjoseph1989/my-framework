@@ -50,6 +50,9 @@ class App extends Core
             },
             'response' => function () {
                 return new Response;
+            },
+            'request' => function () {
+                return new Request;
             }
         ]);
     }
@@ -76,6 +79,31 @@ class App extends Core
         self::setEnv();
 
         return self::route($handler);
+    }
+
+    /**
+     * call the controller
+     *
+     * @param  array $handler
+     * @return object
+     */
+    public function route($handler)
+    {
+        if (is_array($handler)) {
+            $class = "\\App\\Controllers\\{$handler[0]}";
+            $handler[0] = new $class($this);
+        }
+
+        if ( ! is_callable($handler)) {
+            throw new InvalidRouteArgumentException;
+        }
+
+        # Call the controller and passed parameters
+        # Task 22: Check first what method is the request
+        # Issue 27: here nag pass ko og request instance, pero, what daghan parameter required sa method?
+        # Issue 28: can be use call_user_func_array instead
+        # Issue 29: There should be a function that determined of the router required parameters
+        return call_user_func($handler, $this->container->request);
     }
 
     /**
@@ -156,34 +184,6 @@ class App extends Core
         }
 
         $this->container->router->registerRoute($uri, $handler, 'POST');
-    }
-
-    /**
-     * call the controller
-     *
-     * @param  array $handler
-     * @return object
-     */
-    public function route($handler)
-    {
-        if (is_array($handler)) {
-            $class = "\\App\\Controllers\\{$handler[0]}";
-            $handler[0] = new $class($this);
-        }
-
-        /*
-        if ( ! is_callable($handler)) {
-            # Issue 26: Should specify the kind of error message
-            throw new InvalidRouteArgumentException;
-        }
-         */
-
-        # Call the controller and passed parameters
-        # Task 22: Check first what method is the request
-        # Issue 27: here nag pass ko og request instance, pero, what daghan parameter required sa method?
-        # Issue 28: can be use call_user_func_array instead
-        # Issue 29: There should be a function that determined of the router required parameters
-        return call_user_func($handler, (new Request));
     }
 
     /**
