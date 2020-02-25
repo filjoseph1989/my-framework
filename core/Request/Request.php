@@ -2,37 +2,55 @@
 
 namespace Core\Request;
 
+use Core\Contracts\RequestInterface;
+use Core\Traits\RedirectTrait;
+
 /**
  * Request handler
  *
  * @author Fil Beluan
  */
-class Request
+class Request implements RequestInterface
 {
-    /**
-     * Container of post submitted data
-     * @var array
-     */
-    private array $postData = [];
+    use RedirectTrait;
+
+    private object $app;
 
     /**
      * Initiate request instance
      */
-    public function __construct() { }
+    public function __construct()
+    {
+        # Task 2:
+        # Todo 1:
+        self::setProperty();
+    }
 
     /**
      * Validate request input
      *
+     * Issue 33
      * @return void
      */
-    public function validate()
+    public function validate(object $app, object $validator)
     {
-        # Task 2:
-        # Todo 1:
-        # validate, trim, sanitize and scape mysql string
-        $this->postData = $_POST;
+        $this->app = $app;
 
-        self::setProperty();
+        foreach ($this as $method => $input) {
+            if (method_exists($validator, $method)) {
+                $error = $validator->$method($input);
+
+                if (!is_null($error)) {
+                    $validator->appendError($method, $error);
+                }
+            }
+        }
+
+        if ($validator->hasErrors()) {
+            self::redirect()
+                ->with(['errors' => $validator->errors()])
+                ->to($_SERVER['HTTP_REFERER']);
+        }
     }
 
     /**
@@ -42,8 +60,19 @@ class Request
      */
     private function setProperty()
     {
-        foreach ($this->postData as $key => $value) {
-            $this->$key = $value;
+        foreach ($_POST as $key => $value) {
+            unset($_POST[$key]);
+            $this->$key = trim($value);
         }
+    }
+
+    /**
+     * Return the app instance
+     *
+     * @return object
+     */
+    private function app()
+    {
+        return $this->app;
     }
 }
