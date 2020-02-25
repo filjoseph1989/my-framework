@@ -35,7 +35,7 @@ trait RedirectTrait
     protected function with(array $withs = [])
     {
         foreach ($withs as $key => $value) {
-            $_SESSION[$key] = $value;
+            $_SESSION['with'][$key] = $value;
         }
 
         return $this;
@@ -56,5 +56,6 @@ trait RedirectTrait
         ob_start();
         header('Location: ' . $to);
         ob_end_flush();
+        exit;
     }
 }
