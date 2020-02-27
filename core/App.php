@@ -197,8 +197,9 @@ class App extends Core
     public function view(string $view, $data = [])
     {
         self::setAuth($data);
-        self::setErrors($data);
         self::setWith($data);
+        self::setErrors($data);
+        self::unsetEmptyWithData($data);
 
         if (self::isTest()) {
             return $data;
@@ -249,9 +250,9 @@ class App extends Core
      */
     private function setErrors(&$data)
     {
-        if (isset($_SESSION['errors'])) {
-            $data['errors'] = $_SESSION['errors'];
-            unset($_SESSION['errors']);
+        if (isset($data['with']['errors'])) {
+            $data['errors'] = $data['with']['errors'];
+            unset($data['with']['errors']);
         }
     }
 
@@ -266,6 +267,18 @@ class App extends Core
         if (isset($_SESSION['with'])) {
             $data['with'] = $_SESSION['with'];
             unset($_SESSION['with']);
+        }
+    }
+
+    /**
+     * Unset $with if empty
+     *
+     * @param void
+     */
+    private function unsetEmptyWithData(&$data)
+    {
+        if (empty($data['with'])) {
+            unset($data['with']);
         }
     }
 
