@@ -2,6 +2,8 @@
     "name": "personal/project",
     "require": {
         "eftec/bladeone": "^3.33",
+        "filp/whoops": "^2.7",
+        "symfony/var-dumper": "^5.0",
         "vlucas/phpdotenv": "^4.1"
     },
     "autoload": {
