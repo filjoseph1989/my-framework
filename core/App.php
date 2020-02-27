@@ -5,6 +5,7 @@ namespace Core;
 use Core\Exceptions\InvalidRouteArgumentException;
 use Core\Request\Request;
 use Core\Traits\DebugTrait;
+use Dotenv;
 
 /**
  * @author Fil Beluan
@@ -283,16 +284,11 @@ class App extends Core
     }
 
     /**
-     * Set database setting
-     *
-     * Issue 30
+     * Load env
      */
     private function setEnv()
     {
-        putenv('DB_HOST=127.0.0.1');
-        putenv('DB_USERNAME=root');
-        putenv('DB_PASSWORD=password');
-        putenv('DB_DATABASE=crateclub2');
-        putenv('DB_PORT=3306');
+        $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
     }
 }
