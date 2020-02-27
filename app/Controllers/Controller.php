@@ -3,9 +3,12 @@
 namespace App\Controllers;
 
 use Core\App;
+use Core\Traits\DebugTrait;
 
 abstract class Controller
 {
+	use DebugTrait;
+
 	/**
 	 * The app instance
 	 * @var object
