@@ -3,7 +3,6 @@
 namespace Core;
 
 use Core\Exceptions\RouteNotFoundException;
-use Core\Exceptions\MethodNotAllowedException;
 use Core\Traits\DebugTrait;
 
 /**
@@ -91,7 +90,8 @@ class Router
     public function getHandler()
     {
         if ( ! isset($this->routes[$this->uri]) ) {
-            throw new RouteNotFoundException;
+            http_response_code(404);
+            return http_response_code();
         }
 
         if ( ! isset($this->routes[$this->uri][$this->requestMethod])) {

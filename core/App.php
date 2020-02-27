@@ -90,6 +90,10 @@ class App extends Core
      */
     public function route($handler)
     {
+        if ($handler == 404) {
+            return self::notFound();
+        }
+
         if (is_array($handler)) {
             $class = "\\App\\Controllers\\{$handler[0]}";
             $handler[0] = new $class($this);
@@ -105,6 +109,16 @@ class App extends Core
         # Issue 28: can be use call_user_func_array instead
         # Issue 29: There should be a function that determined of the router required parameters
         return call_user_func($handler, $this->container->request);
+    }
+
+    /**
+     * Display not found view
+     *
+     * @return view
+     */
+    private function notFound()
+    {
+        return self::view('404');
     }
 
     /**
