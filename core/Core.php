@@ -1,19 +1,17 @@
 <?php
-/**
-* @package	mynux
-* @author fil joseph elman
-* @email filjoseph22@gmail.com
-* @created October 25, 2015
-* @updated February 03, 2020
-* @since	Version 1.0.0
-* @version 2.0.0
-*
-* Description
-* 	This class set proper reporting values, unregistered globals
-* 	and escapes all inputs.
-*/
+
 namespace Core;
 
+/**
+ * 	This class set proper reporting values, unregistered globals
+ * 	and escapes all inputs.
+ *
+ * @created October 25, 2015
+ * @updated February 03, 2020
+ * @author Fil Beluan <filjoseph22@gmail.com>
+ * @since	Version 1.0.0
+ * @version 2.0.0
+ */
 class Core {
     /**
      * Instantiate
@@ -25,10 +23,26 @@ class Core {
     }
 
     /**
+     * Register whoops error handling
+     *
+     * @return void
+     */
+    public function errorHandling()
+    {
+        $whoops = new \Whoops\Run;
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+        $whoops->register();
+    }
+
+    /**
      * Set error reporting
-     * Task 21: Review this, if this is really working
+     *
+     * @return void
      */
     private function set_reporting() {
+        # Issue 34
+        self::errorHandling();
+
         if (isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])) {
             error_reporting(E_ALL);
             ini_set('display_errors','On');
@@ -37,7 +51,7 @@ class Core {
             error_reporting(E_ALL);
             ini_set('display_errors','Off');
             ini_set('log_errors', 'On');
-            // ini_set('error_log', ROOT_PATH . DS .'log'); # Task 19 Defined ROOT_PATH and DS contants
+            ini_set('error_log', 'error.log'); // Issue 35
             defined('ERROR_REPORTING') or define('ERROR_REPORTING', 'OFF');
         }
     }
