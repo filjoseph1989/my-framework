@@ -1,6 +1,41 @@
 <?php
 
 /**
+ * Return current mainjs version
+ *
+ * @var string
+ */
+if (!function_exists('mainjs_version')) {
+    function mainjs_version() {
+        return getenv('MAINJS');
+    }
+}
+
+/**
+ * Print variable value on file
+ *
+ * @return void
+ */
+if (!function_exists('debug_print')) {
+    function debug_print($var)
+    {
+        file_put_contents('debug.log', print_r($var, true));
+    }
+}
+
+/**
+ * Print var values on file and append to existing content
+ *
+ * @return void
+ */
+if (!function_exists('debug_print_append')) {
+    function debug_print_append($var)
+    {
+        file_put_contents('debug.log', print_r($var, true), FILE_APPEND);
+    }
+}
+
+/**
  * Check if the user is login
  *
  * @return boolean
