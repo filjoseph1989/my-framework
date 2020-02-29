@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * CSRF token
+ * @var
+ */
+if (!function_exists('token')) {
+    function token() {
+        return $_SESSION['token'] ?? '';
+    }
+}
+
+/**
  * Return current mainjs version
  *
  * @var string

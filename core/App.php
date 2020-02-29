@@ -75,6 +75,9 @@ class App extends Core
 
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
+            if (empty($_SESSION['token'])) {
+                $_SESSION['token'] = bin2hex(random_bytes(32));
+            }
         }
 
         self::setEnv();
@@ -258,9 +261,19 @@ class App extends Core
     }
 
     /**
+     * Set token
+     *
+     * @param array $data
+     */
+    private function setToken(&$data)
+    {
+        $data['token'] = $_SESSION['token'] ?? '';;
+    }
+
+    /**
      * Set session errors
      *
-     * @param void
+     * @param array $data
      */
     private function setErrors(&$data)
     {
@@ -274,7 +287,7 @@ class App extends Core
     /**
      * Set with data
      *
-     * @param void
+     * @param array $data
      */
     private function setWith(&$data)
     {
@@ -287,7 +300,7 @@ class App extends Core
     /**
      * Unset $with if empty
      *
-     * @param void
+     * @param array $data
      */
     private function unsetEmptyWithData(&$data)
     {
