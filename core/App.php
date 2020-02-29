@@ -217,6 +217,7 @@ class App extends Core
         self::setWith($data);
         self::setErrors($data);
         self::unsetEmptyWithData($data);
+        self::setToken($data);
 
         if (self::isTest()) {
             return $data;
