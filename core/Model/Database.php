@@ -29,9 +29,6 @@ class Database
      */
     public function __construct()
     {
-        // Task 1: Used enironment variable here
-        // Task 2: Study the implementation of .env
-
         $this->Host     = getenv("DB_HOST");
         $this->User     = getenv("DB_USERNAME");
         $this->Password = getenv("DB_PASSWORD");
@@ -227,9 +224,10 @@ class Database
     /**
      * Implements where condition
      *
-     * Task 11: Problem with this implementation is: It implement like this statement
-     *  "where id=1" but not like "where id=1 and id=2"
-     *  calling it again it would look like "where id=1 where id=2" which is wrong
+     * Issue 11: Problem with this implementation is:
+     *      It implement like this statement
+     *      "where id=1" but not like "where id=1 and id=2"
+     *      calling it again it would look like "where id=1 where id=2" which is wrong
      *
      * @param  array  $wheres
      * @return void
@@ -244,10 +242,10 @@ class Database
     }
 
     /**
-     * Issue 24: Is this being used?
+     * Return SQL error message
      */
     private function getError()
     {
-        return "<br/>" . $this->sql . "<br/> SQL Exception #" . $this->Instance->errno . " : " . $this->Instance->error . "<br/>";
+        return "{$this->sql} <br/> SQL Exception #{$this->Instance->errno} : {$this->Instance->error}";
     }
 }

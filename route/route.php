@@ -1,4 +1,6 @@
 <?php
 
-# Route definition
+/**
+ * Define web application routes
+ */
 $app->get('/', ['HomeController', 'index']);

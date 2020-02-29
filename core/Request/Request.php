@@ -27,9 +27,8 @@ class Request implements RequestInterface
     }
 
     /**
-     * Validate request input
+     * Validate request inputs
      *
-     * Issue 33
      * @return void
      */
     public function validate(object $app, object $validator)
