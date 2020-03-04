@@ -13,6 +13,7 @@ use Core\Traits\ObjectMappingTrait;
  */
 class ObjectMapping implements ObjectMappingInterface
 {
+    // Issue 43
     use ObjectMappingTrait;
 
     public object $model;
