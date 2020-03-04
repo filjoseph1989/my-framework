@@ -54,4 +54,15 @@ trait ModelTrait
         $data = self::get();
         return array_shift($data);
     }
+
+    /**
+     * Update table row
+     *
+     * @param  array  $data
+     * @return void
+     */
+    public function update(array $data = [])
+    {
+        return $this->mapper->update($this->wheres, $data);
+    }
 }
