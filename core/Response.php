@@ -24,4 +24,16 @@ class Response
 
 		echo $blade->run($view, $data);
 	}
+
+	/**
+	 * Response as json
+	 *
+	 * @param  array  $data
+	 * @return string
+	 */
+	public function json(array $data = [])
+	{
+		header('Content-type: application/json');
+        echo json_encode($data);
+	}
 }
