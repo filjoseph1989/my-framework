@@ -158,7 +158,7 @@ class Database
         $results   = $this->Instance->query($this->sql);
 
         if ($results === false) {
-            return false;
+            return [];
         }
 
         while ($row = $results->fetch_assoc()) {
