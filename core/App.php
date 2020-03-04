@@ -77,6 +77,8 @@ class App extends Core
             session_start();
             if (empty($_SESSION['token'])) {
                 $_SESSION['token'] = bin2hex(random_bytes(32));
+                // $_SESSION['salt']  = random_bytes(32);
+                // self::createNonce($_SESSION['salt']);
             }
         }
 
@@ -219,11 +221,24 @@ class App extends Core
         self::unsetEmptyWithData($data);
         self::setToken($data);
 
+        $_SESSION['current_page'] = $view; # Issue 48
+
         if (self::isTest()) {
             return $data;
         }
 
         return $this->container->response->view($view, $data);
+    }
+
+    /**
+     * Response as json
+     *
+     * @param array $data
+     * @return void
+     */
+    public function json(array $data = [])
+    {
+        return $this->container->response->json($data);
     }
 
     /**
@@ -268,7 +283,7 @@ class App extends Core
      */
     private function setToken(&$data)
     {
-        $data['token'] = $_SESSION['token'] ?? '';;
+        $data['token'] = $_SESSION['token'] ?? '';
     }
 
     /**
@@ -279,7 +294,7 @@ class App extends Core
     private function setErrors(&$data)
     {
         if (isset($data['with']['errors'])) {
-            $data['errors'] = $data['with']['errors'];
+            $data['errors'] = $data['with']['errors']; # Issue 45
             unset($data['with']['errors']);
         }
     }
@@ -332,4 +347,20 @@ class App extends Core
         $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->load();
     }
+
+    /**
+     * Create nonce or csrf
+     * Issue 47:
+     *
+     * @param string $salt
+     * @return void
+    private function createNonce($salt = '')
+    {
+        return hash_hmac(
+            'sha256',
+            session_id() . $salt,
+            date("YmdG") . "{$salt} {$_SERVER['REMOTE_ADDR']}"
+        );
+    }
+    */
 }
