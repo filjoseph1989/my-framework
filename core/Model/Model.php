@@ -80,7 +80,7 @@ class Model
     }
 
     /**
-     * Magicall call mapping object method
+     * Magically call mapping object method
      *
      * @param  string $method    Method name
      * @param  array  $arguments The method parameters
