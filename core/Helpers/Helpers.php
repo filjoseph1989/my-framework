@@ -62,6 +62,18 @@ if (!function_exists('isLogin')) {
 }
 
 /**
+ * Check if the user is loggedin
+ * 
+ * @return boolean
+ */
+if (!function_exists('is_login')) {
+    function is_login()
+    {
+        return isLogin();
+    }
+}
+
+/**
  * Display the lines traverse by php execution
  *
  * @param boolean $return
