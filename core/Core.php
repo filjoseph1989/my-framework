@@ -36,12 +36,16 @@ class Core {
 
     /**
      * Set error reporting
+     * Issue 34
      *
      * @return void
      */
     private function set_reporting() {
-        # Issue 34
-        self::errorHandling();
+        $whoops = getenv('WHOOPS_DEBUG');
+
+        if ($whoops) {
+            self::errorHandling();
+        }
 
         if (isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])) {
             error_reporting(E_ALL);
