@@ -20,7 +20,8 @@ class Core {
      */
     public function __construct() {
         self::setEnv();
-        self::set_reporting();
+        self::errorHandling();
+        // self::set_reporting();  # Issue 55
         self::remove_magic_quotes();
         self::unregister_globals();
     }
@@ -34,7 +35,12 @@ class Core {
     {
         $whoops = new \Whoops\Run;
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-        $whoops->register();
+
+        if (getenv('WHOOPS_DEBUG')) {
+            $whoops->register();
+        } else {
+            $whoops->unregister();
+        }
     }
 
     /**
@@ -44,12 +50,6 @@ class Core {
      * @return void
      */
     private function set_reporting() {
-        $whoops = getenv('WHOOPS_DEBUG');
-
-        if ($whoops) {
-            self::errorHandling();
-        }
-
         if (isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $_SERVER['REMOTE_ADDR'] || '::1' == $_SERVER['REMOTE_ADDR'])) {
             error_reporting(E_ALL);
             ini_set('display_errors','On');
