@@ -5,7 +5,6 @@ namespace Core;
 use Core\Exceptions\InvalidRouteArgumentException;
 use Core\Request\Request;
 use Core\Traits\DebugTrait;
-use Dotenv;
 
 /**
  * @author Fil Beluan
@@ -82,8 +81,6 @@ class App extends Core
             }
         }
 
-        self::setEnv();
-
         return self::route($handler);
     }
 
@@ -108,11 +105,12 @@ class App extends Core
             throw new InvalidRouteArgumentException;
         }
 
-        # Call the controller and passed parameters
         # Task 22: Check first what method is the request
-        # Issue 27: here nag pass ko og request instance, pero, what daghan parameter required sa method?
-        # Issue 28: can be use call_user_func_array instead
-        # Issue 29: There should be a function that determined of the router required parameters
+        # Issue 27:
+        # Issue 28:
+        # Issue 29:
+
+        # Call the controller and passed parameters
         return call_user_func($handler, $this->container->request);
     }
 
@@ -208,6 +206,7 @@ class App extends Core
 
     /**
      * Return view
+     * Issue 54
      *
      * @param  string $view
      * @param  array $data
@@ -337,15 +336,6 @@ class App extends Core
         }
 
         return false;
-    }
-
-    /**
-     * Load env
-     */
-    private function setEnv()
-    {
-        $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
-        $dotenv->load();
     }
 
     /**

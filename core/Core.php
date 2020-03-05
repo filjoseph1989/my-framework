@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Dotenv;
+
 /**
  * 	This class set proper reporting values, unregistered globals
  * 	and escapes all inputs.
@@ -17,6 +19,7 @@ class Core {
      * Instantiate
      */
     public function __construct() {
+        self::setEnv();
         self::set_reporting();
         self::remove_magic_quotes();
         self::unregister_globals();
@@ -100,5 +103,14 @@ class Core {
                 }
             }
         }
+    }
+
+    /**
+     * Load env
+     */
+    private function setEnv()
+    {
+        $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
     }
 }
