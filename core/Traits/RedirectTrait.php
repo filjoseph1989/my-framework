@@ -27,8 +27,6 @@ trait RedirectTrait
     /**
      * Set session
      *
-     * Issue 31
-     *
      * @param  array  $withs
      * @return void
      */
