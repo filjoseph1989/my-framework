@@ -51,4 +51,14 @@ class Validation implements ValidationInterface
     {
         $this->errors[$input] = $value;
     }
+
+    /**
+     * Check if magically call enabled
+     *
+     * @return boolean
+     */
+    public function magicallyCall()
+    {
+        return $this->magicallyCall;
+    }
 }
