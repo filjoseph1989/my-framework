@@ -11,6 +11,13 @@ trait ModelTrait
     protected array $wheres = [];
 
     /**
+     * Tell if return as array or object
+     *
+     * @var boolean
+     */
+    protected $toArray = false;
+
+    /**
      * Setup where condition
      *
      * @param  string $columnName
@@ -61,8 +68,42 @@ trait ModelTrait
      * @param  array  $data
      * @return void
      */
-    public function update(array $data = [])
+    public function update(array $data = [], $return = false)
     {
-        return $this->mapper->update($this->wheres, $data);
+        return $this->mapper->update($this->wheres, $data, $return);
+    }
+
+    /**
+     * Update row if exist otherwise
+     * create
+     *
+     * @param  array   $data
+     * @param  boolean $return
+     * @return object|boolean
+     */
+    public function updateOrCreate(array $data = [], $return = false)
+    {
+        if ($this->toArray) {
+            $this->mapper->toArray();
+        }
+        
+        $result = $this->mapper->update($this->wheres, $data, $return);
+
+        if ($result) {
+            return $result;
+        }
+
+        return $this->mapper->create($data);
+    }
+
+    /**
+     * Tell to return array
+     *
+     * @return object
+     */
+    public function toArray()
+    {
+        $this->toArray = true;
+        return $this;
     }
 }
