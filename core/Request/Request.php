@@ -55,10 +55,14 @@ class Request implements RequestInterface
         foreach ($this as $method => $input) {
             if (method_exists($validator, $method)) {
                 $error = $validator->$method($input);
+            }
 
-                if (!is_null($error)) {
-                    $validator->appendError($method, $error);
-                }
+            if ($validator->magicallyCall()) {
+                $error = $validator->$method($input);
+            }
+
+            if (isset($error) && !is_null($error)) {
+                $validator->appendError($method, $error);
             }
         }
 
