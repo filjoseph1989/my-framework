@@ -52,6 +52,9 @@ class Database
             return $results;
         }
 
+        # Issue 56
+        debug_print_append("\nQuery is not successful on @ core\Model\Database.php:49\n");
+        debug_print_append(trace(true));
         return null;
     }
 
