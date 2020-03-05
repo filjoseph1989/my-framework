@@ -3,15 +3,35 @@
 namespace Core\Traits;
 
 use Core\Model\Database;
+use Core\Traits\ObjectMappingParserTrait;
+use Core\Traits\ObjectMappingPrepareDataTrait;
+use Core\Traits\ObjectMappingQueriesTrait;
 
 /**
  * A trait use by Core\Model\ObjectMapping
- * 
+ *
  * @author fil beluan <filjoseph22@gmail.com>
  */
 trait ObjectMappingTrait
 {
-    protected int $count = 0;
+    use ObjectMappingParserTrait;
+    use ObjectMappingPrepareDataTrait;
+    use ObjectMappingQueriesTrait;
+
+    protected int $count    = 0;
+    protected string $query = "";
+
+    /**
+     * Tell if return array or object
+     *
+     * @var boolean
+     */
+    protected $toArray = false;
+
+    /**
+     * Containers of query result
+     */
+    protected array $rows = [];
 
     /**
      * Should return an object map
@@ -50,17 +70,28 @@ trait ObjectMappingTrait
     }
 
     /**
+     * Tell to return query result as array
+     *
+     * @return object
+     */
+    public function toArray()
+    {
+        $this->toArray = true;
+        return $this;
+    }
+
+    /**
      * Return the object result after query
      * Issue 49
      * Issue 51
+     * Issue 53
      *
      * @param  array  $query
      * @return object
      */
-    public function get(array $wheres = [])
+    public function get(array $wheres = [], $toArray = false)
     {
         self::prepareGet($wheres);
-
         return $this->rows;
     }
 
@@ -71,115 +102,31 @@ trait ObjectMappingTrait
      * @param array $data
      * @return void
      */
-    public function update(array &$wheres = [], array &$data = [])
+    public function update(array $wheres = [], array $data = [], $return = false)
     {
-        return self::prepareUpdate($wheres, $data);
+        return self::prepareUpdate($wheres, $data, $return);
     }
 
     /**
-     * Prepare updating table
+     * Create new record
      *
-     * @param  array  $wheres
-     * @param  array  $data
-     * @return boolean
-     */
-    private function prepareUpdate(array $wheres, array $data = [])
-    {
-        if ($this->database->isConnected()) {
-            $wheres  = self::prepareWhere($wheres);
-            $query   = self::prepareUpdateQuery($wheres, self::prepareUpdateData($data));
-            $results = $this->database->query($query);
-
-            if (!$results) {
-                return null;
-            }
-
-            return $results;
-        }
-    }
-
-    /**
-     * Prepare the query and get resulting data
-     *
-     * @param  array  $wheres
+     * @param array $wheres
+     * @param array $data
      * @return void
      */
-    private function prepareGet(array $wheres)
+    public function create(array $data = [], $return = false)
     {
-        if ($this->database->isConnected()) {
-            $wheres  = self::prepareWhere($wheres);
-            $query   = self::prepareSelect($wheres);
-            $results = $this->database->query($query);
-
-            $this->count = $this->database->count();
-
-            if ($this->count == -1 || $this->count == 0) {
-                return null;
-            }
-
-            foreach ($results as $row) {
-                $this->rows[] = (object) $row;
-            }
-        }
+        return self::prepareCreate($data, $return);
     }
 
     /**
-     * Prepare select
+     * Return query string run previously
      *
-     * @param  string $wheres
      * @return string
      */
-    private function prepareSelect(string $wheres)
+    private function query()
     {
-        return "select * from {$this->table} where {$wheres};";
-    }
-
-    /**
-     * Prepare update query
-     *
-     * @param string $wheres
-     * @param string $updateData
-     * @return string
-     */
-    private function prepareUpdateQuery(string $wheres, string $updateData)
-    {
-        return "UPDATE {$this->table} SET {$updateData} WHERE {$wheres};";
-    }
-
-    /**
-     * Building the where condition
-     *
-     * @param  array  $wheres
-     * @return string
-     */
-    private function prepareWhere(array $wheres)
-    {
-        $whereQuery = [];
-
-        foreach ($wheres as $key => $value) {
-            $value = self::scape($value);
-            $whereQuery[] = "$key='$value'";
-        }
-
-        return implode(' AND ', $whereQuery);
-    }
-
-    /**
-     * Prepare update data
-     *
-     * @param  array  $data
-     * @return string
-     */
-    private function prepareUpdateData(array $data)
-    {
-        $updateData = [];
-
-        foreach ($data as $key => $value) {
-            $value = self::scape($value);
-            $updateData[] = "{$key}='{$value}'";
-        }
-
-        return implode(',', $updateData);
+        return $this->query;
     }
 
     /**
