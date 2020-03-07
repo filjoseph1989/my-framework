@@ -2,6 +2,12 @@
 
 namespace Core\Traits;
 
+use Core\Model\ModelFirst;
+
+/**
+ * Collection of other model methods
+ * @author Fil Joseph Beluan <filjoseph22@gmail.com>
+ */
 trait ModelTrait
 {
     /**
@@ -53,13 +59,14 @@ trait ModelTrait
 
     /**
      * Return the first index of the array
+     * Issue 65
      *
      * @return object
      */
     public function first()
     {
-        $data = self::get();
-        return array_shift($data);
+        $rows = self::get();
+        return (new ModelFirst($rows))->first();
     }
 
     /**
@@ -86,7 +93,7 @@ trait ModelTrait
         if ($this->toArray) {
             $this->mapper->toArray();
         }
-        
+
         $result = $this->mapper->update($this->wheres, $data, $return);
 
         if ($result) {
