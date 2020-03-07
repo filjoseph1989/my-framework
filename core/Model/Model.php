@@ -20,19 +20,19 @@ class Model
      * The mapping object
      * @var object
      */
-    public object $mapper;
+    protected object $mapper;
 
     /**
      * Table rows
      * @var array
      */
-    public array $rows = [];
+    protected array $rows = [];
 
     /**
      * Table relationshipe
      * @var array
      */
-    public array $relations = [];
+    protected array $relations = [];
 
     /**
      * Initiate model
@@ -49,11 +49,25 @@ class Model
 
     /**
      * Assign value to the given model property
+     * Issue 57
      *
      * @param string $key   The model property
      * @param mixed  $value The property value
      */
-    public function set($key, $value)
+    public function set(string $key, array $value)
+    {
+        $this->$key = $value;
+    }
+
+    /**
+     * Here we set the return rows from database as
+     * models rows
+     *
+     * @param string $key
+     * @param array $value
+     * @return void
+     */
+    public function setModelRows(string $key, array $value)
     {
         $this->$key = $value;
     }
@@ -76,7 +90,9 @@ class Model
      */
     private function getProperty(string $property = '')
     {
-        return $this->$property;
+        if (isset($this->$property)) {
+            return $this->$property;
+        }
     }
 
     /**
