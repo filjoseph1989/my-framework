@@ -51,11 +51,42 @@ class ObjectMapping implements ObjectMappingInterface
      * @param  array  $columns
      * @return void
      */
-    public function map(&$model, $rows)
+    public function map(&$model, $row)
     {
-        $relations = self::relation($rows);
+        $relations = self::relation($row);
 
-        foreach ($rows[0] as $key => $value) {
+        foreach ($row as $key => $value) {
+            if (isset($relations[$key])) {
+                $linkedClassName = self::className($key);
+
+                if (class_exists($linkedClassName)) {
+                    $objectToPush = new $linkedClassName();
+
+                    if (!empty($relations[$key])) {
+                        $objectToPush = $objectToPush->find($relations[$key]);
+                        unset($relations[$key]);
+                        $relations[$linkedClassName] = $objectToPush;
+                    }
+                }
+            }
+        }
+
+        $model->set('relations', $relations);
+    }
+
+    /**
+     * This is an old mapping way
+     * Issue 64
+     *
+     * @param [type] $model
+     * @param [type] $row
+     * @return void
+     */
+    public function mapOld(&$model, $row)
+    {
+        $relations = self::relation($row);
+
+        foreach ($row as $key => $value) {
             if (isset($relations[$key])) {
                 $linkedClassName = self::className($key);
 
@@ -98,12 +129,12 @@ class ObjectMapping implements ObjectMappingInterface
      * @param  array  $items
      * @return array
      */
-    private function relation(array $rows)
+    private function relation(object $rows)
     {
         $relations = [];
 
         foreach ($this->foreignKeys as $key => $foreignKey) {
-            $relations[$foreignKey] = $rows[0][$foreignKey];
+            $relations[$foreignKey] = $rows[0][$foreignKey]; # Issue 58
         }
 
         return $relations;
