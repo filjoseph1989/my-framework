@@ -100,11 +100,11 @@ trait ObjectMappingPrepareDataTrait
      * @param  array  $wheres
      * @return void
      */
-    private function prepareGet(array $wheres)
+    private function prepareGet(array &$wheres)
     {
         if ($this->database->isConnected()) {
-            $wheres      = self::prepareWhere($wheres);
-            $this->query = self::prepareSelectQuery($wheres);
+            $condition   = self::prepareWhere($wheres);
+            $this->query = self::prepareSelectQuery($condition);
             $results     = $this->database->query($this->query);
 
             $this->count = $this->database->count();
