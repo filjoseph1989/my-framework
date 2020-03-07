@@ -105,7 +105,7 @@ trait ObjectMappingPrepareDataTrait
         if ($this->database->isConnected()) {
             $condition   = self::prepareWhere($wheres);
             $this->query = self::prepareSelectQuery($condition);
-            $results     = $this->database->query($this->query);
+            $rows        = $this->database->query($this->query);
 
             $this->count = $this->database->count();
 
@@ -113,9 +113,36 @@ trait ObjectMappingPrepareDataTrait
                 return null;
             }
 
-            foreach ($results as $row) {
-                $this->rows[] = $this->toArray ? $row : (object) $row;
+            $rows = self::fetchRows($rows);
+            $this->model->setModelRows('rows', $rows);
+
+            foreach ($rows as $row) {
+                if ($this->toArray) {
+                    $this->rows[] = $row;
+                } else {
+                    self::map($this->model, $row);
+                    $this->rows[] = $this->model;
+                }
             }
         }
+    }
+
+    /**
+     * Return the rows from database
+     *
+     * @param  object $results
+     * @return array
+     */
+    private function fetchRows(object $results)
+    {
+        while ($row = $results->fetch_assoc()) {
+            $rows[] = $row;
+        }
+
+        array_walk_recursive($rows, function (&$item, $key) {
+            $item = utf8_decode($item);
+        });
+
+        return json_decode(json_encode($rows));
     }
 }
