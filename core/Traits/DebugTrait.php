@@ -16,6 +16,7 @@ trait DebugTrait
      * @var array
      */
     protected array $availableMethods = [];
+    protected array $availableObjectMethods = [];
 
     /**
      * Print available methods
@@ -31,8 +32,26 @@ trait DebugTrait
             $this->availableMethods[] = $reflection->getFileName() . ':' . $reflection->getStartLine() . " " . $reflection->getName();
         }
 
-        var_dump($this->availableMethods);
+        dump($this->availableMethods);
         exit;
+    }
+
+    /**
+     * Display available methods of the given object
+     *
+     * @param  object $object
+     * @return void
+     */
+    public function availableObjectMethods($object)
+    {
+        $class_methods = get_class_methods($object);
+
+        foreach ($class_methods as $key => $value) {
+            $reflection = new \ReflectionMethod($object, $value);
+            $this->availableMethods[] = $reflection->getFileName() . ':' . $reflection->getStartLine() . " " . $reflection->getName();
+        }
+
+        dump($this->availableObjectMethods);
     }
 
     /**
