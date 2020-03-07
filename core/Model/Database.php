@@ -52,6 +52,22 @@ class Database
             return $results;
         }
 
+        /*
+        if (!$results) {
+            die($this->getError());
+        }
+
+        while ($row = $results->fetch_assoc()) {
+            $return[] = $row;
+        }
+
+        array_walk_recursive($return, function (&$item, $key) {
+            $item = html_entity_decode(utf8_decode($item));
+        });
+
+        return $return;
+         */
+
         # Issue 56
         debug_print_append("\nQuery is not successful on @ core\Model\Database.php:49\n");
         debug_print_append(trace(true));
@@ -182,6 +198,7 @@ class Database
 
     /**
      * Generate a select string
+     * Issue 59
      *
      * @param  string $table
      * @param  array  $columns
@@ -238,7 +255,7 @@ class Database
     public function whereArray(array $where)
     {
         $where["value"] = "{$where["value"]}";
-        $where["value"] = htmlentities(utf8_encode($where["value"]));
+        $where["value"] = htmlentities(utf8_encode($where["value"])); # Issue 60
         $this->sql     .= " WHERE {$where["column"]} {$where["condition"]} {$where["value"]}";
 
         return $this;
