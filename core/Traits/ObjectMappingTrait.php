@@ -35,6 +35,7 @@ trait ObjectMappingTrait
 
     /**
      * Should return an object map
+     * Issue 63
      *
      * @param  int $id Table ID
      * @return object
@@ -51,7 +52,10 @@ trait ObjectMappingTrait
                 ])
                 ->get();
 
-            $this->model->set('rows', $rows[0]);
+            # Issue 66
+            foreach ($rows as $key => $row) {
+                $this->model->set('rows', $row);
+            }
 
             self::map($this->model, $rows);
 
