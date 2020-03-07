@@ -97,21 +97,17 @@ class App extends Core
         }
 
         if (is_array($handler)) {
-            $class = "\\App\\Controllers\\{$handler[0]}";
+            $class      = "\\App\\Controllers\\{$handler[0]}";
             $handler[0] = new $class($this);
+            $params     = self::getParameters($handler);
         }
 
         if ( ! is_callable($handler)) {
             throw new InvalidRouteArgumentException;
         }
 
-        # Task 22: Check first what method is the request
-        # Issue 27:
-        # Issue 28:
-        # Issue 29:
-
         # Call the controller and passed parameters
-        return call_user_func($handler, $this->container->request);
+        return call_user_func_array($handler, $params);
     }
 
     /**
@@ -336,6 +332,28 @@ class App extends Core
         }
 
         return false;
+    }
+
+    /**
+     * Return parameters
+     *
+     * @param  array  $handler
+     * @return array
+     */
+    private function getParameters(array $handler=[])
+    {
+        $reflection = new \ReflectionMethod($handler[0], $handler[1]);
+
+        foreach ($reflection->getParameters() as $param) {
+            if (isset($_GET[$param->getName()])) {
+                $params[$param->getPosition()] = $_GET[$param->getName()];
+            }
+            if (!is_null($param->getClass()) && $param->getClass()->name == "Core\Request\Request") {
+                $params[$param->getPosition()] = $this->container->request;
+            }
+        }
+
+        return $params;
     }
 
     /**
