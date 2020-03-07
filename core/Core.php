@@ -36,7 +36,7 @@ class Core {
         $whoops = new \Whoops\Run;
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 
-        if (getenv('WHOOPS_DEBUG')) {
+        if (getenv('WHOOPS_DEBUG') === 'true') {
             $whoops->register();
         } else {
             $whoops->unregister();
