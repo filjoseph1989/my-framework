@@ -89,7 +89,7 @@ trait ObjectMappingTrait
      * @param  array  $query
      * @return object
      */
-    public function get(array $wheres = [], $toArray = false)
+    public function get(array &$wheres = [])
     {
         self::prepareGet($wheres);
         return $this->rows;
