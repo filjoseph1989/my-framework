@@ -56,71 +56,19 @@ class ObjectMapping implements ObjectMappingInterface
         $relations = self::relation($row);
 
         foreach ($row as $key => $value) {
-            if (isset($relations[$key])) {
-                $linkedClassName = self::className($key);
+            if (isset($relations[$key]) && !empty($relations[$key])) {
+                $linkedClassName = $model->relations[$key];
 
                 if (class_exists($linkedClassName)) {
-                    $objectToPush = new $linkedClassName();
-
-                    if (!empty($relations[$key])) {
-                        $objectToPush = $objectToPush->find($relations[$key]);
-                        unset($relations[$key]);
-                        $relations[$linkedClassName] = $objectToPush;
-                    }
+                    unset($relations[$key]);
+                    $key       = str_replace('_id', '', $key);
+                    $row->$key = new $linkedClassName();
+                    $row->$key->find($value); # Issue 66
                 }
             }
         }
 
-        $model->set('relations', $relations);
-    }
-
-    /**
-     * This is an old mapping way
-     * Issue 64
-     *
-     * @param [type] $model
-     * @param [type] $row
-     * @return void
-     */
-    public function mapOld(&$model, $row)
-    {
-        $relations = self::relation($row);
-
-        foreach ($row as $key => $value) {
-            if (isset($relations[$key])) {
-                $linkedClassName = self::className($key);
-
-                if (class_exists($linkedClassName)) {
-                    $objectToPush = new $linkedClassName();
-
-                    if (!empty($relations[$key])) {
-                        $objectToPush = $objectToPush->find($relations[$key]);
-                        unset($relations[$key]);
-                        $relations[$linkedClassName] = $objectToPush;
-                    }
-                }
-            }
-        }
-
-        $model->set('relations', $relations);
-    }
-
-    /**
-     * Return class name
-     *
-     * Task 23: Dapat naka define na daan sa model ang class na gamitun sa relationship
-     *  sa model
-     *
-     * @param  string $key
-     * @return atring
-     */
-    private function className(string $key)
-    {
-        $linkedClassName = str_replace("_id", "s", $key);
-        $linkedClassName = str_replace("_", " ", $linkedClassName);
-        $linkedClassName = ucwords($linkedClassName);
-
-        return str_replace(" ", "", $linkedClassName);
+        return $row;
     }
 
     /**
@@ -134,7 +82,7 @@ class ObjectMapping implements ObjectMappingInterface
         $relations = [];
 
         foreach ($this->foreignKeys as $key => $foreignKey) {
-            $relations[$foreignKey] = $rows[0][$foreignKey]; # Issue 58
+            $relations[$foreignKey] = $rows->$foreignKey;
         }
 
         return $relations;
