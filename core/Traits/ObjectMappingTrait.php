@@ -40,24 +40,43 @@ trait ObjectMappingTrait
      * @param  int $id Table ID
      * @return object
      */
-    public function find(array $arguments)
+    public function find(array $value)
+    {
+        return self::prepareFind($value);
+    }
+
+    /**
+     * Prepare find
+     *
+     * Issue 67
+     *
+     * @param array $value
+     * @return void
+     */
+    private function prepareFind(array &$value)
     {
         if ($this->database->isConnected()) {
-            $rows = $this->database
-                ->select(strtolower($this->table), ['*'])
-                ->whereArray([
-                    "column"    => $this->primaryKey,
-                    "value"     => $arguments[0],
-                    "condition" => "=",
-                ])
-                ->get();
+            $condition   = "{$this->primaryKey}='{$value[0]}'";
+            $this->query = self::prepareSelectQuery($condition);
+            $rows        = $this->database->query($this->query);
 
-            # Issue 66
-            foreach ($rows as $key => $row) {
-                $this->model->set('rows', $row);
+            $this->count = $this->database->count();
+
+            if ($this->count == -1 || $this->count == 0) {
+                return null;
             }
 
-            self::map($this->model, $rows);
+            $rows = self::fetchRows($rows);
+
+            foreach ($rows as $key => $row) {
+                if ($this->toArray) {
+                    $this->rows[] = $row; # Issue 68
+                } else {
+                    $rows[$key] = self::map($this->model, $row);
+                }
+            }
+
+            $this->model->setModelRows('rows', $rows);
 
             return $this->model;
         }
@@ -95,8 +114,7 @@ trait ObjectMappingTrait
      */
     public function get(array &$wheres = [])
     {
-        self::prepareGet($wheres);
-        return $this->rows;
+        return self::prepareGet($wheres);
     }
 
     /**
