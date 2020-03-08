@@ -115,7 +115,7 @@ class App extends Core
      *
      * @return view
      */
-    private function notFound()
+    public function notFound()
     {
         return self::view('404');
     }
@@ -294,7 +294,6 @@ class App extends Core
         }
     }
 
-
     /**
      * Set with data
      *
@@ -353,7 +352,7 @@ class App extends Core
             }
         }
 
-        return $params;
+        return $params ?? [];
     }
 
     /**
