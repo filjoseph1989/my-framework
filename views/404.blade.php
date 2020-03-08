@@ -5,6 +5,13 @@
         <title>Not Found</title>
     </head>
     <body>
-        <h1>Not Found</h1>
+        <div style="height: 100vh;" class="grid">
+            <div class="" style="align-self: center;justify-self: center;">
+                <h1 class="mb-3">Page Not Found</h1>
+                <a href="/" class="border-2 border-teal-500 p-2 rounded shadow-md">Return Home</a>
+            </div>
+        </div>
+
+        <script src="/js/main.js?v={{ mainjs_version() }}" charset="utf-8"></script>
     </body>
 </html>
