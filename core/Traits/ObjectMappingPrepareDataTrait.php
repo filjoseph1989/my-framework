@@ -114,16 +114,18 @@ trait ObjectMappingPrepareDataTrait
             }
 
             $rows = self::fetchRows($rows);
-            $this->model->setModelRows('rows', $rows);
 
-            foreach ($rows as $row) {
+            foreach ($rows as $key => $row) {
                 if ($this->toArray) {
-                    $this->rows[] = $row;
+                    $this->rows[] = $row; # Issue 68
                 } else {
-                    self::map($this->model, $row);
-                    $this->rows[] = $this->model;
+                    $rows[$key] = self::map($this->model, $row);
                 }
             }
+
+            $this->model->setModelRows('rows', $rows);
+
+            return $this->model;
         }
     }
 
