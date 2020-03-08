@@ -11,7 +11,7 @@ use Core\Model\ModelRowIterator;
  */
 class ModelFirst
 {
-    private array $model;
+    private object $model;
 
     /**
      * Accept Model
@@ -30,21 +30,6 @@ class ModelFirst
      */
     public function first()
     {
-        foreach ($this->model as $key => $model) {
-            return self::evaluateModel($model);
-        }
-    }
-
-    /**
-     * Return first model found
-     *
-     * @param  object $model
-     * @return Core\Model
-     */
-    private function evaluateModel(object $model)
-    {
-        foreach (new ModelRowIterator($model) as $key => $value) {
-            return $value;
-        }
+        return $this->model->rows[0];
     }
 }
