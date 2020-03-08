@@ -7,11 +7,11 @@ class Database
     /**
      * Variables
      *
-     * @var [string] $Host
-     * @var [string] $Database
-     * @var [string] $User
-     * @var [string] $Password
-     * @var [mysqli] $Instance
+     * @var string   $Host
+     * @var string   $Database
+     * @var string   $User
+     * @var string   $Password
+     * @var mysqli   $Instance
      * @var boolean  $connected
      */
     protected string $Host     = '';
@@ -56,16 +56,6 @@ class Database
         if (!$results) {
             die($this->getError());
         }
-
-        while ($row = $results->fetch_assoc()) {
-            $return[] = $row;
-        }
-
-        array_walk_recursive($return, function (&$item, $key) {
-            $item = html_entity_decode(utf8_decode($item));
-        });
-
-        return $return;
          */
 
         # Issue 56
@@ -194,78 +184,5 @@ class Database
         }
 
         return $return;
-    }
-
-    /**
-     * Generate a select string
-     * Issue 59
-     *
-     * @param  string $table
-     * @param  array  $columns
-     * @return object
-     */
-    public function select(string $table, array $columns)
-    {
-        $this->sql = "SELECT ";
-
-        foreach ($columns as $key => $column) {
-            $this->sql .= "{$column} FROM {$table}";
-        }
-
-        return $this;
-    }
-
-    /**
-     * Return query result
-     *
-     * @return mixed
-     */
-    public function get()
-    {
-        $this->sql .= ";";
-
-        $results = $this->Instance->query($this->sql);
-
-        if (!$results) {
-            die($this->getError());
-        }
-
-        while ($row = $results->fetch_assoc()) {
-            $return[] = $row;
-        }
-
-        array_walk_recursive($return, function (&$item, $key) {
-            $item = html_entity_decode(utf8_decode($item));
-        });
-
-        return $return;
-    }
-
-    /**
-     * Implements where condition
-     *
-     * Issue 11: Problem with this implementation is:
-     *      It implement like this statement
-     *      "where id=1" but not like "where id=1 and id=2"
-     *      calling it again it would look like "where id=1 where id=2" which is wrong
-     *
-     * @param  array  $wheres
-     * @return void
-     */
-    public function whereArray(array $where)
-    {
-        $where["value"] = "{$where["value"]}";
-        $where["value"] = htmlentities(utf8_encode($where["value"])); # Issue 60
-        $this->sql     .= " WHERE {$where["column"]} {$where["condition"]} {$where["value"]}";
-
-        return $this;
-    }
-
-    /**
-     * Return SQL error message
-     */
-    private function getError()
-    {
-        return "{$this->sql} <br/> SQL Exception #{$this->Instance->errno} : {$this->Instance->error}";
     }
 }
