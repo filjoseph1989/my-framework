@@ -20,7 +20,9 @@ class ModelFirst
      */
     public function __construct($model)
     {
-        $this->model = $model;
+        if (!is_null($model)) {
+            $this->model = $model;
+        }
     }
 
     /**
@@ -30,6 +32,10 @@ class ModelFirst
      */
     public function first()
     {
+        if (!isset($this->model->rows[0])) {
+            return null;
+        }
+
         return $this->model->rows[0];
     }
 }
