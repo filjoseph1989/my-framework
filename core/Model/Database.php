@@ -102,7 +102,7 @@ class Database
         );
 
         if (mysqli_connect_errno()) {
-            die($this->getError());
+            die($this->getError()); # Issue 70
         } else {
             $this->Instance = $con;
             $this->connected = true;

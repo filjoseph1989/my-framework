@@ -83,6 +83,8 @@ trait ModelTrait
     /**
      * Update row if exist otherwise
      * create
+     * 
+     * Issue 71
      *
      * @param  array   $data
      * @param  boolean $return
