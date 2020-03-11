@@ -59,6 +59,6 @@ class Validation implements ValidationInterface
      */
     public function magicallyCall()
     {
-        return $this->magicallyCall;
+        return $this->magicallyCall ?? false;
     }
 }
