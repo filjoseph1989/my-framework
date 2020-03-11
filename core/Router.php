@@ -89,7 +89,25 @@ class Router
      */
     public function getHandler()
     {
-        if ( ! isset($this->routes[$this->uri]) ) {
+        if (($result = self::hasUri()) !== true) {
+            return $result;
+        }
+
+        if (($result = self::hasUriMethod()) !== true) {
+            return $result;
+        }
+
+        return $this->routes[$this->uri][$this->requestMethod];
+    }
+
+    /**
+     * Check if has route uri
+     *
+     * @return boolean|int
+     */
+    private function hasUri()
+    {
+        if (! isset($this->routes[$this->uri])) {
             $this->uri = self::lookForPattern();
 
             if (empty($this->uri)) {
@@ -98,11 +116,26 @@ class Router
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Check if has method
+     *
+     * @return boolean|int
+     */
+    private function hasUriMethod()
+    {
         if ( ! isset($this->routes[$this->uri][$this->requestMethod])) {
-            throw new MethodNotAllowedException;
+            if ($this->requestMethod === 'GET') {
+                http_response_code(404);
+                return http_response_code();
+            } else {
+                throw new MethodNotAllowedException;
+            }
         }
 
-        return $this->routes[$this->uri][$this->requestMethod];
+        return true;
     }
 
     /**
