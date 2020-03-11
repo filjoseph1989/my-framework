@@ -76,8 +76,6 @@ class App extends Core
             session_start();
             if (empty($_SESSION['token'])) {
                 $_SESSION['token'] = bin2hex(random_bytes(32));
-                // $_SESSION['salt']  = random_bytes(32);
-                // self::createNonce($_SESSION['salt']);
             }
         }
 
@@ -354,20 +352,4 @@ class App extends Core
 
         return $params ?? [];
     }
-
-    /**
-     * Create nonce or csrf
-     * Issue 47:
-     *
-     * @param string $salt
-     * @return void
-    private function createNonce($salt = '')
-    {
-        return hash_hmac(
-            'sha256',
-            session_id() . $salt,
-            date("YmdG") . "{$salt} {$_SERVER['REMOTE_ADDR']}"
-        );
-    }
-    */
 }
