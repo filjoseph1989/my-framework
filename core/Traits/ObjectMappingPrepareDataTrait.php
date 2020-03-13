@@ -100,30 +100,42 @@ trait ObjectMappingPrepareDataTrait
      * @param  array  $wheres
      * @return void
      */
-    private function prepareGet(array &$wheres)
+    private function prepareGet(object &$model)
     {
         if ($this->database->isConnected()) {
-            $condition   = self::prepareWhere($wheres);
-            $this->query = self::prepareSelectQuery($condition);
+            $condition   = self::prepareWhere($model->wheres);
+            $limit       = self::prepareLimit($model);
+            $this->query = self::prepareSelectQuery($condition, $limit);
             $rows        = $this->database->query($this->query);
 
-            $this->count = $this->database->count();
-
-            if ($this->count == -1 || $this->count == 0) {
+            if (is_null(self::hasCount())) {
                 return null;
             }
 
-            $rows = self::fetchRows($rows);
+            self::mapRows($rows);
 
-            foreach ($rows as $key => $row) {
-                if ($this->toArray) {
-                    $this->rows[] = $row; # Issue 68
-                } else {
-                    $rows[$key] = self::map($this->model, $row);
-                }
+            return $this->model;
+        }
+    }
+
+    /**
+     * Prepare find
+     *
+     * @param array $value
+     * @return void
+     */
+    private function prepareFind(array &$value)
+    {
+        if ($this->database->isConnected()) {
+            $condition   = "{$this->primaryKey}='{$value[0]}'";
+            $this->query = self::prepareSelectQuery($condition);
+            $rows        = $this->database->query($this->query);
+
+            if (is_null(self::hasCount())) {
+                return null;
             }
 
-            $this->model->setModelRows('rows', $rows);
+            self::mapRows($rows);
 
             return $this->model;
         }
@@ -146,5 +158,42 @@ trait ObjectMappingPrepareDataTrait
         });
 
         return json_decode(json_encode($rows));
+    }
+
+    /**
+     * Check if has count
+     *
+     * @return boolean
+     */
+    private function hasCount()
+    {
+        $this->count = $this->database->count();
+
+        if ($this->count == -1 || $this->count == 0) {
+            return null;
+        }
+
+        return true;
+    }
+
+    /**
+     * Map results into model object
+     *
+     * @param object $rows
+     * @return void
+     */
+    private function mapRows(object $rows)
+    {
+        $rows = self::fetchRows($rows);
+
+        foreach ($rows as $key => $row) {
+            if ($this->toArray) {
+                $this->rows[] = $row; # Issue 68
+            } else {
+                $rows[$key] = self::map($this->model, $row);
+            }
+        }
+
+        $this->model->setModelRows('rows', $rows);
     }
 }
