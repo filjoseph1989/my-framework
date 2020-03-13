@@ -52,14 +52,9 @@ class Database
             return $results;
         }
 
-        /*
-        if (!$results) {
-            die($this->getError());
-        }
-         */
-
         # Issue 56
         debug_print_append("\nQuery is not successful on @ core\Model\Database.php:49\n");
+        debug_print_append("\n". self::getError() ."\n");
         debug_print_append(trace(true));
         return null;
     }
@@ -184,5 +179,15 @@ class Database
         }
 
         return $return;
+    }
+
+    /**
+     * Get sql error
+     *
+     * @return void
+     */
+    private function getError()
+    {
+        return $this->sql . "SQL Exception #" . $this->Instance->errno . " : " . $this->Instance->error;
     }
 }
