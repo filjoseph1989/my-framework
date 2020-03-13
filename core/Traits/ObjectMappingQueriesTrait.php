@@ -17,9 +17,19 @@ trait ObjectMappingQueriesTrait
      * @param  string $wheres
      * @return string
      */
-    private function prepareSelectQuery(string $wheres)
+    private function prepareSelectQuery(string $wheres, string $limit = '')
     {
-        return "select * from {$this->table} where {$wheres};";
+        $query = "SELECT * FROM {$this->table}";
+
+        if (!empty($wheres)) {
+            $query = "{$query} WHERE {$wheres}";
+        }
+
+        if (!empty($limit)) {
+            $query = "{$query} {$limit}";
+        }
+
+        return $query;
     }
 
     /**
