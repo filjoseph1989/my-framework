@@ -12,6 +12,20 @@ use Core\Model\Database;
 trait ObjectMappingParserTrait
 {
     /**
+     * Prepare limit string
+     *
+     * @param object $model
+     * @return void
+     */
+    private function prepareLimit(object &$model)
+    {
+        if ($model->limit > 0) {
+            return "limit {$model->limit}";
+        }
+
+        return "";
+    }
+    /**
      * Building the where condition
      *
      * @param  array  $wheres
