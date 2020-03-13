@@ -112,9 +112,9 @@ trait ObjectMappingTrait
      * @param  array  $query
      * @return object
      */
-    public function get(array &$wheres = [])
+    public function get(object &$model)
     {
-        return self::prepareGet($wheres);
+        return self::prepareGet($model);
     }
 
     /**
