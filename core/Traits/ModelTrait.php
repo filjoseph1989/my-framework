@@ -24,6 +24,18 @@ trait ModelTrait
     protected $toArray = false;
 
     /**
+     * Set limit of a query
+     *
+     * @param  integer $limit
+     * @return object
+     */
+    public function limit(int $limit=0)
+    {
+        $this->limit = $limit;
+        return $this;
+    }
+
+    /**
      * Setup where condition
      *
      * @param  string $columnName
@@ -38,23 +50,13 @@ trait ModelTrait
     }
 
     /**
-     * Return wheres container
-     *
-     * @return array
-     */
-    public function getWheres()
-    {
-        return $this->wheres;
-    }
-
-    /**
      * Return the resulting data
      *
      * @return mixed
      */
     public function get()
     {
-        return $this->mapper->get($this->wheres);
+        return $this->mapper->get($this);
     }
 
     /**
@@ -83,7 +85,7 @@ trait ModelTrait
     /**
      * Update row if exist otherwise
      * create
-     * 
+     *
      * Issue 71
      *
      * @param  array   $data
@@ -114,5 +116,15 @@ trait ModelTrait
     {
         $this->toArray = true;
         return $this;
+    }
+
+    /**
+     * Return wheres container
+     *
+     * @return array
+     */
+    private function getWheres()
+    {
+        return $this->wheres;
     }
 }
