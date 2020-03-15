@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\model;
+namespace Core\Model;
 
 use Core\Model\ObjectMapping;
 use Core\Traits\DebugTrait;
