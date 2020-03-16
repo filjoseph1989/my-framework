@@ -213,8 +213,10 @@ class App extends Core
         self::setErrors($data);
         self::unsetEmptyWithData($data);
         self::setToken($data);
-
-        $_SESSION['current_page'] = $view; # Issue 48
+        self::setCurrentPage($data, $view);
+        self::setResponse($data);
+        self::setViewUri($data);
+        self::setViewSiteName($data);
 
         if (self::isTest()) {
             return $data;
@@ -303,6 +305,26 @@ class App extends Core
             $data['with'] = $_SESSION['with'];
             unset($_SESSION['with']);
         }
+    }
+
+    /**
+     * Set URI as view variable
+     *
+     * @param void
+     */
+    private function setViewUri(&$data)
+    {
+        $data['uri'] = $this->uri;
+    }
+
+    /**
+     * Set site name
+     *
+     * @param void
+     */
+    private function setViewSiteName(&$data)
+    {
+        $data['site_name'] = $_SERVER['SERVER_NAME'];
     }
 
     /**
