@@ -6,6 +6,7 @@ use Core\Model\ModelFirst;
 
 /**
  * Collection of other model methods
+ * 
  * @author Fil Joseph Beluan <filjoseph22@gmail.com>
  */
 trait ModelTrait
@@ -24,12 +25,55 @@ trait ModelTrait
     protected $toArray = false;
 
     /**
+     * Limitation of result in query
+     */
+    protected int $limit = 0;
+    
+    /**
+     * Sortation of result in query
+     */
+    protected string $orderBy = '';
+
+    /**
+     * Set order by
+     *
+     * @param string $order
+     * @return model
+     */
+    public function orderBy(string $order = '')
+    {
+        $this->orderBy = $order;
+        return $this;
+    }
+
+    /**
+     * Reurn mysql query string
+     *
+     * @return string
+     */
+    public function query()
+    {
+        return $this->mapper->query();
+    }
+
+    /**
+     * Set limit about getting database data
+     *
+     * @param integer $limit
+     * @return model
+     */
+    public function take(int $limit = 0)
+    {
+        return self::limit($limit);
+    }
+
+    /**
      * Set limit of a query
      *
      * @param  integer $limit
      * @return object
      */
-    public function limit(int $limit=0)
+    public function limit(int $limit = 0)
     {
         $this->limit = $limit;
         return $this;
@@ -40,12 +84,11 @@ trait ModelTrait
      *
      * @param  string $columnName
      * @param  string $value
-     * @return void
+     * @return model
      */
     public function where($columnName, $value)
     {
         $this->wheres[$columnName] = $value;
-
         return $this;
     }
 
@@ -75,7 +118,7 @@ trait ModelTrait
      * Update table row
      *
      * @param  array  $data
-     * @return void
+     * @return boolean
      */
     public function update(array $data = [], $return = false)
     {
