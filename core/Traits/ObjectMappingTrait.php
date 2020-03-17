@@ -146,7 +146,7 @@ trait ObjectMappingTrait
      *
      * @return string
      */
-    private function query()
+    public function query()
     {
         return $this->query;
     }
