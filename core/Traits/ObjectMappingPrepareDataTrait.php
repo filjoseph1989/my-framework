@@ -104,8 +104,9 @@ trait ObjectMappingPrepareDataTrait
     {
         if ($this->database->isConnected()) {
             $condition   = self::prepareWhere($model->wheres);
+            $order       = self::prepareOrderBy($model);
             $limit       = self::prepareLimit($model);
-            $this->query = self::prepareSelectQuery($condition, $limit);
+            $this->query = self::prepareSelectQuery($condition, $limit, $order);
             $rows        = $this->database->query($this->query);
 
             if (is_null(self::hasCount())) {

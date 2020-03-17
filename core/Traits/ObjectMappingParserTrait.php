@@ -12,15 +12,30 @@ use Core\Model\Database;
 trait ObjectMappingParserTrait
 {
     /**
+     * Prepare order by string
+     *
+     * @param object $model
+     * @return string
+     */
+    private function prepareOrderBy(object &$model)
+    {
+        if ($model->limit > 0) {
+            return "ORDER BY {$model->orderBy}";
+        }
+
+        return "";
+    }
+
+    /**
      * Prepare limit string
      *
      * @param object $model
-     * @return void
+     * @return string
      */
     private function prepareLimit(object &$model)
     {
         if ($model->limit > 0) {
-            return "limit {$model->limit}";
+            return "LIMIT {$model->limit}";
         }
 
         return "";
@@ -57,12 +72,12 @@ trait ObjectMappingParserTrait
 
         return implode(',', $values);
     }
-    
+
     /**
      * Prepare insert values
      *
      * @param array $data
-     * @return void
+     * @return string
      */
     private function prepareInsertValues(array $data = [])
     {
