@@ -10,7 +10,7 @@ class ModelRowIterator implements \Iterator
     /**
      * Containers of rows
      */
-    private array $rows = [];
+    protected array $rows = [];
 
     /**
      * Accept model at initialization
