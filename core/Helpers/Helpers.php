@@ -22,6 +22,17 @@ if (!function_exists('mainjs_version')) {
 }
 
 /**
+ * Return asset version
+ *
+ * @var float
+ */
+if (!function_exists('asset_version')) {
+    function asset_version() {
+        return getenv('MAINJS');
+    }
+}
+
+/**
  * Print variable value on file
  *
  * @return void
@@ -63,7 +74,7 @@ if (!function_exists('isLogin')) {
 
 /**
  * Check if the user is loggedin
- * 
+ *
  * @return boolean
  */
 if (!function_exists('is_login')) {
