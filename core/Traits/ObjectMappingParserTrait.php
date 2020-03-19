@@ -19,7 +19,7 @@ trait ObjectMappingParserTrait
      */
     private function prepareOrderBy(object &$model)
     {
-        if ($model->limit > 0) {
+        if (strlen($model->orderBy) > 0) {
             return "ORDER BY {$model->orderBy}";
         }
 
