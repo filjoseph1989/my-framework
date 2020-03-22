@@ -1,5 +1,20 @@
 <?php
 
+use Core\Iterators\ModelRowIterator;
+
+/**
+ * Pass model to row iterator class
+ * Task 6
+ *
+ * @var object
+ */
+if (!function_exists('iterate_model')) {
+    function iterate_model(object $model)
+    {
+        return new ModelRowIterator($model);
+    }
+}
+
 /**
  * CSRF token
  * @var
