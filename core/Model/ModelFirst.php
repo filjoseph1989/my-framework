@@ -2,7 +2,7 @@
 
 namespace Core\Model;
 
-use Core\Model\ModelRowIterator;
+use Core\Iterators\ModelRowIterator;
 
 /**
  * Evaluate model to first
