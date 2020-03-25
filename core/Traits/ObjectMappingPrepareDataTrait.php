@@ -30,6 +30,7 @@ trait ObjectMappingPrepareDataTrait
             $this->query = self::prepareInsertQuery($data);
             $results     = $this->database->query($this->query);
             $this->count = $this->database->count();
+            $this->id    = $this->database->insertId();
 
             if ($this->count <= 0) {
                 debug_print_append("\nCreate is not successfull @ core\Traits\ObjectMappingTrait.php:111\n");
@@ -47,7 +48,7 @@ trait ObjectMappingPrepareDataTrait
                 return array_shift(self::get());
             }
 
-            return $results;
+            return self::find([$this->id]);
         }
     }
 
