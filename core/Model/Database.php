@@ -53,10 +53,22 @@ class Database
         }
 
         # Issue 56
+        # Issue 
         debug_print_append("\nQuery is not successful on @ core\Model\Database.php:49\n");
+        debug_print_append("\n{$query}\n");
         debug_print_append("\n". self::getError() ."\n");
         debug_print_append(trace(true));
         return null;
+    }
+
+    /**
+     * Return the last insert ID
+     *
+     * @return int
+     */
+    public function insertId()
+    {
+        return $this->Instance->insert_id;
     }
 
     /**
