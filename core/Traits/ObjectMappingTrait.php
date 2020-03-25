@@ -138,7 +138,7 @@ trait ObjectMappingTrait
      */
     public function create(array $data = [], $return = false)
     {
-        return self::prepareCreate($data, $return);
+        return self::prepareCreate($data[0], $return);
     }
 
     /**
