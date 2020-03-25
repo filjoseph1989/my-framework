@@ -160,7 +160,7 @@ class App extends Core
     public function getAction()
     {
         if (empty($this->action)) {
-            return $_SERVER['REQUEST_METHOD'] ?? 'index';
+            return $_SERVER['REQUEST_METHOD'];
         }
 
         return $this->action;
