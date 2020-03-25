@@ -110,6 +110,10 @@ trait ModelTrait
      */
     public function first()
     {
+        if (count($this->rows) > 0) {
+            return $this->rows[0];
+        }
+        
         $rows = self::get();
         return (new ModelFirst($rows))->first();
     }
