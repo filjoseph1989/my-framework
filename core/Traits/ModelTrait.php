@@ -126,7 +126,7 @@ trait ModelTrait
      */
     public function update(array $data = [], $return = false)
     {
-        return $this->mapper->update($this->wheres, $data, $return);
+        return $this->mapper->update($this, $data, $return);
     }
 
     /**
