@@ -159,7 +159,7 @@ trait ObjectMappingTrait
      */
     private function scape($value)
     {
-        $value = trim($value, " \t\n\r\0\x0B");
+        // $value = trim($value, " \t\n\r\0\x0B");
         return $this->database->scape($value);
     }
 }
