@@ -6,7 +6,7 @@ use Core\Model\ModelFirst;
 
 /**
  * Collection of other model methods
- * 
+ *
  * @author Fil Joseph Beluan <filjoseph22@gmail.com>
  */
 trait ModelTrait
@@ -28,7 +28,7 @@ trait ModelTrait
      * Limitation of result in query
      */
     protected int $limit = 0;
-    
+
     /**
      * Sortation of result in query
      */
@@ -111,11 +111,11 @@ trait ModelTrait
     public function first()
     {
         if (count($this->rows) > 0) {
-            return $this->rows[0];
+            return (new ModelFirst($this))->first();            
         }
-        
-        $rows = self::get();
-        return (new ModelFirst($rows))->first();
+
+        $model = self::get();
+        return (new ModelFirst($model))->first();
     }
 
     /**
