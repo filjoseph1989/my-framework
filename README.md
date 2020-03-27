@@ -28,7 +28,6 @@ npm install
 make a copy of .env.example as .env
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
