@@ -46,7 +46,7 @@ trait ObjectMappingQueriesTrait
     {
         $keys   = self::prepareDataKey($data);
         $values = self::prepareInsertValues($data);
-        return "INSERT INTO {$this->table} ({$keys}) VALUES ({$values});";
+        return "INSERT INTO {$this->table} ({$keys}) VALUES ({$values})";
     }
 
     /**
@@ -58,6 +58,6 @@ trait ObjectMappingQueriesTrait
      */
     private function prepareUpdateQuery(string $wheres, string $updateData)
     {
-        return "UPDATE {$this->table} SET {$updateData} WHERE {$wheres};";
+        return "UPDATE {$this->table} SET {$updateData} WHERE {$wheres}";
     }
 }
