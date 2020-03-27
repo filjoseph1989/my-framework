@@ -11,48 +11,45 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-php
+php7.4
 nodejs
-apache
+apache2
 mysql
+tailwindcss
 ```
 
 ### Installing
-
-A step by step series of examples that tell you how to get a development env running
 
 Download code into your project directory and run
 
 ```
 composer install
 npm install
+make a copy of .env.example as .env
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
+There is an example of test in test directory and to run test.
 
 ```
-Give an example
+./vendor/bin/phpunit ./test/ExampleTest.php
 ```
+To write a test refer to the phpunit documentation
+
+* [phpunit](https://phpunit.readthedocs.io/en/9.0/installation.html)
+
+I will write more about writing a test soon on official docs
 
 ### And coding style tests
 
-Explain what these tests test and why
-
-```
-Give an example
-```
+Just follow PSR
 
 ## Deployment
 
-I will discusss this in my blog
+I will discuss this in my blog
 
 ## Built With
 
