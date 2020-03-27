@@ -77,7 +77,7 @@ class Database
      * @param  string $value
      * @return string
      */
-    public function scape(string $value = '')
+    public function scape($value)
     {
         return $this->Instance->real_escape_string($value);
     }
