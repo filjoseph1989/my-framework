@@ -83,7 +83,7 @@ class Request implements RequestInterface
         foreach ($_POST as $key => $value) {
             unset($_POST[$key]);
 
-            if ($key !== "password") {
+            if ($key !== "password" && $key !== 'token') {
                 $key = str_replace('-', '_', $key);
             }
 
