@@ -40,19 +40,20 @@ trait ObjectMappingParserTrait
 
         return "";
     }
+
     /**
      * Building the where condition
      *
-     * @param  array  $wheres
+     * @param  object $model
      * @return string
      */
-    private function prepareWhere(array $wheres)
+    private function prepareWhere(object &$model)
     {
-        if (empty($wheres)) {
+        if (count($model->wheres) == 0) {
             return "";
         }
 
-        return self::walkThroughWheres($wheres);
+        return self::walkThroughWheres($model);
     }
 
     /**
@@ -61,7 +62,7 @@ trait ObjectMappingParserTrait
      * @param  array  $data
      * @return string
      */
-    private function prepareData(array $data = [])
+    private function prepareData(array &$data)
     {
         $values = [];
 
@@ -114,11 +115,11 @@ trait ObjectMappingParserTrait
      * @param  array  $wheres
      * @return string
      */
-    private function walkThroughWheres(array $wheres)
+    private function walkThroughWheres(object &$model)
     {
         $whereQuery = [];
-        foreach ($wheres as $key => $value) {
-            $value = self::scape($value);
+        foreach ($model->wheres as $key => $value) {
+            $value        = self::scape($value);
             $whereQuery[] = "$key='$value'";
         }
 
