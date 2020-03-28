@@ -145,7 +145,7 @@ trait ModelTrait
             $this->mapper->toArray();
         }
 
-        $result = $this->mapper->update($this->wheres, $data, $return);
+        $result = $this->mapper->update($this, $data, $return);
 
         if ($result) {
             return $result;
