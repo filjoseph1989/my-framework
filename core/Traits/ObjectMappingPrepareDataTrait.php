@@ -55,15 +55,15 @@ trait ObjectMappingPrepareDataTrait
     /**
      * Prepare updating table
      *
-     * @param  array    $wheres
-     * @param  array    $data
-     * @param  boolean  $return
-     * @return boolean|object
+     * @param  object  $model
+     * @param  array   $data
+     * @param  boolean $return
+     * @return object
      */
-    private function prepareUpdate(array $wheres, array $data = [], $return = false)
+    private function prepareUpdate(object &$model, array $data = [], $return = false)
     {
         if ($this->database->isConnected()) {
-            $condition   = self::prepareWhere($wheres);
+            $condition   = self::prepareWhere($model);
             $this->query = self::prepareSelectQuery($condition);
 
             $this->database->query($this->query);
@@ -104,7 +104,7 @@ trait ObjectMappingPrepareDataTrait
     private function prepareGet(object &$model)
     {
         if ($this->database->isConnected()) {
-            $condition   = self::prepareWhere($model->wheres);
+            $condition   = self::prepareWhere($model);
             $order       = self::prepareOrderBy($model);
             $limit       = self::prepareLimit($model);
             $this->query = self::prepareSelectQuery($condition, $limit, $order);
