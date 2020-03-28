@@ -77,7 +77,7 @@ class ObjectMapping implements ObjectMappingInterface
      * @param  array  $items
      * @return array
      */
-    private function relation(object $rows)
+    private function relation(object &$rows)
     {
         $relations = [];
 
