@@ -119,14 +119,13 @@ trait ObjectMappingTrait
 
     /**
      * Update database table
-     * Issue 50
      *
      * @param array $data
      * @return void
      */
-    public function update(object $model, array $data = [], $return = false)
+    public function update(object &$model, array $data = [], $return = false)
     {
-        return self::prepareUpdate($model->wheres, $data, $return);
+        return self::prepareUpdate($model, $data, $return);
     }
 
     /**
