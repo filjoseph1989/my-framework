@@ -3,7 +3,7 @@
 use Core\Iterators\ModelRowIterator;
 
 /**
- * Return first two sentense of a paragraph
+ * Return sentence(s) of a paragraph
  *
  * @param  string $sub_heading
  * @return string
