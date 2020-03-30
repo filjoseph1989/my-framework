@@ -3,6 +3,31 @@
 use Core\Iterators\ModelRowIterator;
 
 /**
+ * Return first two sentense of a paragraph
+ *
+ * @param  string $sub_heading
+ * @return string
+ */
+if (!function_exists('excerpt')) {
+    function excerpt(object &$draft, int $sentense = 2)
+    {
+        # Task 60
+        // if (isset($_SESSION['excerpt'][$draft->id]) && !empty($_SESSION['excerpt'][$draft->id])) {
+        //     return $_SESSION['excerpt'][$draft->id];
+        // }
+
+        if (isset($draft->content->sub_heading)) {
+            $expression = "/^([^.!?]*[\.!?]+){0,{$sentense}}/";
+            preg_match($expression, strip_tags($draft->content->sub_heading), $abstract);
+            $_SESSION['excerpt'][$draft->id] = $abstract[0];
+            return $abstract[0] ?? '';
+        }
+
+        return "";
+    }
+}
+
+/**
  * Pass model to row iterator class
  * Task 6
  *
