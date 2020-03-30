@@ -26,10 +26,13 @@ $excluded  = [
     $main_path . '/test',
     $main_path . '/vendor'
 ];
+$files = [];
 
+print "Traversing all directories in {$main_path}\n";
 $directory = new \RecursiveDirectoryIterator($main_path);
+
+print "Reading all files in {$main_path}\n";
 $iterator  = new \RecursiveIteratorIterator($directory);
-$files     = [];
 
 function isContainExcluded($file, &$excluded)
 {
