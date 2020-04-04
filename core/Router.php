@@ -148,6 +148,11 @@ class Router
         $keys = [];
 
         foreach ($this->routes as $key => $value) {
+            # Here we breakdown the request uri into segments and same with key in $this->routes
+            # get their count and compare if it match.
+            #
+            # This way, we will capture routes the has the same structure with the current
+            # request uri.
             if (count($uriExploded = explode('/', $this->uri)) == count($keyExploded = explode('/', $key))) {
                 $catch = self::matchBaseOnRoute($uriExploded, $keyExploded);
 
@@ -167,15 +172,16 @@ class Router
      * @param array $keyExploded
      * @return string|empty
      */
-    private function matchBaseOnRoute(array $uriExploded = [], array $keyExploded = [])
+    private function matchBaseOnRoute(array &$uriExploded = [], array &$keyExploded = [])
     {
         for ($i=0; $i < count($keyExploded); $i++) {
             if (empty($keyExploded) && empty($uriExploded)) {
                 continue;
             }
 
+            # Check if the string in $keyExploded[$i] is wrap with {}
             if (preg_match('/{\K[^}]*(?=})/m', $keyExploded[$i], $match)) {
-                $_GET[$match[0]] = $uriExploded[$i];
+                $_GET[$match[0]] = $uriExploded[$i]; # Issue 77
                 continue;
             }
 
