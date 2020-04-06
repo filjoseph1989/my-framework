@@ -41,7 +41,11 @@ trait ObjectMappingTrait
      */
     public function delete(object &$model)
     {
-        return self::prepareDelete($model);
+        if (count($model->rows) > 0) {
+            return self::prepareDelete($model);
+        }
+
+        return false;
     }
 
     /**
@@ -51,7 +55,7 @@ trait ObjectMappingTrait
      * @param  int $id Table ID
      * @return object
      */
-    public function find(array $value)
+    public function find(int $value)
     {
         return self::prepareFind($value);
     }
