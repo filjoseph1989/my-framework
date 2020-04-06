@@ -98,6 +98,8 @@ class Model
     /**
      * Magically call mapping object method
      *
+     * Issue 80
+     *
      * @param  string $method    Method name
      * @param  array  $arguments The method parameters
      * @return mixed
