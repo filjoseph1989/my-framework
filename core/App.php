@@ -365,7 +365,7 @@ class App extends Core
 
         foreach ($reflection->getParameters() as $param) {
             if (isset($_GET[$param->getName()])) {
-                $params[$param->getPosition()] = $_GET[$param->getName()];
+                $params[$param->getPosition()] = $_GET[$param->getName()]; # Issue 78
             }
             if (!is_null($param->getClass()) && $param->getClass()->name == "Core\Request\Request") {
                 $params[$param->getPosition()] = $this->container->request;
