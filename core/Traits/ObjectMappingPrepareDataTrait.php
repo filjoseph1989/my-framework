@@ -140,10 +140,10 @@ trait ObjectMappingPrepareDataTrait
      * @param array $value
      * @return void
      */
-    private function prepareFind(array &$value)
+    private function prepareFind(int &$value)
     {
         if ($this->database->isConnected()) {
-            $condition   = "{$this->primaryKey}='{$value[0]}'";
+            $condition   = "{$this->primaryKey}='{$value}'";
             $this->query = self::prepareSelectQuery($condition);
             $rows        = $this->database->query($this->query);
 
