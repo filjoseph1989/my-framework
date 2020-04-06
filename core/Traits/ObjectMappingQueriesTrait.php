@@ -12,6 +12,17 @@ use Core\Model\Database;
 trait ObjectMappingQueriesTrait
 {
     /**
+     * Prepare delete query
+     *
+     * @param  object $model
+     * @return string
+     */
+    private function prepareDeleteQuery(object &$model)
+    {
+        return "DELETE FROM {$this->table} WHERE `id`={$model->rows[0]->id}";
+    }
+
+    /**
      * Prepare select
      *
      * @param  string $wheres
