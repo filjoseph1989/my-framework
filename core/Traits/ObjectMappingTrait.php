@@ -34,6 +34,17 @@ trait ObjectMappingTrait
     protected array $rows = [];
 
     /**
+     * Delete row in a table
+     *
+     * @param  object $model
+     * @return boolean
+     */
+    public function delete(object &$model)
+    {
+        return self::prepareDelete($model);
+    }
+
+    /**
      * Should return an object map
      * Issue 63
      *
