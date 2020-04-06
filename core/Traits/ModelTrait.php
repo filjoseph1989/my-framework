@@ -35,15 +35,30 @@ trait ModelTrait
     protected string $orderBy = '';
 
     /**
+     * Find rows
+     *
+     * @param integer $id
+     * @return void
+     */
+    public function find(int $id)
+    {
+        $model = $this->mapper->find($id); 
+
+        if (is_null($model)) {
+            return $this;
+        }
+
+        return $this;
+    }
+
+    /**
      * Delete row
      *
      * @return
      */
     public function delete()
     {
-        if (count($this->rows) > 0) {
-            return $this->mapper->delete($this);
-        }
+        return $this->mapper->delete($this);
     }
 
     /**
