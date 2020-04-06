@@ -35,6 +35,18 @@ trait ModelTrait
     protected string $orderBy = '';
 
     /**
+     * Delete row
+     *
+     * @return
+     */
+    public function delete()
+    {
+        if (count($this->rows) > 0) {
+            return $this->mapper->delete($this);
+        }
+    }
+
+    /**
      * Set order by
      *
      * @param string $order
@@ -114,8 +126,8 @@ trait ModelTrait
             return (new ModelFirst($this))->first();            
         }
 
-        $model = self::get();
-        return (new ModelFirst($model))->first();
+        $rows = self::get();
+        return (new ModelFirst($rows))->first();
     }
 
     /**
