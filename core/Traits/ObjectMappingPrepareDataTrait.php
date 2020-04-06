@@ -12,6 +12,20 @@ use Core\Model\Database;
 trait ObjectMappingPrepareDataTrait
 {
     /**
+     * Prepare delete
+     *
+     * @param object $model
+     * @return void
+     */
+    private function prepareDelete(object &$model)
+    {
+        if ($this->database->isConnected()) {
+            $this->query = self::prepareDeleteQuery($model);
+            return $this->database->query($this->query);
+        }
+    }
+
+    /**
      * Prepare create
      *
      * @param array $data
@@ -33,13 +47,13 @@ trait ObjectMappingPrepareDataTrait
             $this->id    = $this->database->insertId();
 
             if ($this->count <= 0) {
-                debug_print_append("\nCreate is not successfull @ core\Traits\ObjectMappingTrait.php:111\n");
+                debug_print_append("\nCreate is not successfull\n");
                 debug_print_append(trace(true));
                 return false;
             }
 
             if (!$results) {
-                debug_print_append("\nCreate is not successfull @ core\Traits\ObjectMappingTrait.php:111\n");
+                debug_print_append("\nCreate is not successfull\n");
                 debug_print_append(trace(true));
                 return false;
             }
