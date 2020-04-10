@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Traits;
+namespace Core\Model\Traits;
 
 use Core\Model\ModelFirst;
 
@@ -42,7 +42,7 @@ trait ModelTrait
      */
     public function find(int $id)
     {
-        $model = $this->mapper->find($id); 
+        $model = $this->mapper->find($id);
 
         if (is_null($model)) {
             return $this;

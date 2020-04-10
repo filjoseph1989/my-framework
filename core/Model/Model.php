@@ -3,8 +3,8 @@
 namespace Core\Model;
 
 use Core\Mapper\ObjectMapper;
+use Core\Model\Traits\ModelTrait;
 use Core\Traits\DebugTrait;
-use Core\Traits\ModelTrait;
 
 /**
  * Main model
