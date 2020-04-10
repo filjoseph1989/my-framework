@@ -62,7 +62,7 @@ trait ObjectMappingPrepareDataTrait
                 return array_shift(self::get());
             }
 
-            return self::find([$this->id]);
+            return self::find($this->id);
         }
     }
 
