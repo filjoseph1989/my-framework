@@ -2,8 +2,12 @@
 
 namespace Core\Model;
 
+<<<<<<< HEAD
 use Core\Mapper\ObjectMapper;
 use Core\Model\Traits\ModelTrait;
+=======
+use Core\Model\ObjectMapper;
+>>>>>>> 9287905... Core: Rename objectMapping to objectMapper
 use Core\Traits\DebugTrait;
 
 /**
