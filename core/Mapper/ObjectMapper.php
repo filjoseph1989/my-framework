@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Model;
+namespace Core\Mapper;
 
 use Core\Contracts\ObjectMapperInterface;
 use Core\Model\Database;

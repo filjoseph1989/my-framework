@@ -2,7 +2,7 @@
 
 namespace Core\Model;
 
-use Core\Model\ObjectMapper;
+use Core\Mapper\ObjectMapper;
 use Core\Traits\DebugTrait;
 use Core\Traits\ModelTrait;
 
