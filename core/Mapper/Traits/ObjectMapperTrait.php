@@ -3,6 +3,11 @@
 namespace Core\Mapper\Traits;
 
 use Core\Model\Database;
+<<<<<<<< HEAD:core/Mapper/Traits/ObjectMapperTrait.php
+use Core\Mapper\Traits\ObjectMapperParserTrait;
+use Core\Mapper\Traits\ObjectMapperPrepareDataTrait;
+use Core\Mapper\Traits\ObjectMapperQueriesTrait;
+========
 <<<<<<< HEAD:core/Mapper/Traits/ObjectMapperTrait.php
 use Core\Mapper\Traits\ObjectMapperParserTrait;
 use Core\Mapper\Traits\ObjectMapperPrepareDataTrait;
@@ -12,6 +17,7 @@ use Core\Traits\ObjectMapperParserTrait;
 use Core\Traits\ObjectMapperPrepareDataTrait;
 use Core\Traits\ObjectMapperQueriesTrait;
 >>>>>>> 9287905... Core: Rename objectMapping to objectMapper:core/Traits/ObjectMapperTrait.php
+>>>>>>>> b81e947... Core: Moved object mapper traits to its own directory:core/Traits/ObjectMapperTrait.php
 
 /**
  * A trait use by Core\Model\ObjectMapper

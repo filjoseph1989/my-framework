@@ -84,11 +84,7 @@ trait ObjectMapperPrepareDataTrait
             $this->count = $this->database->count();
 
             if ($this->count <= 0) {
-<<<<<<< HEAD:core/Mapper/Traits/ObjectMapperPrepareDataTrait.php
-                debug_print_append("\nRow {$condition} doesn't exist @ Core\Mapper\Traits\ObjectMapperTrait.php:92\n");
-=======
-                debug_print_append("\nRow {$condition} doesn't exist @ core\Traits\ObjectMapperTrait.php:92\n");
->>>>>>> 9287905... Core: Rename objectMapping to objectMapper:core/Traits/ObjectMapperPrepareDataTrait.php
+                debug_print_append("\nRow {$condition} doesn't exist \n");
                 debug_print_append(trace(true));
                 return false;
             }

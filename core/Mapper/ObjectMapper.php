@@ -3,13 +3,8 @@
 namespace Core\Mapper;
 
 use Core\Contracts\ObjectMapperInterface;
-<<<<<<< HEAD:core/Mapper/ObjectMapper.php
 use Core\Mapper\Traits\ObjectMapperTrait;
 use Core\Model\Database;
-=======
-use Core\Model\Database;
-use Core\Traits\ObjectMapperTrait;
->>>>>>> 9287905... Core: Rename objectMapping to objectMapper:core/Model/ObjectMapper.php
 
 /**
  * Map database as object
