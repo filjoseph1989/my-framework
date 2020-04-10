@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Traits;
+namespace Core\Mapper\Traits;
 
 use Core\Model\Database;
 

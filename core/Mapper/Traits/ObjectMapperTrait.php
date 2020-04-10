@@ -1,11 +1,11 @@
 <?php
 
-namespace Core\Traits;
+namespace Core\Mapper\Traits;
 
 use Core\Model\Database;
-use Core\Traits\ObjectMapperParserTrait;
-use Core\Traits\ObjectMapperPrepareDataTrait;
-use Core\Traits\ObjectMapperQueriesTrait;
+use Core\Mapper\Traits\ObjectMapperParserTrait;
+use Core\Mapper\Traits\ObjectMapperPrepareDataTrait;
+use Core\Mapper\Traits\ObjectMapperQueriesTrait;
 
 /**
  * A trait use by Core\Model\ObjectMapper

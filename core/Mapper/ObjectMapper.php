@@ -3,8 +3,8 @@
 namespace Core\Mapper;
 
 use Core\Contracts\ObjectMapperInterface;
+use Core\Mapper\Traits\ObjectMapperTrait;
 use Core\Model\Database;
-use Core\Traits\ObjectMapperTrait;
 
 /**
  * Map database as object

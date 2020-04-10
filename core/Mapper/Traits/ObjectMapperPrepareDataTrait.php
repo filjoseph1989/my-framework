@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Traits;
+namespace Core\Mapper\Traits;
 
 use Core\Model\Database;
 
@@ -84,7 +84,7 @@ trait ObjectMapperPrepareDataTrait
             $this->count = $this->database->count();
 
             if ($this->count <= 0) {
-                debug_print_append("\nRow {$condition} doesn't exist @ core\Traits\ObjectMapperTrait.php:92\n");
+                debug_print_append("\nRow {$condition} doesn't exist @ Core\Mapper\Traits\ObjectMapperTrait.php:92\n");
                 debug_print_append(trace(true));
                 return false;
             }
