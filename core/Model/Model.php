@@ -2,7 +2,7 @@
 
 namespace Core\Model;
 
-use Core\Model\ObjectMapping;
+use Core\Model\ObjectMapper;
 use Core\Traits\DebugTrait;
 use Core\Traits\ModelTrait;
 
@@ -39,7 +39,7 @@ class Model
      */
     public function __construct()
     {
-        $this->mapper = new ObjectMapping($this);
+        $this->mapper = new ObjectMapper($this);
     }
 
     /**

@@ -3,9 +3,9 @@
 namespace Core\Contracts;
 
 /**
- * A contract tha protect ObjectMapping
+ * A contract tha protect ObjectMapper
  */
-interface ObjectMappingInterface
+interface ObjectMapperInterface
 {
     /**
      * Initiate object mapping

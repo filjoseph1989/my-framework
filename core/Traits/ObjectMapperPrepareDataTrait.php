@@ -5,11 +5,11 @@ namespace Core\Traits;
 use Core\Model\Database;
 
 /**
- * A trait use by Core\Model\ObjectMapping
+ * A trait use by Core\Model\ObjectMapper
  *
  * @author fil beluan <filjoseph22@gmail.com>
  */
-trait ObjectMappingPrepareDataTrait
+trait ObjectMapperPrepareDataTrait
 {
     /**
      * Prepare delete
@@ -84,7 +84,7 @@ trait ObjectMappingPrepareDataTrait
             $this->count = $this->database->count();
 
             if ($this->count <= 0) {
-                debug_print_append("\nRow {$condition} doesn't exist @ core\Traits\ObjectMappingTrait.php:92\n");
+                debug_print_append("\nRow {$condition} doesn't exist @ core\Traits\ObjectMapperTrait.php:92\n");
                 debug_print_append(trace(true));
                 return false;
             }

@@ -5,11 +5,11 @@ namespace Core\Traits;
 use Core\Model\Database;
 
 /**
- * A trait use by Core\Model\ObjectMapping
+ * A trait use by Core\Model\ObjectMapper
  *
  * @author fil beluan <filjoseph22@gmail.com>
  */
-trait ObjectMappingQueriesTrait
+trait ObjectMapperQueriesTrait
 {
     /**
      * Prepare delete query

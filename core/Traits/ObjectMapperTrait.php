@@ -3,20 +3,20 @@
 namespace Core\Traits;
 
 use Core\Model\Database;
-use Core\Traits\ObjectMappingParserTrait;
-use Core\Traits\ObjectMappingPrepareDataTrait;
-use Core\Traits\ObjectMappingQueriesTrait;
+use Core\Traits\ObjectMapperParserTrait;
+use Core\Traits\ObjectMapperPrepareDataTrait;
+use Core\Traits\ObjectMapperQueriesTrait;
 
 /**
- * A trait use by Core\Model\ObjectMapping
+ * A trait use by Core\Model\ObjectMapper
  *
  * @author fil beluan <filjoseph22@gmail.com>
  */
-trait ObjectMappingTrait
+trait ObjectMapperTrait
 {
-    use ObjectMappingParserTrait;
-    use ObjectMappingPrepareDataTrait;
-    use ObjectMappingQueriesTrait;
+    use ObjectMapperParserTrait;
+    use ObjectMapperPrepareDataTrait;
+    use ObjectMapperQueriesTrait;
 
     protected int $count    = 0;
     protected string $query = "";

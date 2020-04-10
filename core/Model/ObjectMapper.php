@@ -2,19 +2,19 @@
 
 namespace Core\Model;
 
-use Core\Contracts\ObjectMappingInterface;
+use Core\Contracts\ObjectMapperInterface;
 use Core\Model\Database;
-use Core\Traits\ObjectMappingTrait;
+use Core\Traits\ObjectMapperTrait;
 
 /**
  * Map database as object
  *
  * @author Fil Beluan
  */
-class ObjectMapping implements ObjectMappingInterface
+class ObjectMapper implements ObjectMapperInterface
 {
     // Issue 43
-    use ObjectMappingTrait;
+    use ObjectMapperTrait;
 
     public object $model;
 
