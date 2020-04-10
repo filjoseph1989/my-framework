@@ -16,11 +16,34 @@ class ObjectMapper implements ObjectMapperInterface
     // Issue 43
     use ObjectMapperTrait;
 
+    /**
+     * The model to map with
+     * @var object
+     */
     public object $model;
 
+    /**
+     * The model table name
+     * @var string
+     */
     protected string $table      = '';
-    protected string $primaryKey  = '';
+
+    /**
+     * Model primary key
+     * @var string
+     */
+    protected string $primaryKey = '';
+
+    /**
+     * Collection of model foreign keys
+     * @var array
+     */
     protected array $foreignKeys = [];
+
+    /**
+     * Database object container
+     * @var object
+     */
     protected object $database;
 
     /**
@@ -34,7 +57,7 @@ class ObjectMapper implements ObjectMapperInterface
      *
      * @param object $object The model object
      */
-    public function __construct($model)
+    public function __construct(object $model)
     {
         $this->model = $model;
         $this->table = $this->model->table;
@@ -51,7 +74,7 @@ class ObjectMapper implements ObjectMapperInterface
      * @param  array  $columns
      * @return void
      */
-    public function map(&$model, $row)
+    public function map(object &$model, object $row)
     {
         $relations = self::relation($row);
 

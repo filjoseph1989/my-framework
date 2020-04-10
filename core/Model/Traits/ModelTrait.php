@@ -38,7 +38,7 @@ trait ModelTrait
      * Find rows
      *
      * @param integer $id
-     * @return void
+     * @return object
      */
     public function find(int $id)
     {
@@ -54,7 +54,7 @@ trait ModelTrait
     /**
      * Delete row
      *
-     * @return
+     * @return boolean
      */
     public function delete()
     {
@@ -65,7 +65,7 @@ trait ModelTrait
      * Set order by
      *
      * @param string $order
-     * @return model
+     * @return object
      */
     public function orderBy(string $order = '')
     {
@@ -87,7 +87,7 @@ trait ModelTrait
      * Set limit about getting database data
      *
      * @param integer $limit
-     * @return model
+     * @return object
      */
     public function take(int $limit = 0)
     {
@@ -111,7 +111,7 @@ trait ModelTrait
      *
      * @param  string $columnName
      * @param  string $value
-     * @return model
+     * @return object
      */
     public function where($columnName, $value)
     {
@@ -132,13 +132,14 @@ trait ModelTrait
     /**
      * Return the first index of the array
      * Issue 65
+     * Issue 72
      *
      * @return object
      */
     public function first()
     {
         if (count($this->rows) > 0) {
-            return (new ModelFirst($this))->first();            
+            return $this->rows[0];
         }
 
         $rows = self::get();

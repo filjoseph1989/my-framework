@@ -28,7 +28,7 @@ trait RedirectTrait
      * Set session
      *
      * @param  array  $withs
-     * @return void
+     * @return null|object
      */
     protected function with(array $withs = [])
     {
@@ -43,7 +43,7 @@ trait RedirectTrait
      * Target location
      *
      * @param  string $to
-     * @return void
+     * @return null|array
      */
     protected function to($to = '/')
     {

@@ -76,6 +76,7 @@ class Router
      * Return request method
      *
      * @param string
+     * @return string
      */
     public function getAction()
     {

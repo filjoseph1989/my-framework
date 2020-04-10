@@ -51,7 +51,7 @@ trait ObjectMapperQueriesTrait
      * Prepare insert query
      *
      * @param string $wheres
-     * @return void
+     * @return string
      */
     private function prepareInsertQuery(array &$data = [])
     {

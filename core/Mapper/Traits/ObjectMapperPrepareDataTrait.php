@@ -15,7 +15,7 @@ trait ObjectMapperPrepareDataTrait
      * Prepare delete
      *
      * @param object $model
-     * @return void
+     * @return boolean|object
      */
     private function prepareDelete(object &$model)
     {
@@ -29,7 +29,7 @@ trait ObjectMapperPrepareDataTrait
      * Prepare create
      *
      * @param array $data
-     * @return void
+     * @return object
      */
     private function prepareCreate(array &$data = [], $return = false)
     {
@@ -84,7 +84,7 @@ trait ObjectMapperPrepareDataTrait
             $this->count = $this->database->count();
 
             if ($this->count <= 0) {
-                debug_print_append("\nRow {$condition} doesn't exist \n");
+                debug_print_append("\nRow {$condition} doesn't exist @ Core\Mapper\Traits\ObjectMapperTrait.php:92\n");
                 debug_print_append(trace(true));
                 return false;
             }
@@ -113,7 +113,7 @@ trait ObjectMapperPrepareDataTrait
      * Prepare the query and get resulting data
      *
      * @param  array  $wheres
-     * @return void
+     * @return object
      */
     private function prepareGet(object &$model)
     {
@@ -138,7 +138,7 @@ trait ObjectMapperPrepareDataTrait
      * Prepare find
      *
      * @param array $value
-     * @return void
+     * @return object
      */
     private function prepareFind(int &$value)
     {

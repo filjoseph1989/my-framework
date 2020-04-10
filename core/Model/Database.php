@@ -5,23 +5,57 @@ namespace Core\Model;
 class Database
 {
     /**
-     * Variables
-     *
-     * @var string   $Host
-     * @var string   $Database
-     * @var string   $User
-     * @var string   $Password
-     * @var mysqli   $Instance
-     * @var boolean  $connected
+     * Database Host
+     * @var string
      */
     protected string $Host     = '';
+
+    /**
+     * Database port
+     * @var string
+     */
     protected string $Port     = '';
+
+    /**
+     * Database name
+     * @var string
+     */
     protected string $Database = '';
+
+    /**
+     * Database user
+     * @var string
+     */
     protected string $User     = '';
+
+    /**
+     * Database password
+     * @var string
+     */
     protected string $Password = '';
+
+    /**
+     * Databse Driver instance
+     * @var object
+     */
     protected object $Instance;
+
+    /**
+     * Query string
+     * @var string
+     */
     protected string $sql      = '';
+
+    /**
+     * Connection checker
+     * @var boolean
+     */
     protected bool $connected  = false;
+
+    /**
+     * Query result count container
+     * @var int
+     */
     protected int $rows_count  = 0;
 
     /**
@@ -53,7 +87,7 @@ class Database
         }
 
         # Issue 56
-        # Issue 
+        # Issue
         debug_print_append("\nQuery is not successful on @ core\Model\Database.php:49\n");
         debug_print_append("\n{$query}\n");
         debug_print_append("\n". self::getError() ."\n");

@@ -14,6 +14,10 @@ class Request implements RequestInterface
 {
     use RedirectTrait;
 
+    /**
+     * App instance container
+     * @var object
+     */
     private object $app;
 
     /**

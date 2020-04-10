@@ -76,6 +76,7 @@ class Model
      * Remove property from model
      *
      * @param string $prop  The model property
+     * @return void
      */
     public function unsetProperty($prop)
     {
@@ -86,7 +87,7 @@ class Model
      * Return property
      *
      * @param string $property
-     * @return void
+     * @return mixed
      */
     private function getProperty(string $property = '')
     {

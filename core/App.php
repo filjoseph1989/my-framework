@@ -60,7 +60,7 @@ class App extends Core
     /**
      * Run the application
      *
-     * @return void
+     * @return null
      */
     public function run()
     {
@@ -111,7 +111,7 @@ class App extends Core
     /**
      * Display not found view
      *
-     * @return view
+     * @return object
      */
     public function notFound()
     {
@@ -233,6 +233,12 @@ class App extends Core
      */
     public function json(array $data = [])
     {
+        self::setResponse($data);
+
+        if (self::isTest()) {
+            return $data;
+        }
+
         return $this->container->response->json($data);
     }
 
@@ -305,6 +311,32 @@ class App extends Core
             $data['with'] = $_SESSION['with'];
             unset($_SESSION['with']);
         }
+    }
+
+
+    /**
+     * Set the current page name
+     *
+     * @param array $data
+     * @param string $view
+     * @return void
+     */
+    private function setCurrentPage(&$data, string &$view)
+    {
+        $_SESSION['current_page'] = $view; # Issue 48
+        $data['curren_page']      = $view;
+    }
+
+    /**
+     * Set the current response
+     *
+     * @param [type] $data
+     * @return void
+     */
+    private function setResponse(&$data)
+    {
+        http_response_code(200);
+        $data['response'] = http_response_code();
     }
 
     /**

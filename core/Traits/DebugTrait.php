@@ -16,7 +16,6 @@ trait DebugTrait
      * @var array
      */
     protected array $availableMethods = [];
-    protected array $availableObjectMethods = [];
 
     /**
      * Print available methods
@@ -51,7 +50,7 @@ trait DebugTrait
             $this->availableMethods[] = $reflection->getFileName() . ':' . $reflection->getStartLine() . " " . $reflection->getName();
         }
 
-        dump($this->availableObjectMethods);
+        dump($this->availableMethods);
     }
 
     /**

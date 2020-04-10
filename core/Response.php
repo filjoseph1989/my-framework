@@ -13,7 +13,7 @@ class Response
 	 *
 	 * @param  string $view
 	 * @param  array  $data
-	 * @return object
+	 * @return null
 	 */
 	public function view(string $view, $data = [])
 	{
@@ -29,7 +29,7 @@ class Response
 	 * Response as json
 	 *
 	 * @param  array  $data
-	 * @return string
+	 * @return null
 	 */
 	public function json(array $data = [])
 	{

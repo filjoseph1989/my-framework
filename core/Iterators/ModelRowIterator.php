@@ -19,7 +19,7 @@ class ModelRowIterator implements \Iterator
      *
      * @param Core\Model $model
      */
-    public function __construct($model)
+    public function __construct(object $model)
     {
         $this->rows = $model->rows;
     }

@@ -12,7 +12,7 @@ interface ObjectMapperInterface
      *
      * @param object $object The model object
      */
-    public function __construct($model);
+    public function __construct(object $model);
 
     /**
      * Mapping database result
@@ -21,5 +21,5 @@ interface ObjectMapperInterface
      * @param  array  $columns
      * @return void
      */
-    public function map(&$model, $row);
+    public function map(object &$model, object $row);
 }
