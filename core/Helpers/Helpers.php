@@ -51,24 +51,13 @@ if (!function_exists('token')) {
 }
 
 /**
- * Return current mainjs version
- *
- * @var string
- */
-if (!function_exists('mainjs_version')) {
-    function mainjs_version() {
-        return getenv('MAINJS');
-    }
-}
-
-/**
  * Return asset version
  *
  * @var float
  */
 if (!function_exists('asset_version')) {
     function asset_version() {
-        return getenv('MAINJS');
+        return getenv('ASSET');
     }
 }
 
