@@ -14,6 +14,18 @@ class App extends Core
     use DebugTrait;
 
     /**
+     * A class handler a.k.a controller and method
+     * @var object
+     */
+    private object $router;
+
+    /**
+     * A class handler a.k.a controller and method
+     * @var array
+     */
+    private array $handler;
+
+    /**
      * Application container
      * @var object
      */
@@ -24,12 +36,6 @@ class App extends Core
      * @var boolean
      */
     private $test;
-
-    /**
-     * URI Container
-     * @var string
-     */
-    private string $uri = '';
 
     /**
      * Container for request method (get/post) to be call
@@ -44,6 +50,7 @@ class App extends Core
     {
         parent::__construct();
 
+        # Issue 82
         $this->container = new Container([
             'router' => function () {
                 return new Router;
@@ -64,13 +71,11 @@ class App extends Core
      */
     public function run()
     {
-        $router = $this->container->router;
+        $this->router = $this->container->router;
+        $this->router->setUri(self::getUri());
+        $this->router->setAction(self::getAction());
 
-        $router->setUri(self::getUri());
-
-        $router->setAction(self::getAction());
-
-        $handler = $router->getHandler();
+        $this->handler = $this->router->getHandler();
 
         if (session_status() !== PHP_SESSION_ACTIVE) {
             session_start();
@@ -79,7 +84,7 @@ class App extends Core
             }
         }
 
-        return self::route($handler);
+        return self::route();
     }
 
     /**
@@ -88,24 +93,30 @@ class App extends Core
      * @param  array $handler
      * @return object
      */
-    public function route($handler)
+    public function route()
     {
-        if ($handler == 404) {
+        if ($this->handler == 404) {
             return self::notFound();
         }
 
-        if (is_array($handler)) {
-            $class      = "\\App\\Controllers\\{$handler[0]}";
-            $handler[0] = new $class($this);
-            $params     = self::getParameters($handler);
+        if (!self::token() && self::getAction() == 'POST') {
+            return self::json([
+                'message' => "Method not allowed"
+            ]);
         }
 
-        if ( ! is_callable($handler)) {
+        if (is_array($this->handler)) {
+            $class            = "\\App\\Controllers\\{$this->handler[0]}";
+            $this->handler[0] = new $class($this);
+            $params           = self::getParameters($this->handler);
+        }
+
+        if ( ! is_callable($this->handler)) {
             throw new InvalidRouteArgumentException;
         }
 
         # Call the controller and passed parameters
-        return call_user_func_array($handler, $params);
+        return call_user_func_array($this->handler, $params);
     }
 
     /**
@@ -135,11 +146,11 @@ class App extends Core
      */
     public function getUri()
     {
-        if (empty($this->uri)) {
-            return $_SERVER['REQUEST_URI'] ?? '/';
+        if ($this->router->getUri() != '') {
+            return $this->router->getUri();
         }
 
-        return $this->uri;
+        return $_SERVER['REQUEST_URI'] ?? '/';
     }
 
     /**
@@ -159,11 +170,7 @@ class App extends Core
      */
     public function getAction()
     {
-        if (empty($this->action)) {
-            return $_SERVER['REQUEST_METHOD'];
-        }
-
-        return $this->action;
+        return $_SERVER['REQUEST_METHOD'];
     }
 
     /**
@@ -346,7 +353,7 @@ class App extends Core
      */
     private function setViewUri(&$data)
     {
-        $data['uri'] = $this->uri;
+        $data['uri'] = self::getUri();
     }
 
     /**
@@ -366,7 +373,7 @@ class App extends Core
      */
     private function unsetEmptyWithData(&$data)
     {
-        if (empty($data['with'])) {
+        if (isset($data['with'])) {
             unset($data['with']);
         }
     }
@@ -405,5 +412,15 @@ class App extends Core
         }
 
         return $params ?? [];
+    }
+
+    /**
+     * Verify token from user|client
+     *
+     * @return boolean
+     */
+    private function token()
+    {
+        return $this->container->request->verifyCsrfToken();
     }
 }
