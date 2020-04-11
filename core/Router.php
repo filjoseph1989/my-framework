@@ -16,24 +16,22 @@ class Router
      * URI string
      * @var string
      */
-    protected string $uri;
+    protected string $uri = '';
 
     /**
      * Request method get|post
-     *
      * @var string
      */
     protected string $requestMethod;
 
     /**
      * Route container
-     *
      * @var array
      */
     protected array $routes = [];
 
     /**
-     * add route to route container
+     * Add route to route container
      *
      * @param  string $uri
      * @param  array $handler
@@ -60,6 +58,16 @@ class Router
     public function setUri($uri)
     {
         $this->uri = $uri;
+    }
+
+    /**
+     * Return uri
+     *
+     * @return string
+     */
+    public function getUri()
+    {
+        return $this->uri;
     }
 
     /**
