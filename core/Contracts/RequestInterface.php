@@ -10,6 +10,13 @@ interface RequestInterface
     public function __construct();
 
     /**
+     * Verify CSRF Token
+     *
+     * @return boolean
+     */
+    public function verifyCsrfToken();
+
+    /**
      * Validate inputs
      *
      * @return void
