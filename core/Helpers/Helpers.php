@@ -93,7 +93,7 @@ if (!function_exists('debug_print_append')) {
 if (!function_exists('isLogin')) {
     function isLogin()
     {
-        if (isset($_SESSION['login'])) {
+        if (isset($_SESSION['login'])) { # Issue 84
             return true;
         }
 
