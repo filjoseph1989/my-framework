@@ -37,8 +37,8 @@ class Request implements RequestInterface
      */
     public function verifyCsrfToken()
     {
-        if (!empty($_POST['token'])) {
-            if (hash_equals($_SESSION['token'], $_POST['token'])) {
+        if (isset($this->token)) {
+            if (hash_equals($_SESSION['token'], $this->token)) {
                 return true;
             }
         }
