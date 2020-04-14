@@ -15,6 +15,12 @@ class Request implements RequestInterface
     use RedirectTrait;
 
     /**
+     * Container of submitted input using POST
+     * @var array
+     */
+    protected array $preservedInputs = [];
+
+    /**
      * App instance container
      * @var object
      */
@@ -62,12 +68,14 @@ class Request implements RequestInterface
 
             if (isset($error) && !is_null($error)) {
                 $validator->appendError($method, $error);
+                unset($error);
             }
         }
 
         if ($validator->hasErrors()) {
             self::redirect()
                 ->with(['errors' => $validator->errors()])
+                ->inputs($this->preservedInputs)
                 ->to($_SERVER['HTTP_REFERER']);
         }
     }
@@ -79,6 +87,8 @@ class Request implements RequestInterface
      */
     private function setProperty()
     {
+        $this->preservedInputs = $_POST;
+
         foreach ($_POST as $key => $value) {
             unset($_POST[$key]);
 
