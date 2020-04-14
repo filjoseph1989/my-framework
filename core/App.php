@@ -217,6 +217,7 @@ class App extends Core
     {
         self::setAuth($data);
         self::setWith($data);
+        self::setInputs($data);
         self::setErrors($data);
         self::unsetEmptyWithData($data);
         self::setToken($data);
@@ -317,6 +318,20 @@ class App extends Core
         if (isset($_SESSION['with'])) {
             $data['with'] = $_SESSION['with'];
             unset($_SESSION['with']);
+        }
+    }
+
+    /**
+     * Set previous input data
+     *
+     * @param array $data
+     * @return void
+     */
+    private function setInputs(&$data)
+    {
+        if (isset($_SESSION['inputs'])) {
+            $data['inputs'] = $_SESSION['inputs'];
+            unset($_SESSION['inputs']);
         }
     }
 
