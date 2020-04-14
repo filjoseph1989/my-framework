@@ -40,6 +40,18 @@ trait RedirectTrait
     }
 
     /**
+     * Put preserved input in a session
+     *
+     * @param  array  $inputs
+     * @return object
+     */
+    protected function inputs(array $inputs = [])
+    {
+        $_SESSION['inputs'] = $inputs;
+        return $this;
+    }
+
+    /**
      * Target location
      *
      * @param  string $to
