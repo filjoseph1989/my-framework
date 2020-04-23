@@ -121,7 +121,8 @@ trait ObjectMapperPrepareDataTrait
             $condition   = self::prepareWhere($model);
             $order       = self::prepareOrderBy($model);
             $limit       = self::prepareLimit($model);
-            $this->query = self::prepareSelectQuery($condition, $limit, $order);
+            $offset      = self::prepareSkip($model);
+            $this->query = self::prepareSelectQuery($condition, $limit, $offset, $order);
             $rows        = $this->database->query($this->query);
 
             if (is_null(self::hasCount())) {
