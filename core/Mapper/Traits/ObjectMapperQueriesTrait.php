@@ -28,8 +28,12 @@ trait ObjectMapperQueriesTrait
      * @param  string $wheres
      * @return string
      */
-    private function prepareSelectQuery(string $wheres, string $limit = '', string $order = '')
-    {
+    private function prepareSelectQuery(
+        string $wheres, 
+        string $limit = '', 
+        string $offset = '', 
+        string $order = ''
+    ) {
         $query = "SELECT * FROM {$this->table}";
 
         if (!empty($wheres)) {
@@ -42,6 +46,10 @@ trait ObjectMapperQueriesTrait
 
         if (!empty($limit)) {
             $query = "{$query} {$limit}";
+        }
+
+        if (!empty($offset)) {
+            $query = "{$query} {$offset}";
         }
 
         return $query;
