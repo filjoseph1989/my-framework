@@ -42,6 +42,21 @@ trait ObjectMapperParserTrait
     }
 
     /**
+     * Prepare skip query
+     *
+     * @param  object $model
+     * @return string
+     */
+    private function prepareSkip(object &$model)
+    {
+        if ($model->limit > 0) {
+            return "OFFSET {$model->skip}";
+        }
+
+        return "";
+    }
+
+    /**
      * Building the where condition
      *
      * @param  object $model
