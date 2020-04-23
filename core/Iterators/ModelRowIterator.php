@@ -74,4 +74,14 @@ class ModelRowIterator implements \Iterator
     {
         return key($this->rows) !== null;
     }
+
+    /**
+     * Return the count of rows
+     *
+     * @return int
+     */
+    public function countRows()
+    {
+        return count($this->rows);
+    }
 }
