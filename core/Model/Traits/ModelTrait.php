@@ -30,6 +30,12 @@ trait ModelTrait
     protected int $limit = 0;
 
     /**
+     * Offset for query
+     * @var int
+     */
+    protected int $skip = 0;
+
+    /**
      * Sortation of result in query
      */
     protected string $orderBy = '';
@@ -103,6 +109,18 @@ trait ModelTrait
     public function limit(int $limit = 0)
     {
         $this->limit = $limit;
+        return $this;
+    }
+
+    /**
+     * Skip rows
+     *
+     * @param  integer $skip
+     * @return object
+     */
+    public function skip(int $skip = 0)
+    {
+        $this->skip = $skip;
         return $this;
     }
 
