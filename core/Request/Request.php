@@ -18,7 +18,7 @@ class Request implements RequestInterface
      * Container of submitted input using POST
      * @var array
      */
-    protected array $preservedInputs = [];
+    private array $preservedInputs = [];
 
     /**
      * App instance container
@@ -62,7 +62,11 @@ class Request implements RequestInterface
         $this->app = $app;
 
         foreach ($this as $method => $input) {
-            if (method_exists($validator, $method) || $validator->magicallyCall()) {
+            if (method_exists($validator, $method)) {
+                $error = $validator->$method($input);
+            }
+
+            if ($validator->magicallyCall()) {
                 $error = $validator->$method($input);
             }
 
@@ -78,6 +82,16 @@ class Request implements RequestInterface
                 ->inputs($this->preservedInputs)
                 ->to($_SERVER['HTTP_REFERER']);
         }
+    }
+
+    /**
+     * Return array of form inputs
+     *
+     * @return array
+     */
+    public function getPreservedInputs()
+    {
+        return $this->preservedInputs;
     }
 
     /**
