@@ -31,6 +31,12 @@ class Router
     protected array $routes = [];
 
     /**
+     * Handler cache
+     * @ver array
+     */
+    protected array $handler = [];
+
+    /**
      * Add route to route container
      *
      * @param  string $uri
@@ -98,6 +104,10 @@ class Router
      */
     public function getHandler()
     {
+        if (isset($this->handler[$this->uri])) {
+            return $this->handler[$this->uri];
+        }
+        
         if (($result = self::hasUri()) !== true) {
             return $result;
         }
@@ -105,6 +115,9 @@ class Router
         if (($result = self::hasUriMethod()) !== true) {
             return $result;
         }
+
+        # Cache routes
+        $this->handler[$this->uri] = $this->routes[$this->uri][$this->requestMethod];
 
         return $this->routes[$this->uri][$this->requestMethod];
     }
