@@ -75,6 +75,10 @@ class App extends Core
         $this->router->setUri(self::getUri());
         $this->router->setAction(self::getAction());
 
+        if ($this->router->getHandler() == 404) {
+            return self::notFound();
+        }
+
         $this->handler = $this->router->getHandler();
 
         if (session_status() !== PHP_SESSION_ACTIVE) {
@@ -95,10 +99,6 @@ class App extends Core
      */
     public function route()
     {
-        if ($this->handler == 404) {
-            return self::notFound();
-        }
-
         if (!self::token() && self::getAction() == 'POST') {
             return self::json([
                 'message' => "Method not allowed"
@@ -388,7 +388,7 @@ class App extends Core
      */
     private function unsetEmptyWithData(&$data)
     {
-        if (isset($data['with'])) {
+        if (empty($data['with'])) {
             unset($data['with']);
         }
     }
