@@ -8,6 +8,10 @@ use Core\Iterators\ModelRowIterator;
  */
 if (!function_exists('isJson')) {
     function isJson($string) {
+        if (is_object($string) || is_array($string)) {
+            return false;
+        }
+        
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }

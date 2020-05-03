@@ -104,6 +104,7 @@ class Router
      */
     public function getHandler()
     {
+        # Return cached
         if (isset($this->handler[$this->uri])) {
             return $this->handler[$this->uri];
         }
