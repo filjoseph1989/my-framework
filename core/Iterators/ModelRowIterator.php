@@ -21,7 +21,7 @@ class ModelRowIterator implements \Iterator
      */
     public function __construct(object $model)
     {
-        $this->rows = $model->rows;
+        $this->rows = $model->rows ?? [];
     }
 
     /**
