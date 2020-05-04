@@ -63,20 +63,4 @@ trait DebugTrait
         var_dump($this);
         exit;
     }
-
-    /**
-     * Dump the array of wheres
-     *
-     * @return void
-     */
-    public function dumpWheres()
-    {
-        if (isset($this->wheres)) {
-            var_dump($this->wheres);
-            exit;
-        }
-
-        echo "Not found exception";
-        exit;
-    }
 }
