@@ -39,6 +39,22 @@ trait ModelTrait
      * Sortation of result in query
      */
     protected string $orderBy = '';
+    
+    /**
+     * Use to check if row exists
+     */
+    protected bool $exists = false;
+
+    /**
+     * Check if the row exists
+     *
+     * @return object
+     */
+    public function exists()
+    {
+        $this->exists = true;
+        return $this;
+    }
 
     /**
      * Find rows
@@ -46,9 +62,17 @@ trait ModelTrait
      * @param integer $id
      * @return object
      */
-    public function find(int $id)
+    public function find(int $id, array $columns = [])
     {
-        $model = $this->mapper->find($id);
+        if (count($columns) > 0) {
+            $model = $this->mapper->findByColumn($id, $columns);
+        } else {
+            $model = $this->mapper->find($id);
+        }
+
+        if ($this->exists === true) {
+            return $model;
+        }
 
         if (is_null($model)) {
             return $this;
