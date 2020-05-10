@@ -159,6 +159,50 @@ trait ObjectMapperPrepareDataTrait
     }
 
     /**
+     * Prepare find using columns given
+     *
+     * @param integer $value
+     * @param array $columns
+     * @return mixed
+     */
+    private function prepareFindByColumn(int &$value, array &$columns)
+    {
+        if ($this->database->isConnected()) {
+            $condition   = "{$this->primaryKey}='{$value}'";
+
+            if (count($columns) > 0) {
+                foreach ($columns as $key => $column) {
+                    $condition .= " AND $key='{$column}'";
+                }
+            }
+
+            $this->query = self::prepareSelectQuery($condition);
+
+            if ($this->model->exists === true) {
+                $this->query = "SELECT EXISTS ({$this->query})";
+            }
+
+            $rows = $this->database->query($this->query);
+
+            if ($this->model->exists === true) {
+                $rows = self::fetchRows($rows);
+                $rows = get_object_vars($rows[0]);
+                foreach ($rows as $key => $value) {
+                    return $value;
+                }
+            }
+
+            if (is_null(self::hasCount())) {
+                return null;
+            }
+
+            self::mapRows($rows);
+
+            return $this->model;
+        }
+    }
+
+    /**
      * Return the rows from database
      *
      * @param  object $results
