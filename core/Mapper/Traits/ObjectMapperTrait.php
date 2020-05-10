@@ -58,7 +58,7 @@ trait ObjectMapperTrait
     }
 
     /**
-     * Should return an object map
+     * Find row using ID
      * Issue 63
      *
      * @param  int $id Table ID
@@ -67,6 +67,18 @@ trait ObjectMapperTrait
     public function find(int $value)
     {
         return self::prepareFind($value);
+    }
+
+    /**
+     * Return resulting column from the given conditions
+     *
+     * @param integer $value
+     * @param array $columns
+     * @return mixed
+     */
+    public function findByColumn(int $value, array $columns = [])
+    {
+        return self::prepareFindByColumn($value, $columns);
     }
 
     /**
