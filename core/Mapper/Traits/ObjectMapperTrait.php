@@ -59,7 +59,6 @@ trait ObjectMapperTrait
 
     /**
      * Find row using ID
-     * Issue 63
      *
      * @param  int $id Table ID
      * @return object

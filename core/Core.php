@@ -21,7 +21,7 @@ class Core {
     public function __construct() {
         self::setEnv();
         self::errorHandling();
-        self::set_reporting();  # Issue 55
+        self::set_reporting();
         self::remove_magic_quotes();
         self::unregister_globals();
     }
@@ -45,7 +45,6 @@ class Core {
 
     /**
      * Set error reporting
-     * Issue 34
      *
      * @return void
      */
@@ -58,7 +57,7 @@ class Core {
             error_reporting(E_ALL);
             ini_set('display_errors','Off');
             ini_set('log_errors', 'On');
-            ini_set('error_log', 'error.log'); // Issue 35
+            ini_set('error_log', 'error.log');
             defined('ERROR_REPORTING') or define('ERROR_REPORTING', 'OFF');
         }
     }
