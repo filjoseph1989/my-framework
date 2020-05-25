@@ -29,9 +29,9 @@ trait ObjectMapperQueriesTrait
      * @return string
      */
     private function prepareSelectQuery(
-        string $wheres, 
-        string $limit = '', 
-        string $offset = '', 
+        string $wheres,
+        string $limit = '',
+        string $offset = '',
         string $order = ''
     ) {
         $query = "SELECT * FROM {$this->table}";
@@ -63,9 +63,8 @@ trait ObjectMapperQueriesTrait
      */
     private function prepareInsertQuery(array &$data = [])
     {
-        $keys   = self::prepareDataKey($data);
-        $values = self::prepareInsertValues($data);
-        return "INSERT INTO {$this->table} ({$keys}) VALUES ({$values})";
+        $newData = self::prepareInsertData($data);
+        return "INSERT INTO {$this->table} ({$newData['keys']}) VALUES ({$newData['values']})";
     }
 
     /**
