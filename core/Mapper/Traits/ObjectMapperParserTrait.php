@@ -90,41 +90,6 @@ trait ObjectMapperParserTrait
     }
 
     /**
-     * Prepare insert values
-     *
-     * @param array $data
-     * @return string
-     */
-    private function prepareInsertValues(array $data = [])
-    {
-        $values = [];
-
-        foreach ($data as $key => $value) {
-            $value = self::scape($value);
-            $values[] = "'{$value}'";
-        }
-
-        return implode(',', $values);
-    }
-
-    /**
-     * Prepare data key
-     *
-     * @param  array  $data
-     * @return string
-     */
-    private function prepareDataKey(array $data = [])
-    {
-        $keys = [];
-
-        foreach ($data as $key => $value) {
-            $keys[] = $key;
-        }
-
-        return implode(',', $keys);
-    }
-
-    /**
      * Traversing the given where array
      *
      * @param  array  $wheres
@@ -139,5 +104,28 @@ trait ObjectMapperParserTrait
         }
 
         return implode(' AND ', $whereQuery);
+    }
+
+    /**
+     * Prepare insert keys and values
+     *
+     * @param  array  $data
+     * @return array
+     */
+    private function prepareInsertData(array &$data=[])
+    {
+        $keys   = [];
+        $values = [];
+
+        foreach ($data as $key => $value) {
+            $value    = self::scape($value);
+            $values[] = "'{$value}'";
+            $keys[]   = $key;
+        }
+
+        return [
+            'keys' => implode(',', $keys),
+            'values' => implode(',', $values)
+        ];
     }
 }
