@@ -24,7 +24,10 @@ $excluded  = [
     $main_path . '/docs',
     $main_path . '/node_modules',
     $main_path . '/test',
-    $main_path . '/vendor'
+    $main_path . '/vendor',
+    $main_path . '/lamp',
+    $main_path . '/release',
+    $main_path . '/deploy'
 ];
 $files = [];
 
