@@ -75,9 +75,9 @@ trait ObjectMapperTrait
      * @param array $columns
      * @return mixed
      */
-    public function findByColumn(int $value, array $columns = [])
+    public function findByColumn(array $columns = [])
     {
-        return self::prepareFindByColumn($value, $columns);
+        return self::prepareFindByColumn($columns[0]);
     }
 
     /**
@@ -103,9 +103,6 @@ trait ObjectMapperTrait
 
     /**
      * Return the object result after query
-     * Issue 49
-     * Issue 51
-     * Issue 53
      *
      * @param  array  $query
      * @return object
