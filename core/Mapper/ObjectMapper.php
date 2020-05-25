@@ -13,7 +13,6 @@ use Core\Model\Database;
  */
 class ObjectMapper implements ObjectMapperInterface
 {
-    // Issue 43
     use ObjectMapperTrait;
 
     /**
