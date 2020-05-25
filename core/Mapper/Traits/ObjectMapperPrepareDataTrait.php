@@ -165,14 +165,14 @@ trait ObjectMapperPrepareDataTrait
      * @param array $columns
      * @return mixed
      */
-    private function prepareFindByColumn(int &$value, array &$columns)
+    private function prepareFindByColumn(array &$columns)
     {
         if ($this->database->isConnected()) {
-            $condition   = "{$this->primaryKey}='{$value}'";
+            $condition = "";
 
             if (count($columns) > 0) {
                 foreach ($columns as $key => $column) {
-                    $condition .= " AND $key='{$column}'";
+                    $condition .= "$key='{$column}'";
                 }
             }
 
