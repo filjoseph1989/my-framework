@@ -118,7 +118,7 @@ trait ObjectMapperTrait
      * @param array $data
      * @return object
      */
-    public function update(object &$model, array $data = [], $return = false)
+    public function update(object &$model, array &$data = [], $return = false)
     {
         return self::prepareUpdate($model, $data, $return);
     }
@@ -132,7 +132,7 @@ trait ObjectMapperTrait
      */
     public function create(array $data = [], $return = false)
     {
-        return self::prepareCreate($data[0], $return);
+        return self::prepareCreate($data, $return);
     }
 
     /**
