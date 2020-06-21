@@ -76,6 +76,12 @@ trait ObjectMapperQueriesTrait
      */
     private function prepareUpdateQuery(string $wheres, string $updateData)
     {
-        return "UPDATE {$this->table} SET {$updateData} WHERE {$wheres}";
+        $query = "UPDATE {$this->table} SET {$updateData}";
+
+        if ($wheres != "") {
+            $query .= " WHERE {$wheres}";
+        }
+
+        return $query;
     }
 }
