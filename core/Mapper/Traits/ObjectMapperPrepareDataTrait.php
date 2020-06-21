@@ -74,7 +74,7 @@ trait ObjectMapperPrepareDataTrait
      * @param  boolean $return
      * @return object
      */
-    private function prepareUpdate(object &$model, array $data = [], $return = false)
+    private function prepareUpdate(object &$model, array &$data = [], $return = false)
     {
         if ($this->database->isConnected()) {
             $condition   = self::prepareWhere($model);
@@ -84,8 +84,6 @@ trait ObjectMapperPrepareDataTrait
             $this->count = $this->database->count();
 
             if ($this->count <= 0) {
-                debug_print_append("\nRow {$condition} doesn't exist @ Core\Mapper\Traits\ObjectMapperTrait.php:92\n");
-                debug_print_append(trace(true));
                 return false;
             }
 
