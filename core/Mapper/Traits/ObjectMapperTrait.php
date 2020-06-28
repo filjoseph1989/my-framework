@@ -3,6 +3,8 @@
 namespace Core\Mapper\Traits;
 
 use Core\Model\Database;
+use Core\Mapper\Classes\Parser;
+use Core\Mapper\Classes\PrepareData;
 use Core\Mapper\Traits\ObjectMapperParserTrait;
 use Core\Mapper\Traits\ObjectMapperPrepareDataTrait;
 use Core\Mapper\Traits\ObjectMapperQueriesTrait;
@@ -66,6 +68,43 @@ trait ObjectMapperTrait
     public function find(int $value)
     {
         return self::prepareFind($value);
+    }
+
+    /**
+     * look for a columns or create if not exists
+     *
+     * @param  array  $columns
+     * @return object
+     */
+    public function findOrCreate(array $columns = [])
+    {
+        if (!self::exists($columns)) {
+            $prepareData = new PrepareData($this->database, $this->table, $columns[0]);
+            $prepareData->create();
+            return self::find($prepareData->insertedId());
+        }
+    }
+
+    /**
+     * Check if the column exists
+     * 
+     * @param  array  $columns
+     * @return boolean
+     */
+    public function exists(array $columns=[])
+    {
+        if ($this->database->isConnected()) {
+            $condition = (new Parser($columns[0]))->buildQueryCondition();
+            $this->query = self::prepareSelectQuery($condition);
+            $this->query = "SELECT EXISTS ({$this->query})";
+
+            $rows = $this->database->query($this->query);
+            $rows = self::fetchRows($rows);
+            $rows = get_object_vars($rows[0]);
+            foreach ($rows as $key => $value) {
+                return $value;
+            }
+        }
     }
 
     /**
