@@ -2,8 +2,6 @@
 
 namespace Core\Mapper\Traits;
 
-use Core\Model\Database;
-
 /**
  * A trait use by Core\Model\ObjectMapper
  *
@@ -118,7 +116,7 @@ trait ObjectMapperParserTrait
         $values = [];
 
         foreach ($data as $key => $value) {
-            $value    = self::scape($value);
+            $value    = $this->database->scape($value);
             $values[] = "'{$value}'";
             $keys[]   = $key;
         }

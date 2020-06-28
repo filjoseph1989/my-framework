@@ -2,6 +2,7 @@
 
 namespace Core\Mapper\Traits;
 
+use Core\Mapper\Classes\Parser;
 use Core\Model\Database;
 
 /**
@@ -27,6 +28,7 @@ trait ObjectMapperPrepareDataTrait
 
     /**
      * Prepare create
+     * Issue 87
      *
      * @param array $data
      * @return object
@@ -166,14 +168,7 @@ trait ObjectMapperPrepareDataTrait
     private function prepareFindByColumn(array &$columns)
     {
         if ($this->database->isConnected()) {
-            $condition = "";
-
-            if (count($columns) > 0) {
-                foreach ($columns as $key => $column) {
-                    $condition .= "$key='{$column}'";
-                }
-            }
-
+            $condition = (new Parser($columns))->buildQueryCondition();
             $this->query = self::prepareSelectQuery($condition);
 
             if ($this->model->exists === true) {
