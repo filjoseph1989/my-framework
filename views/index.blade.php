@@ -4,7 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-witdh, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Personal Project</title>
+        <title>Default Page</title>
+        <link rel="stylesheet" href="/css/main.css?v=0.1">
     </head>
 
     <body>
@@ -12,24 +13,6 @@
             <div class="bg-teal-700 navigation">
                 <div class="h-full navigation-container">
                     <div class="brand w-full text-white">Personal Framework</div>
-                    {{-- <div class="flex justify-center search">
-                        <div class="w-full">
-                            <form class="relative search-wrapper w-full" action="" method="post">
-                                <input class="search-input bg-gray-200 float-left p-px pl-3 placeholder-red-900 py-1 search-input" type="text" placeholder="Search here..." required>
-                                <button class="text-white overflow-visible relative uppercase cursor-pointer" type="submit">
-                                    <i class="fas fa-search search-icon"></i>
-                                    <span class="search-text">Search</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div> --}}
-
-                    {{-- <div class="sign-in text-white">
-                        <p>
-                            <i class="fas fa-search"></i>
-                            <a href="#">Sign In</a>
-                        </p>
-                    </div> --}}
                 </div>
             </div>
 
@@ -40,7 +23,7 @@
                             <h1 class="text-2xl">Welcome to this default view</h1>
                             <p class="mb-2">A framework documentation</p>
                             <ul>
-                                <li>Version: 0.1.0-dev</li>
+                                <li>Version: {{ asset_version() }}</li>
                                 <li>Author: Fil Joseph Beluan</li>
                                 <li>Email: fil joseph 22 @ gmail dot com</li>
                             </ul>
@@ -79,6 +62,8 @@
                             </ul>
                         </div>
 
+                        @include('docs.helpers')
+
                         <div class="bg-gray-100 card p-3 mt-3 rounded shadow">
                             <h2 class="text-2xl">Wanted to have with in the documentation:</h2>
                             <ul>
@@ -99,6 +84,6 @@
             </div>
         </div>
 
-        <script src="/js/main.js?v=63" charset="utf-8"></script>
+        <script src="/js/main.js?v=64" charset="utf-8"></script>
     </body>
 </html>

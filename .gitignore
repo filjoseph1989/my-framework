@@ -8,3 +8,4 @@
 /backup
 /composer.lock
 /my-framework.test.conf
+/package-lock.json
