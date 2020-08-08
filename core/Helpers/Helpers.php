@@ -11,7 +11,7 @@ if (!function_exists('isJson')) {
         if (is_object($string) || is_array($string)) {
             return false;
         }
-        
+
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
@@ -47,7 +47,7 @@ if (!function_exists('token')) {
  */
 if (!function_exists('asset_version')) {
     function asset_version() {
-        return getenv('ASSET');
+        return $_ENV['ASSET'];
     }
 }
 
