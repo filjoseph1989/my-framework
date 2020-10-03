@@ -3,6 +3,16 @@
 use Core\Iterators\ModelRowIterator;
 
 /**
+ * Return user's data
+ * @var string
+ */
+if (!function_exists('user')) {
+    function user() {
+        return $_SESSION['user'];
+    }
+}
+
+/**
  * Determine if string is a json
  * @var string
  */
@@ -11,7 +21,7 @@ if (!function_exists('isJson')) {
         if (is_object($string) || is_array($string)) {
             return false;
         }
-        
+
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
     }
@@ -47,7 +57,7 @@ if (!function_exists('token')) {
  */
 if (!function_exists('asset_version')) {
     function asset_version() {
-        return getenv('ASSET');
+        return $_ENV['ASSET'];
     }
 }
 
@@ -88,18 +98,6 @@ if (!function_exists('isLogin')) {
         }
 
         return false;
-    }
-}
-
-/**
- * Check if the user is loggedin
- *
- * @return boolean
- */
-if (!function_exists('is_login')) {
-    function is_login()
-    {
-        return isLogin();
     }
 }
 
