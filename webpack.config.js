@@ -4,12 +4,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-        "js/main": './views/js/main.js'
+        "main" : './views/js/main.js'
     },
     mode: 'development',
     output: {
-        filename: '[name].js',
-        chunkFilename: '[id].[chunkhash].js',
+        filename: 'js/[name].js',
+        chunkFilename: 'js/[id].[chunkhash].js',
         path: path.resolve(__dirname, 'public')
     },
     module: {
@@ -36,7 +36,8 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: devMode ? '[name].css' : '[name].[hash].css'
+            filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
+            chunkFilename: 'css/[id].[chunkhash].js'
         })
     ]
 }
