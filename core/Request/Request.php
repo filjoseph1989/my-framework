@@ -4,6 +4,7 @@ namespace Core\Request;
 
 use Core\Contracts\RequestInterface;
 use Core\Traits\RedirectTrait;
+use Core\Files;
 
 /**
  * Request handler
@@ -31,8 +32,6 @@ class Request implements RequestInterface
      */
     public function __construct()
     {
-        # Task 2:
-        # Todo 1:
         self::setProperty();
     }
 
@@ -102,7 +101,19 @@ class Request implements RequestInterface
     private function setProperty()
     {
         $this->preservedInputs = $_POST;
+        $this->preservedFiles  = $_FILES;
 
+        self::loopPost();
+        self::loopFile();
+    }
+
+    /**
+     * Evaluate every submitted data
+     *
+     * @return void
+     */
+    private function loopPost()
+    {
         foreach ($_POST as $key => $value) {
             unset($_POST[$key]);
 
@@ -111,6 +122,19 @@ class Request implements RequestInterface
             }
 
             $this->$key = trim($value, " \t\n\r\0\x0B");
+        }
+    }
+
+    /**
+     * evaluate every submitted files
+     *
+     * @return void
+     */
+    private function loopFile()
+    {
+        foreach ($_FILES as $key => $value) {
+            unset($_FILES[$key]);
+            $this->$key = new Files($value);
         }
     }
 
