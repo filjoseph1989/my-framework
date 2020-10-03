@@ -63,11 +63,11 @@ class Database
      */
     public function __construct()
     {
-        $this->Host     = $_ENV["DB_HOST"];
-        $this->User     = $_ENV["DB_USERNAME"];
-        $this->Password = $_ENV["DB_PASSWORD"];
-        $this->Database = $_ENV["DB_DATABASE"];
-        $this->Port     = $_ENV["DB_PORT"];
+        $this->Host     = getenv("DB_HOST");
+        $this->User     = getenv("DB_USERNAME");
+        $this->Password = getenv("DB_PASSWORD");
+        $this->Database = getenv("DB_DATABASE");
+        $this->Port     = getenv("DB_PORT");
 
         self::connect();
     }
