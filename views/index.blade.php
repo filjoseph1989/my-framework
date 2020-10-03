@@ -62,6 +62,10 @@
                             </ul>
                         </div>
 
+                        @include('docs.controller')
+
+                        @include('docs.model')
+
                         @include('docs.helpers')
 
                         <div class="bg-gray-100 card p-3 mt-3 rounded shadow">
