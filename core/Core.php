@@ -36,7 +36,7 @@ class Core {
         $whoops = new \Whoops\Run;
         $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
 
-        if (getenv('DEBUG') === 'true') {
+        if ($_ENV['DEBUG'] === 'true') {
             $whoops->register();
         } else {
             $whoops->unregister();
@@ -49,7 +49,7 @@ class Core {
      * @return void
      */
     private function set_reporting() {
-        if (getenv('NATIVE_DEBUG') === 'true') {
+        if ($_ENV['NATIVE_DEBUG'] === 'true') {
             error_reporting(E_ALL);
             ini_set('display_errors','On');
             defined('ERROR_REPORTING') or define('ERROR_REPORTING', 'ON');

@@ -122,7 +122,7 @@ trait ObjectMapperParserTrait
         }
 
         return [
-            'keys' => implode(',', $keys),
+            'keys'   => implode(',', $keys),
             'values' => implode(',', $values)
         ];
     }
