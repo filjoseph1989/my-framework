@@ -99,6 +99,7 @@ class App extends Core
      */
     public function route()
     {
+        # Processing request here
         if (!self::token() && self::getAction() == 'POST') {
             return self::json([
                 'message' => "Method not allowed"
@@ -228,6 +229,10 @@ class App extends Core
 
         if (self::isTest()) {
             return $data;
+        }
+
+        if ($_ENV['DUMP_DATA'] == "true") {
+            file_put_contents('data.log', print_r($data, true), FILE_APPEND);
         }
 
         return $this->container->response->view($view, $data);
@@ -419,7 +424,7 @@ class App extends Core
 
         foreach ($reflection->getParameters() as $param) {
             if (isset($_GET[$param->getName()])) {
-                $params[$param->getPosition()] = $_GET[$param->getName()]; # Issue 78
+                $params[$param->getPosition()] = $_GET[$param->getName()];
             }
             if (!is_null($param->getClass()) && $param->getClass()->name == "Core\Request\Request") {
                 $params[$param->getPosition()] = $this->container->request;
