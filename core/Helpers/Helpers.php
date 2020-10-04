@@ -81,7 +81,7 @@ if (!function_exists('debug_print')) {
 if (!function_exists('debug_print_append')) {
     function debug_print_append($var)
     {
-        file_put_contents('debug.log', print_r($var, true), FILE_APPEND);
+        file_put_contents('debug.log', print_r($var, true)."\n", FILE_APPEND);
     }
 }
 
