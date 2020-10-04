@@ -8,13 +8,13 @@ class Database
      * Database Host
      * @var string
      */
-    protected string $Host     = '';
+    protected string $Host = '';
 
     /**
      * Database port
      * @var string
      */
-    protected string $Port     = '';
+    protected string $Port = '';
 
     /**
      * Database name
@@ -26,7 +26,7 @@ class Database
      * Database user
      * @var string
      */
-    protected string $User     = '';
+    protected string $User = '';
 
     /**
      * Database password
@@ -44,19 +44,19 @@ class Database
      * Query string
      * @var string
      */
-    protected string $sql      = '';
+    protected string $sql = '';
 
     /**
      * Connection checker
      * @var boolean
      */
-    protected bool $connected  = false;
+    protected bool $connected = false;
 
     /**
      * Query result count container
      * @var int
      */
-    protected int $rows_count  = 0;
+    protected int $rows_count = 0;
 
     /**
      * Initiate database
