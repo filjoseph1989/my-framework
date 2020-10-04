@@ -240,6 +240,15 @@ trait ModelTrait
     }
 
     /**
+     * Return last insert ID
+     * @return int
+     */
+    public function insertId()
+    {
+        $this->id;
+    }
+
+    /**
      * Return wheres container
      *
      * @return array
