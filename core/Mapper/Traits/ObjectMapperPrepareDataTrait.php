@@ -12,6 +12,8 @@ use Core\Model\Database;
  */
 trait ObjectMapperPrepareDataTrait
 {
+    private string $currentOperation = '';
+
     /**
      * Prepare delete
      *
@@ -35,6 +37,8 @@ trait ObjectMapperPrepareDataTrait
      */
     private function prepareCreate(array &$data = [], $return = false)
     {
+        $this->currentOperation = 'create';
+
         if ($this->database->isConnected()) {
             if (!isset($data['created_at'])) {
                 $data['created_at'] = date('Y-m-d H:i:s');
@@ -211,7 +215,23 @@ trait ObjectMapperPrepareDataTrait
             $item = utf8_decode($item);
         });
 
+        if ($this->currentOperation == 'create') {
+            self::setModelProperty($rows);
+        }
+
         return json_decode(json_encode($rows));
+    }
+
+    /**
+     * Set model property
+     * 
+     * @param array $rows [description]
+     */
+    public function setModelProperty(array $rows = [])
+    {
+        foreach ($rows[0] as $key => $value) {
+            $this->model->$key = $value;
+        }
     }
 
     /**
