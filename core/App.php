@@ -231,7 +231,7 @@ class App extends Core
             return $data;
         }
 
-        if ($_ENV['DUMP_DATA'] == "true") {
+        if (isset($_ENV['DUMP_DATA']) && $_ENV['DUMP_DATA'] == "true") {
             file_put_contents('data.log', print_r($data, true), FILE_APPEND);
         }
 
