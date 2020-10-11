@@ -2,10 +2,15 @@
 
 namespace Core;
 
-// Todo-1
+/**
+ * File upload handler class
+ *
+ * @author Fil Beluan
+ */
 class Files
 {
     private array $file;
+    private array $errorMessage = [];
 
     public function __construct($file)
     {
@@ -104,9 +109,9 @@ class Files
     private function setProperty()
     {
         if (!isset($this->file['error']) || is_array($this->file['error'])) {
-            throw new RuntimeException('Invalid parameters.');
-            $this->error = true;
-            $this->errorMessage = 'Invalid parameters.';
+            throw new \RuntimeException('Invalid parameters.');
+            $this->error        = true;
+            $this->errorMessage[] = 'Invalid parameters.';
             return false;
         }
 
@@ -129,48 +134,48 @@ class Files
 
         switch ($this->file['error']) {
             case UPLOAD_ERR_OK:
-                $this->errorMessage = 'The file uploaded with success.';
+                $this->errorMessage[] = 'The file uploaded with success.';
                 break;
 
             case UPLOAD_ERR_NO_FILE:
-                throw new RuntimeException('No file sent.');
                 $this->error = true;
-                $this->errorMessage = 'No file sent';
+                $this->errorMessage[] = 'No file sent';
+                break;
 
             case UPLOAD_ERR_NO_TMP_DIR:
-                throw new RuntimeException('Missing a temporary folder.');
                 $this->error = true;
-                $this->errorMessage = 'Missing a temporary folder';
+                $this->errorMessage[] = 'Missing a temporary folder';
+                break;
 
             case UPLOAD_ERR_CANT_WRITE:
-                throw new RuntimeException('Failed to write file to disk.');
                 $this->error = true;
-                $this->errorMessage = 'Failed to write file to disk';
+                $this->errorMessage[] = 'Failed to write file to disk';
+                break;
 
             case UPLOAD_ERR_EXTENSION:
-                throw new RuntimeException('A PHP extension stopped the file upload.');
                 $this->error = true;
-                $this->errorMessage = 'A PHP extension stopped the file upload';
+                $this->errorMessage[] = 'A PHP extension stopped the file upload';
+                break;
 
             case UPLOAD_ERR_INI_SIZE:
-                throw new RuntimeException('The uploaded file exceeds the upload_max_filesize directive in php.ini');
                 $this->error = true;
-                $this->errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+                $this->errorMessage[] = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+                break;
 
             case UPLOAD_ERR_PARTIAL:
-                throw new RuntimeException('The uploaded file was only partially uploaded');
                 $this->error = true;
-                $this->errorMessage = 'The uploaded file was only partially uploaded';
+                $this->errorMessage[] = 'The uploaded file was only partially uploaded';
+                break;
 
             case UPLOAD_ERR_FORM_SIZE:
-                throw new RuntimeException('Exceeded filesize limit.');
                 $this->error = true;
-                $this->errorMessage = 'Exceeded filesize limit.';
+                $this->errorMessage[] = 'Exceeded filesize limit.';
+                break;
 
             default:
-                throw new RuntimeException('Unknown errors.');
                 $this->error = true;
-                $this->errorMessage = 'Unknown errors.';
+                $this->errorMessage[] = 'Unknown errors.';
+                break;
         }
 
         return $this->error;
