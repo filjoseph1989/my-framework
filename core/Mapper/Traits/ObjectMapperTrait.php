@@ -8,6 +8,7 @@ use Core\Mapper\Classes\PrepareData;
 use Core\Mapper\Traits\ObjectMapperParserTrait;
 use Core\Mapper\Traits\ObjectMapperPrepareDataTrait;
 use Core\Mapper\Traits\ObjectMapperQueriesTrait;
+use Core\Mapper\Traits\ObjectMapperUtilityTrait;
 
 /**
  * A trait use by Core\Model\ObjectMapper
@@ -19,6 +20,7 @@ trait ObjectMapperTrait
     use ObjectMapperParserTrait;
     use ObjectMapperPrepareDataTrait;
     use ObjectMapperQueriesTrait;
+    use ObjectMapperUtilityTrait;
 
     /**
      * Count container of successfull query
@@ -87,7 +89,7 @@ trait ObjectMapperTrait
 
     /**
      * Check if the column exists
-     * 
+     *
      * @param  array  $columns
      * @return boolean
      */
@@ -159,7 +161,7 @@ trait ObjectMapperTrait
      */
     public function update(object &$model, array &$data = [], $return = false)
     {
-        return self::prepareUpdate($model, $data, $return);
+        return self::performUpdate($model, $data, $return);
     }
 
     /**
@@ -171,7 +173,7 @@ trait ObjectMapperTrait
      */
     public function create(array $data = [], $return = false)
     {
-        return self::prepareCreate($data[0], $return);
+        return self::performCreate($data[0], $return);
     }
 
     /**
@@ -182,16 +184,5 @@ trait ObjectMapperTrait
     public function query()
     {
         return $this->query;
-    }
-
-    /**
-     * Scape any value given
-     *
-     * @param mixed $value
-     * @return mixed
-     */
-    private function scape($value)
-    {
-        return $this->database->scape($value);
     }
 }
