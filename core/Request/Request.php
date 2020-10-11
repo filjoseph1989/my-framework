@@ -22,6 +22,19 @@ class Request implements RequestInterface
     private array $preservedInputs = [];
 
     /**
+     * Container of the uploaded files
+     * @var array
+     */
+    private array $preservedFiles = [];
+
+    /**
+     * Container for counts
+     * @var int
+     */
+    private int $preservedFilesCount;
+    private int $preservedInputsCount;
+
+    /**
      * App instance container
      * @var object
      */
@@ -76,11 +89,17 @@ class Request implements RequestInterface
         }
 
         if ($validator->hasErrors()) {
-            self::redirect()
-                ->with(['errors' => $validator->errors()])
-                ->inputs($this->preservedInputs)
-                ->to($_SERVER['HTTP_REFERER']);
+            if ($this->want_json == 'true') {
+                return ['errors' => $validator->errors()];
+            } else {
+                self::redirect()
+                    ->with(['errors' => $validator->errors()])
+                    ->inputs($this->preservedInputs)
+                    ->to($_SERVER['HTTP_REFERER']);
+            }
         }
+
+        return true;
     }
 
     /**
@@ -94,14 +113,44 @@ class Request implements RequestInterface
     }
 
     /**
+     * Return the inputs count
+     * @return int
+     */
+    public function getPreservedInputsCount()
+    {
+        return $this->preservedInputsCount;
+    }
+
+    /**
+     * Return array of uploaded files
+     *
+     * @return array
+     */
+    public function getPreservedFiles()
+    {
+        return $this->preservedFiles;
+    }
+
+    /**
+     * Return the uploaded files count
+     * @return int
+     */
+    public function getPreservedFilesCount()
+    {
+        return $this->preservedFilesCount;
+    }
+
+    /**
      * Set submitted post data as request property
      *
      * @return void
      */
     private function setProperty()
     {
-        $this->preservedInputs = $_POST;
-        $this->preservedFiles  = $_FILES;
+        $this->preservedInputs      = $_POST;
+        $this->preservedFiles       = $_FILES;
+        $this->preservedInputsCount = is_countable($_POST) ? count($_POST) : 0;
+        $this->preservedFilesCount  = is_countable($_FILES) ? count($_FILES) : 0;
 
         self::loopPost();
         self::loopFile();
