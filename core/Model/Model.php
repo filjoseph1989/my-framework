@@ -16,6 +16,8 @@ class Model
     use ModelTrait;
     use DebugTrait;
 
+    public $wasRecentlyCreated = false;
+
     /**
      * The mapping object
      * @var object
