@@ -86,8 +86,8 @@ trait ObjectMapperUtilityTrait
             $rows[] = $row;
         }
 
-        array_walk_recursive($rows, function (&$item, $key) {
-            $item = utf8_decode($item);
+        array_walk_recursive($rows, function (&$value, $key) {
+            $value = utf8_decode($value);
         });
 
         if ($this->currentOperation == 'create') {
