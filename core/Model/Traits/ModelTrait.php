@@ -2,6 +2,7 @@
 
 namespace Core\Model\Traits;
 
+use Core\Iterators\HasManyRowIterator;
 use Core\Model\ModelFirst;
 
 /**
@@ -76,12 +77,10 @@ trait ModelTrait
     {
         $model = $this->mapper->find($id);
 
+        # Here we check if it want to return the model
+        # when exists
         if ($this->exists === true) {
             return $model;
-        }
-
-        if (is_null($model)) {
-            return $this;
         }
 
         return $this;
@@ -246,6 +245,26 @@ trait ModelTrait
     public function insertId()
     {
         $this->id;
+    }
+
+    /**
+     * Return a model containing a one to many relationship
+     */
+    public function withMany(string $table='', bool $returnModel=false)
+    {
+        $this->withMany = $table;
+
+        foreach (new HasManyRowIterator($this) as $key => $row) {
+            foreach ($row as $secondKey => $value) {
+                $this->rows[$key]->$secondKey = $value;
+            }
+        }
+
+        if ($returnModel === true) {
+            return $this;
+        }
+
+        return $this->rows;
     }
 
     /**
