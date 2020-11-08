@@ -94,9 +94,18 @@ class ObjectMapper implements ObjectMapperInterface
     }
 
     /**
-     * Assign ID values to the foriegn keys
+     * Return the connected to database object
+     * @return object
+     */
+    public function getDatabaseConnection()
+    {
+        return $this->database;
+    }
+
+    /**
+     * Collect relation IDs and return
      *
-     * @param  array  $items
+     * @param  array  $rows
      * @return array
      */
     private function relation(object &$rows)

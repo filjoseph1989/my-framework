@@ -4,8 +4,6 @@ namespace Core\Iterators;
 
 /**
  * Iterate an object
- *
- * Task 4
  */
 class ModelRowIterator implements \Iterator
 {
