@@ -1,6 +1,7 @@
 <?php
 
 use Core\Iterators\ModelRowIterator;
+use Hashids\Hashids;
 
 /**
  * Return user's data
@@ -70,6 +71,20 @@ if (!function_exists('debug_print')) {
     function debug_print($var)
     {
         file_put_contents('debug.log', print_r($var, true));
+    }
+}
+
+/**
+ * Return a decoded ID using 
+ * hashIds
+ * 
+ * @param string $var 
+ * @return int
+ */
+if (!function_exists('hashIdDecode')) {
+    function hashIdDecode($var)
+    {
+		return (new Hashids())->decode($var)[0];
     }
 }
 
