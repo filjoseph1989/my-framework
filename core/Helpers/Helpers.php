@@ -4,6 +4,17 @@ use Core\Iterators\ModelRowIterator;
 use Hashids\Hashids;
 
 /**
+ * This function is used determining where to look in trace log
+ * Example: setting on xdebug. xdebug.mode=trace
+ * @var [type]
+ */
+if (!function_exists('tracing')) {
+    function tracing() {
+        return true;
+    }
+}
+
+/**
  * Return user's data
  * @var string
  */
@@ -75,10 +86,10 @@ if (!function_exists('debug_print')) {
 }
 
 /**
- * Return a decoded ID using 
+ * Return a decoded ID using
  * hashIds
- * 
- * @param string $var 
+ *
+ * @param string $var
  * @return int
  */
 if (!function_exists('hashIdDecode')) {
