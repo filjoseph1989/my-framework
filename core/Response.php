@@ -6,7 +6,30 @@ Use eftec\bladeone\BladeOne;
 
 class Response
 {
-	protected $statusCode = 200;
+	protected int $statusCode = 200;
+	protected string $views = __DIR__ . '/../views';
+	protected string $cache = __DIR__ . '/../cache';
+	protected object $blade;
+
+	public function __construct()
+	{
+		$this->blade = new BladeOne($this->views, $this->cache, BladeOne::MODE_AUTO);
+	}
+
+	/**
+	 * Return buffer usefull for ajax|http request
+	 * @param  string $view
+	 * @param  array  $data
+	 * @return
+	 */
+	public function viewBuffer(string $view, array $data = []): string
+	{
+		ob_start();
+		echo $this->blade->run($view, $data);
+		$out = ob_get_clean();
+
+		self::json(['post' => $out]);
+	}
 
 	/**
 	 * Return view object
@@ -17,12 +40,7 @@ class Response
 	 */
 	public function view(string $view, $data = [])
 	{
-		$views = __DIR__ . '/../views';
-		$cache = __DIR__ . '/../cache';
-
-		$blade = new BladeOne($views, $cache, BladeOne::MODE_AUTO);
-
-		echo $blade->run($view, $data);
+		echo $this->blade->run($view, $data);
 	}
 
 	/**
