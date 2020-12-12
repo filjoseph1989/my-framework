@@ -13,39 +13,26 @@ class App extends Core
 {
     use DebugTrait;
 
-    /**
-     * A class handler a.k.a controller and method
-     * @var object
-     */
+    # A class handler a.k.a controller and method
     private object $router;
 
-    /**
-     * A class handler a.k.a controller and method
-     * @var array
-     */
+    # A class handler a.k.a controller and method
     private array $handler;
 
-    /**
-     * Application container
-     * @var object
-     */
+    # Application container
     private object $container;
 
-    /**
-     * Setting for testing mode
-     * @var boolean
-     */
+    # Setting for testing mode
     private $test;
 
-    /**
-     * Container for request method (get/post) to be call
-     * @var string
-     */
+    # Container for request method (get/post) to be call
     private string $action = '';
 
-    /**
-     * Initiate app instance
-     */
+    # Use in sending json message
+    private string $customMessage = "";
+    private string $replace       = "";
+
+    # Initiate app instance
     public function __construct()
     {
         parent::__construct();
@@ -92,7 +79,7 @@ class App extends Core
     }
 
     /**
-     * call the controller
+     * Call the controller
      *
      * @param  array $handler
      * @return object
@@ -101,15 +88,13 @@ class App extends Core
     {
         # Processing request here
         if (!self::token() && self::getAction() == 'POST') {
-            return self::json([
-                'message' => "Method not allowed"
-            ]);
+            return self::json(['message' => "Method not allowed"]);
         }
 
         if (is_array($this->handler)) {
-            $class            = "\\App\\Controllers\\{$this->handler[0]}";
+            $class = "\\App\\Controllers\\{$this->handler[0]}";
             $this->handler[0] = new $class($this);
-            $params           = self::getParameters($this->handler);
+            $params = self::getParameters($this->handler);
         }
 
         if ( ! is_callable($this->handler)) {
@@ -118,6 +103,14 @@ class App extends Core
 
         # Call the controller and passed parameters
         return call_user_func_array($this->handler, $params);
+    }
+
+    /**
+     * Reurn router object
+     */
+    public function router(): object
+    {
+        return $this->router;
     }
 
     /**
@@ -256,6 +249,44 @@ class App extends Core
     }
 
     /**
+     * Return json error preset messages
+     * @param  string $uri
+     */
+    #[App('errorMessages')]
+    public function errorMessages(array|string $message): void
+    {
+        if (!file_exists(__DIR__ . '/../views/text/messages.json')) {
+            $this->container->response->json([]);
+        }
+
+        $data     = [];
+        $messages = file_get_contents(__DIR__ . '/../views/text/messages.json');
+        $messages = json_decode($messages, true);
+
+        if (is_array($message)) {
+            $data = self::parseErrorMessage($message, $messages);
+        } else {
+            $data = $messages[$this->router()->getUri()][$message];
+        }
+
+        $this->container->response->json($data);
+    }
+
+    /**
+     * Accept a custom message
+     * @param  string $customMessage
+     * @param  string $replace
+     */
+    #[App('customMessage')]
+    public function customeMessage(string $customMessage, string $replace): object
+    {
+        $this->customMessage = $customMessage;
+        $this->replace       = $replace;
+
+        return $this;
+    }
+
+    /**
      * Set mode
      *
      * @param  boolean $testing
@@ -278,6 +309,30 @@ class App extends Core
     public function visit(string $uri = '')
     {
         self::setUri($uri);
+    }
+
+    /**
+     * Do a replace with custom or just merge messages
+     * @param  array|string $message
+     * @param  array        $messages
+     */
+    #[App('parseErrorMessage')]
+    private function parseErrorMessage(array|string &$message, array &$messages): array
+    {
+        $data = [];
+
+        foreach ($message as $key => $m) {
+            if (!empty($this->customMessage) && !empty($this->replace)) {
+                $n = json_decode(str_replace(
+                    $this->replace,
+                    $this->customMessage,
+                    json_encode($messages[$this->router()->getUri()][$m])
+                ), true);
+            }
+            $data = array_merge($n, $data);
+        }
+
+        return $data;
     }
 
     /**
@@ -426,7 +481,7 @@ class App extends Core
             if (isset($_GET[$param->getName()])) {
                 $params[$param->getPosition()] = $_GET[$param->getName()];
             }
-            if (!is_null($param->getClass()) && $param->getClass()->name == "Core\Request\Request") {
+            if (!is_null($param->getType()) && $param->getType()->getName() == "Core\Request\Request") {
                 $params[$param->getPosition()] = $this->container->request;
             }
         }
