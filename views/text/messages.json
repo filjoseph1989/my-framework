@@ -1,0 +1,29 @@
+{
+    "/post": {
+        "message-1": {
+            "message": "Please fill up the required input boxes",
+            "status": "failed"
+        },
+        "message-2": {
+            "errors": {
+                "file": {
+                    "message": "<message>"
+                }
+            }
+        },
+        "message-3": {
+            "errors": {
+                "file": {
+                    "message": "You need to add image or collection of images to post"
+                }
+            }
+        },
+        "message-4": {
+            "errors": {
+                "file": {
+                    "message": "Opps, as of now we are only limited up to 5 images per post"
+                }
+            }
+        }
+    }
+}
