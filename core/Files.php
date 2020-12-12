@@ -91,6 +91,30 @@ class Files
     }
 
     /**
+     * Set a prefix error message
+     * @param  string $prefix
+     */
+    public function setPrefixErrorMessage(string $prefix): object|bool
+    {
+        if (isset($this->errorMessage['description'])) {
+            $this->errorMessage['description'] = "{$prefix} {$this->errorMessage['description']}";
+            return $this;
+        }
+        return false;
+    }
+
+    /**
+     * Return prefixed error message
+     */
+    public function getPrefixErrorMessage(): string
+    {
+        if (isset($this->errorMessage['description'])) {
+            return $this->errorMessage['description'];
+        }
+        return '';
+    }
+
+    /**
      * Return file size
      * @return int|boolean
      */
@@ -110,7 +134,7 @@ class Files
     {
         if (!isset($this->file['error']) || is_array($this->file['error'])) {
             throw new \RuntimeException('Invalid parameters.');
-            $this->error        = true;
+            $this->error = true;
             $this->errorMessage[] = 'Invalid parameters.';
             return false;
         }
@@ -132,49 +156,76 @@ class Files
     {
         $this->error = false;
 
-        switch ($this->file['error']) {
+        switch ($this->file['error']) { # Todo-13
             case UPLOAD_ERR_OK:
-                $this->errorMessage[] = 'The file uploaded with success.';
+                $this->errorMessage = [
+                    'type'        => 'SUCCESS',
+                    'description' => 'The file uploaded with success.'
+                ];
                 break;
 
             case UPLOAD_ERR_NO_FILE:
                 $this->error = true;
-                $this->errorMessage[] = 'No file sent';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_NO_FILE',
+                    'description' => 'No file sent'
+                ];
                 break;
 
             case UPLOAD_ERR_NO_TMP_DIR:
                 $this->error = true;
-                $this->errorMessage[] = 'Missing a temporary folder';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_NO_TMP_DIR',
+                    'description' => 'Missing a temporary folder'
+                ];
                 break;
 
             case UPLOAD_ERR_CANT_WRITE:
                 $this->error = true;
-                $this->errorMessage[] = 'Failed to write file to disk';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_CANT_WRITE',
+                    'description' => 'Failed to write file to disk'
+                ];
                 break;
 
             case UPLOAD_ERR_EXTENSION:
                 $this->error = true;
-                $this->errorMessage[] = 'A PHP extension stopped the file upload';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_EXTENSION',
+                    'description' => 'A PHP extension stopped the file upload'
+                ];
                 break;
 
             case UPLOAD_ERR_INI_SIZE:
                 $this->error = true;
-                $this->errorMessage[] = 'The uploaded file exceeds the upload_max_filesize directive in php.ini';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_INI_SIZE',
+                    'description' => 'The uploaded file exceeds the upload_max_filesize directive'
+                ];
                 break;
 
             case UPLOAD_ERR_PARTIAL:
                 $this->error = true;
-                $this->errorMessage[] = 'The uploaded file was only partially uploaded';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_PARTIAL',
+                    'description' => 'The uploaded file was only partially uploaded'
+                ];
                 break;
 
             case UPLOAD_ERR_FORM_SIZE:
                 $this->error = true;
-                $this->errorMessage[] = 'Exceeded filesize limit.';
+                $this->errorMessage = [
+                    'type'        => 'UPLOAD_ERR_FORM_SIZE',
+                    'description' => 'Exceeded filesize limit.'
+                ];
                 break;
 
             default:
                 $this->error = true;
-                $this->errorMessage[] = 'Unknown errors.';
+                $this->errorMessage = [
+                    'type'        => 'default',
+                    'description' => 'Unknown errors.'
+                ];
                 break;
         }
 
