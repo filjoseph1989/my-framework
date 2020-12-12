@@ -65,7 +65,9 @@ class Request implements RequestInterface
     }
 
     /**
-     * Validate request inputs
+     * Here we accept an object $validator
+     * and use $validator to evaluate every input gathered 
+     * by the request
      *
      * @return void
      */
