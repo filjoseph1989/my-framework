@@ -18,11 +18,8 @@ class Files
         self::setProperty();
     }
 
-    /**
-     * return file name
-     * @return string|boolean
-     */
-    public function name()
+    # return file name
+    public function name(): string|bool
     {
         if (isset($this->name)) {
             return $this->name;
@@ -30,11 +27,8 @@ class Files
         return false;
     }
 
-    /**
-     * Return file type
-     * @return string|boolean
-     */
-    public function type()
+    # Return file type
+    public function type(): string|bool
     {
         if (isset($this->type)) {
             return $this->type;
@@ -42,11 +36,8 @@ class Files
         return false;
     }
 
-    /**
-     * Return uploaded temp name
-     * @return string|boolean
-     */
-    public function tmp_name()
+    # Return uploaded temp name
+    public function tmp_name(): string|bool
     {
         if (isset($this->tmp_name)) {
             return $this->tmp_name;
@@ -54,11 +45,8 @@ class Files
         return false;
     }
 
-    /**
-     * Return errors
-     * @return string|boolean
-     */
-    public function errors()
+    # Return errors
+    public function errors(): string|bool
     {
         if (isset($this->errors)) {
             return $this->errors;
@@ -66,11 +54,8 @@ class Files
         return false;
     }
 
-    /**
-     * Return boolean of error
-     * @return boolean
-     */
-    public function error()
+    # Return boolean of error
+    public function error(): bool
     {
         if (isset($this->error)) {
             return $this->error;
@@ -78,11 +63,8 @@ class Files
         return false;
     }
 
-    /**
-     * Return error message or false
-     * @return string|boolean
-     */
-    public function errorMessage()
+    # Return error message or false
+    public function errorMessage(): string|bool
     {
         if (isset($this->errorMessage)) {
             return $this->errorMessage;
@@ -103,9 +85,7 @@ class Files
         return false;
     }
 
-    /**
-     * Return prefixed error message
-     */
+    # Return prefixed error message
     public function getPrefixErrorMessage(): string
     {
         if (isset($this->errorMessage['description'])) {
@@ -114,11 +94,8 @@ class Files
         return '';
     }
 
-    /**
-     * Return file size
-     * @return int|boolean
-     */
-    public function size()
+    # Return file size
+    public function size(): int|bool
     {
         if (isset($this->size)) {
             return $this->size;
@@ -126,11 +103,8 @@ class Files
         return false;
     }
 
-    /**
-     * Set property
-     * @return void
-     */
-    private function setProperty()
+    # Set property
+    private function setProperty(): void
     {
         if (!isset($this->file['error']) || is_array($this->file['error'])) {
             throw new \RuntimeException('Invalid parameters.');
@@ -148,15 +122,12 @@ class Files
         }
     }
 
-    /**
-     * Check every error
-     * @return boolean
-     */
-    private function hasFileErrors()
+    # Check every error
+    private function hasFileErrors(): bool
     {
         $this->error = false;
 
-        switch ($this->file['error']) { # Todo-13
+        switch ($this->file['error']) {
             case UPLOAD_ERR_OK:
                 $this->errorMessage = [
                     'type'        => 'SUCCESS',
