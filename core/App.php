@@ -278,7 +278,7 @@ class App extends Core
      * @param  string $replace
      */
     #[App('customMessage')]
-    public function customeMessage(string $customMessage, string $replace): object
+    public function customMessage(string $customMessage, string $replace): object
     {
         $this->customMessage = $customMessage;
         $this->replace       = $replace;
