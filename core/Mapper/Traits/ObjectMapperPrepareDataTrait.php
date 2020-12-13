@@ -111,11 +111,9 @@ trait ObjectMapperPrepareDataTrait
 
     /**
      * Prepare the query and get resulting data
-     *
      * @param  array  $wheres
-     * @return object
      */
-    private function prepareGet(object &$model)
+    private function prepareGet(object &$model): object|null
     {
         if ($this->database->isConnected()) {
             $condition   = self::prepareWhere($model);

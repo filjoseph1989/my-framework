@@ -51,8 +51,6 @@ class Model
 
     /**
      * Assign value to the given model property
-     * Issue 57
-     *
      * @param string $key   The model property
      * @param mixed  $value The property value
      */
