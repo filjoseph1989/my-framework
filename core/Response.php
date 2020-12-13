@@ -20,7 +20,6 @@ class Response
 	 * Return buffer usefull for ajax|http request
 	 * @param  string $view
 	 * @param  array  $data
-	 * @return
 	 */
 	public function viewBuffer(string $view, array $data = []): string
 	{
@@ -36,9 +35,8 @@ class Response
 	 *
 	 * @param  string $view
 	 * @param  array  $data
-	 * @return null
 	 */
-	public function view(string $view, $data = [])
+	public function view(string $view, $data = []): void
 	{
 		echo $this->blade->run($view, $data);
 	}
@@ -47,9 +45,8 @@ class Response
 	 * Response as json
 	 *
 	 * @param  array  $data
-	 * @return null
 	 */
-	public function json(array $data = [])
+	public function json(array $data = []): void
 	{
 		header('Content-type: application/json');
         echo json_encode($data);
