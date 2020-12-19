@@ -104,7 +104,7 @@ class Files
     }
 
     # Set property
-    private function setProperty(): void
+    private function setProperty(): bool
     {
         if (!isset($this->file['error']) || is_array($this->file['error'])) {
             throw new \RuntimeException('Invalid parameters.');
@@ -120,6 +120,8 @@ class Files
         foreach ($this->file as $key => $value) {
             $this->$key = $value;
         }
+
+        return true;
     }
 
     # Check every error
