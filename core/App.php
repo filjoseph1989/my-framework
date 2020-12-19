@@ -205,9 +205,9 @@ class App extends Core
      *
      * @param  string $view
      * @param  array $data
-     * @return object
+     * @return null
      */
-    public function view(string $view, $data = [])
+    public function view(string $view, array $data = [])
     {
         self::setAuth($data);
         self::setWith($data);
@@ -246,6 +246,17 @@ class App extends Core
         }
 
         return $this->container->response->json($data);
+    }
+
+    /**
+     * Return buffer string to http request
+     * @param  string $view
+     * @param  array  $data
+     * @return null
+     */
+    public function viewBuffer(string $view, array $data = [])
+    {
+        return $this->container->response->viewBuffer($view, $data);
     }
 
     /**
