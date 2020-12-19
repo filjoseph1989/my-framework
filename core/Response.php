@@ -21,7 +21,7 @@ class Response
 	 * @param  string $view
 	 * @param  array  $data
 	 */
-	public function viewBuffer(string $view, array $data = []): string
+	public function viewBuffer(string $view, array $data = [])
 	{
 		ob_start();
 		echo $this->blade->run($view, $data);
@@ -32,7 +32,6 @@ class Response
 
 	/**
 	 * Return view object
-	 *
 	 * @param  string $view
 	 * @param  array  $data
 	 */
@@ -43,7 +42,6 @@ class Response
 
 	/**
 	 * Response as json
-	 *
 	 * @param  array  $data
 	 */
 	public function json(array $data = []): void
