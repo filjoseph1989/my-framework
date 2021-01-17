@@ -3,6 +3,7 @@
 namespace Core\Mapper\Traits;
 
 use Core\Mapper\Classes\Parser;
+use Core\Mapper\Classes\PrepareData;
 use Core\Model\Database;
 
 /**
@@ -83,9 +84,10 @@ trait ObjectMapperPrepareDataTrait
     private function performUpdate(object &$model, array &$data = [], $return = false)
     {
         if ($this->database->isConnected()) {
-            $condition = self::prepareWhere($model);
+            // $condition = self::prepareWhere($model);
+            $prepareData = new PrepareData($model, $this->database, $this->table, $data);
 
-            if (self::isColumnEmpty($model, $condition)) {
+            if (self::isColumnEmpty($prepareData)) {
                 return false;
             }
 
@@ -93,8 +95,9 @@ trait ObjectMapperPrepareDataTrait
                 $data['updated_at'] = date('Y-m-d H:i:s');
             }
 
-            $this->query = self::prepareUpdateQuery($condition, self::prepareData($data));
-            $results     = $this->database->query($this->query);
+            $prepareData->updateData();
+            $prepareData->update();
+            $results = $this->database->query($this->query = $prepareData->getQueryString());
 
             if (!$results) {
                 return null;
@@ -116,12 +119,16 @@ trait ObjectMapperPrepareDataTrait
     private function prepareGet(object &$model): object|null
     {
         if ($this->database->isConnected()) {
-            $condition   = self::prepareWhere($model);
-            $order       = self::prepareOrderBy($model);
-            $limit       = self::prepareLimit($model);
-            $offset      = self::prepareSkip($model);
-            $this->query = self::prepareSelectQuery($condition, $limit, $offset, $order);
-            $rows        = $this->database->query($this->query);
+            $data = new PrepareData($model, $this->database, $this->table);
+            $data->where();
+            $data->order();
+            $data->limit();
+            $data->skip();
+            $data->select();
+
+            $rows = $this->database->query(
+                $this->query = $data->getQueryString()
+            );
 
             if (is_null(self::hasCount())) {
                 return null;
@@ -131,20 +138,22 @@ trait ObjectMapperPrepareDataTrait
 
             return $this->model;
         }
+
+        return null;
     }
 
     /**
      * Prepare find
-     *
      * @param array $value
-     * @return object
      */
-    private function prepareFind(int &$value)
+    private function prepareFind(int &$value): object|null
     {
         if ($this->database->isConnected()) {
-            $condition   = "{$this->primaryKey}='{$value}'";
-            $this->query = self::prepareSelectQuery($condition);
-            $rows        = $this->database->query($this->query);
+            $data = new PrepareData($this->model, $this->database, $this->table);
+            $data->setCondition("{$this->primaryKey}='{$value}'");
+            $data->select();
+
+            $rows = $this->database->query($this->query = $data->getQueryString());
 
             if (is_null(self::hasCount())) {
                 return null;
