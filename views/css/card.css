@@ -23,7 +23,7 @@
         .card-footer {
             a {
                 svg {
-                    @apply text-teal-600;
+                    /* @apply text-teal-600; */
                     position: relative;
                 }
             }

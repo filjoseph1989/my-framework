@@ -9,7 +9,6 @@
                     and change the name of the class</p>
             </article>
         </li>
-
         <li class="list-decimal ml-4">
             <article class="method">
                 <h3 class="border-b border-t font-black mt-2 py-1">Define a relationship</h3>
@@ -19,6 +18,12 @@
                         'user_id' => 'App\\Models\\User'
                     ];
                 </pre>
+            </article>
+        </li>
+        <li class="list-decimal ml-4">
+            <article class="method">
+                <h3 class="border-b border-t font-black mt-2 py-1">To get last insert ID</h3>
+                <p>$model->insertId()</p>
             </article>
         </li>
     </ul>
