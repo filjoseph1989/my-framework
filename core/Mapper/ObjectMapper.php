@@ -68,12 +68,10 @@ class ObjectMapper implements ObjectMapperInterface
 
     /**
      * Mapping database result
-     *
      * @param  object $model
      * @param  array  $columns
-     * @return void
      */
-    public function map(object &$model, object $row)
+    public function map(object &$model, object $row): object
     {
         $relations = self::relation($row);
 
@@ -104,11 +102,9 @@ class ObjectMapper implements ObjectMapperInterface
 
     /**
      * Collect relation IDs and return
-     *
      * @param  array  $rows
-     * @return array
      */
-    private function relation(object &$rows)
+    private function relation(object &$rows): array
     {
         $relations = [];
 
