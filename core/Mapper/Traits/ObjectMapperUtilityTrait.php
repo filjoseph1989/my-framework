@@ -2,32 +2,28 @@
 
 namespace Core\Mapper\Traits;
 
-/**
- * List of utility methods
- */
 trait ObjectMapperUtilityTrait
 {
     /**
      * Scape any value given
-     *
      * @param mixed $value
-     * @return mixed
      */
-    private function scape($value)
+    #[ObjectMapperUtilityTrait('scape')]
+    private function scape($value): string
     {
         return $this->database->scape($value);
     }
 
     /**
      * Determine if there's a column in the database table
-     *
-     * @return boolean
+     * @param  object $data
      */
-    private function isColumnEmpty(object &$model, &$condition)
+    #[ObjectMapperUtilityTrait('isColumnEmpty')]
+    private function isColumnEmpty(object &$data): bool
     {
-        $this->query = self::prepareSelectQuery($condition);
-
-        $this->database->query($this->query);
+        $data->where();
+        $data->select();
+        $this->database->query($this->query = $data->getQueryString());
         $this->count = $this->database->count();
 
         if ($this->count <= 0) {
@@ -37,17 +33,14 @@ trait ObjectMapperUtilityTrait
         return false;
     }
 
-    /**
-     * Check if has count
-     *
-     * @return boolean
-     */
-    private function hasCount()
+    # Check if has count
+    #[ObjectMapperUtilityTrait('hasCount')]
+    private function hasCount(): bool
     {
         $this->count = $this->database->count();
 
         if ($this->count == -1 || $this->count == 0) {
-            return null;
+            return false;
         }
 
         return true;
@@ -55,20 +48,19 @@ trait ObjectMapperUtilityTrait
 
     /**
      * Map results into model object
-     *
      * @param object $rows
-     * @return void
      */
+    #[ObjectMapperUtilityTrait('mapRows')]
     private function mapRows(object $rows)
     {
         $rows = self::fetchRows($rows);
 
+        if (is_null($rows)) {
+            return null;
+        }
+
         foreach ($rows as $key => $row) {
-            if ($this->toArray) {
-                $this->rows[] = $row; # Issue 68
-            } else {
-                $rows[$key] = self::map($this->model, $row);
-            }
+            $rows[$key] = self::map($this->model, $row);
         }
 
         $this->model->setModelRows('rows', $rows);
@@ -76,14 +68,16 @@ trait ObjectMapperUtilityTrait
 
     /**
      * Return the rows from database
-     *
      * @param  object $results
-     * @return array
      */
-    private function fetchRows(object $results)
+    private function fetchRows(object $results): array|null
     {
         while ($row = $results->fetch_assoc()) {
             $rows[] = $row;
+        }
+
+        if (!isset($rows)) {
+            return null;
         }
 
         array_walk_recursive($rows, function (&$value, $key) {

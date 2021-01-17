@@ -3,7 +3,6 @@
 namespace Core\Model\Traits;
 
 use Core\Iterators\HasManyRowIterator;
-use Core\Model\ModelFirst;
 
 /**
  * Collection of other model methods
@@ -56,12 +55,9 @@ trait ModelTrait
         return $this->mapper->exists();
     }
 
-    /**
-     * Check internally if exists
-     *
-     * @return boolean
-     */
-    public function isExists()
+    # Check internally if exists
+    #[ModelTrait('isExists')]
+    public function isExists(): bool
     {
         $this->exists = true;
         return $this;
@@ -98,14 +94,11 @@ trait ModelTrait
 
     /**
      * Set order by
-     *
      * @param string $order
-     * @return object
      */
     public function orderBy(string $order = '')
     {
         $this->orderBy = $order;
-        return $this;
     }
 
     /**
@@ -120,25 +113,11 @@ trait ModelTrait
 
     /**
      * Set limit about getting database data
-     *
      * @param integer $limit
-     * @return object
      */
     public function take(int $limit = 0)
     {
-        return self::limit($limit);
-    }
-
-    /**
-     * Set limit of a query
-     *
-     * @param  integer $limit
-     * @return object
-     */
-    public function limit(int $limit = 0)
-    {
         $this->limit = $limit;
-        return $this;
     }
 
     /**
@@ -155,49 +134,42 @@ trait ModelTrait
 
     /**
      * Setup where condition
-     *
      * @param  string $columnName
      * @param  string $value
-     * @return object
      */
     public function where($columnName, $value)
     {
         $this->wheres[$columnName] = $value;
-        return $this;
     }
 
-    /**
-     * Return the resulting data
-     *
-     * @return mixed
-     */
-    public function get()
+    # Return the the model with resulting data
+    #[ModelTrait('get')]
+    public function get(): object|null
     {
         return $this->mapper->get($this);
     }
 
     /**
-     * Return the first index of the array
-     *
-     * @return object
+     * Return the first index of the array or
+     * As opposed to get() method, first() perform get and only return the first row
      */
-    public function first()
+    #[ModelTrait('first')]
+    public function first(): object|null
     {
         if (count($this->rows) > 0) {
             return $this->rows[0];
         }
 
-        $rows = self::get();
-        return (new ModelFirst($rows))->first();
+        self::get();
+        return $this->rows[0] ?? null;
     }
 
     /**
      * Update table row
-     *
      * @param  array  $data
-     * @return boolean
      */
-    public function update(array $data = [], $return = false)
+    #[ModelTrait('update')]
+    public function update(array $data = [], $return = false): bool
     {
         return $this->mapper->update($this, $data, $return);
     }
@@ -248,9 +220,11 @@ trait ModelTrait
     }
 
     /**
-     * Return a model containing a one to many relationship
+     * Return a model or rows containing it's many relations
+     * @param  string  $table
+     * @param  boolean $returnModel
      */
-    public function withMany(string $table='', bool $returnModel=false)
+    public function withMany(string $table, bool $returnModel=false): array|object
     {
         $this->withMany = $table;
 
