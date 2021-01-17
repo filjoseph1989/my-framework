@@ -4,63 +4,17 @@ namespace Core\Model;
 
 class Database
 {
-    /**
-     * Database Host
-     * @var string
-     */
     protected string $Host = '';
-
-    /**
-     * Database port
-     * @var string
-     */
     protected string $Port = '';
-
-    /**
-     * Database name
-     * @var string
-     */
     protected string $Database = '';
-
-    /**
-     * Database user
-     * @var string
-     */
     protected string $User = '';
-
-    /**
-     * Database password
-     * @var string
-     */
     protected string $Password = '';
-
-    /**
-     * Databse Driver instance
-     * @var object
-     */
     protected object $Instance;
-
-    /**
-     * Query string
-     * @var string
-     */
     protected string $sql = '';
-
-    /**
-     * Connection checker
-     * @var boolean
-     */
     protected bool $connected = false;
-
-    /**
-     * Query result count container
-     * @var int
-     */
     protected int $rows_count = 0;
 
-    /**
-     * Initiate database
-     */
+    // Instanciate database
     public function __construct()
     {
         $this->Host     = $_ENV["DB_HOST"];
@@ -74,13 +28,15 @@ class Database
 
     /**
      * Run direct query
-     *
      * @param  string $query
-     * @return mixed
      */
-    public function query(string $query)
+    public function query(string $query): mixed
     {
-        $results = $this->Instance->query($query);
+        if ($_ENV["DEBUG_QUERY"] == 'true') {
+            file_put_contents('query.log', print_r($query, true)."\n", FILE_APPEND);
+        }
+
+        $results = $this->Instance->query($this->sql = $query);
 
         if ($results !== false) {
             return $results;
@@ -89,33 +45,23 @@ class Database
         return null;
     }
 
-    /**
-     * Return the last insert ID
-     *
-     * @return int
-     */
-    public function insertId()
+    // Return the last insert ID
+    public function insertId(): int
     {
         return $this->Instance->insert_id;
     }
 
     /**
      * Scape given
-     *
      * @param  string $value
-     * @return string
      */
-    public function scape($value)
+    public function scape($value): string
     {
         return $this->Instance->real_escape_string($value);
     }
 
-    /**
-     * Return the count of rows from previous query
-     *
-     * @return int
-     */
-    public function count()
+    // Return the count of rows from previous query
+    public function count(): int
     {
         return $this->Instance->affected_rows;
     }
@@ -123,8 +69,6 @@ class Database
     /**
      * Database::connect()
      * Opens up the connection to the database based on the object's attributes¸
-     *
-     * @return void
      */
     public function connect()
     {
@@ -137,18 +81,18 @@ class Database
         );
 
         if (mysqli_connect_errno()) {
-            die($this->getError()); # Issue 70
-        } else {
-            $this->Instance = $con;
-            $this->connected = true;
+            file_put_contents('sql.log', print_r(mysqli_connect_error(), true)."\n", FILE_APPEND);
         }
+
+        if (!is_object($con)) return;
+
+        $this->Instance = $con;
+        $this->connected = true;
     }
 
-    /**
-     * Check if database connected
-     * @return boolean
-     */
-    public function isConnected()
+    # Check if database connected
+    #[Database('isConnected')]
+    public function isConnected(): bool
     {
         return $this->connected;
     }
@@ -168,18 +112,17 @@ class Database
 
     /**
      * Return primary key
-     *
      * @param  string $table
-     * @return int
      */
-    public function getPrimaryKey(string $table)
+    public function getPrimaryKey(string $table): string
     {
-        $this->sql = "SHOW COLUMNS FROM {$table};";
-        $results   = $this->Instance->query($this->sql);
+        if (!$this->connected) return false;
 
-        if ($results === false) {
-            return false;
-        }
+        $this->sql = "SHOW COLUMNS FROM {$table}";
+
+        $results = $this->Instance->query($this->sql);
+
+        if ($results === false) return false;
 
         foreach ($results as $row) {
             if ($row["Key"] == "PRI") {
@@ -190,20 +133,18 @@ class Database
 
     /**
      * Return the array of foriegn key(s)
-     *
      * @param  string $table
-     * @return array
      */
-    public function getForeignKey(string $table)
+    public function getForeignKey(string $table): array
     {
+        if (!$this->connected) return [];
+
         $fk_array  = [];
         $return    = [];
-        $this->sql = "SHOW CREATE TABLE " . $table;
+        $this->sql = "SHOW CREATE TABLE {$table}";
         $results   = $this->Instance->query($this->sql);
 
-        if ($results === false) {
-            return [];
-        }
+        if ($results === false) return [];
 
         while ($row = $results->fetch_assoc()) {
             $fk_array[] = $row;
@@ -219,15 +160,5 @@ class Database
         }
 
         return $return;
-    }
-
-    /**
-     * Get sql error
-     *
-     * @return void
-     */
-    private function getError()
-    {
-        return $this->sql . "SQL Exception #" . $this->Instance->errno . " : " . $this->Instance->error;
     }
 }
