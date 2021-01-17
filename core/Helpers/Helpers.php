@@ -54,29 +54,24 @@ if (!function_exists('iterate_model')) {
 
 /**
  * CSRF token
- * @var
  */
 if (!function_exists('token')) {
-    function token() {
+    function token(): string {
         return $_SESSION['token'] ?? '';
     }
 }
 
 /**
  * Return asset version
- *
- * @var float
  */
 if (!function_exists('asset_version')) {
-    function asset_version() {
+    function asset_version(): float {
         return $_ENV['ASSET'];
     }
 }
 
 /**
  * Print variable value on file
- *
- * @return void
  */
 if (!function_exists('debug_print')) {
     function debug_print($var)
@@ -88,14 +83,23 @@ if (!function_exists('debug_print')) {
 /**
  * Return a decoded ID using
  * hashIds
- *
  * @param string $var
- * @return int
  */
 if (!function_exists('hashIdDecode')) {
-    function hashIdDecode($var)
+    function hashIdDecode($var): string
     {
 		return (new Hashids())->decode($var)[0];
+    }
+}
+
+/**
+ * Encode ID
+ * @param mixed $var
+ */
+if (!function_exists('hashIdEncode')) {
+    function hashIdEncode($var): string
+    {
+		return (new Hashids())->encode($var);
     }
 }
 
