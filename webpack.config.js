@@ -15,21 +15,22 @@ module.exports = {
     module: {
         rules: [
             {
+                test: /\.js$/,
+                enforce: "pre",
+                use: ["source-map-loader"],
+            },
+            {
                 test: /\.css$/,
                 exclude: /node_modules/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader
-                    },
+                    { loader: MiniCssExtractPlugin.loader },
                     {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 1,
                         }
                     },
-                    {
-                        loader: 'postcss-loader'
-                    }
+                    { loader: 'postcss-loader' }
                 ]
             }
         ]
@@ -39,5 +40,6 @@ module.exports = {
             filename: devMode ? 'css/[name].css' : 'css/[name].[hash].css',
             chunkFilename: 'css/[id].[chunkhash].js'
         })
-    ]
+    ],
+    devtool: 'cheap-module-source-map'
 }
