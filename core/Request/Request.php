@@ -48,12 +48,9 @@ class Request implements RequestInterface
         self::setProperty();
     }
 
-    /**
-     * Verify CSRF Token
-     *
-     * @return boolean
-     */
-    public function verifyCsrfToken()
+    # Verify CSRF Token
+    #[Request('verifyCsrfToken')]
+    public function verifyCsrfToken(): bool
     {
         if (isset($this->token)) {
             if (hash_equals($_SESSION['token'], $this->token)) {
@@ -66,7 +63,7 @@ class Request implements RequestInterface
 
     /**
      * Here we accept an object $validator
-     * and use $validator to evaluate every input gathered 
+     * and use $validator to evaluate every input gathered
      * by the request
      *
      * @return void
@@ -158,12 +155,9 @@ class Request implements RequestInterface
         self::loopFile();
     }
 
-    /**
-     * Evaluate every submitted data
-     *
-     * @return void
-     */
-    private function loopPost()
+    # Evaluate every submitted data
+    #[Request('loopPost')]
+    private function loopPost(): void
     {
         foreach ($_POST as $key => $value) {
             unset($_POST[$key]);
