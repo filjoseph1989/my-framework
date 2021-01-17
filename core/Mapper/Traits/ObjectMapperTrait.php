@@ -81,7 +81,7 @@ trait ObjectMapperTrait
     public function findOrCreate(array $columns = [])
     {
         if (!self::exists($columns)) {
-            $prepareData = new PrepareData($this->database, $this->table, $columns[0]);
+            $prepareData = new PrepareData($this->model, $this->database, $this->table, $columns[0]);
             $prepareData->create();
             return self::find($prepareData->insertedId());
         }
@@ -144,11 +144,9 @@ trait ObjectMapperTrait
 
     /**
      * Return the object result after query
-     *
      * @param  array  $query
-     * @return object
      */
-    public function get(object &$model)
+    public function get(object &$model): object|null
     {
         return self::prepareGet($model);
     }
