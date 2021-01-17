@@ -85,11 +85,9 @@ class Model
 
     /**
      * Return property
-     *
      * @param string $property
-     * @return mixed
      */
-    private function getProperty(string $property = '')
+    private function getProperty(string $property = ''): mixed
     {
         if (isset($this->$property)) {
             return $this->$property;
@@ -103,9 +101,8 @@ class Model
      *
      * @param  string $method    Method name
      * @param  array  $arguments The method parameters
-     * @return mixed
      */
-    public function __call($method, $arguments)
+    public function __call($method, $arguments): mixed
     {
         if (!method_exists($this->mapper, $method)) {
             return null;
@@ -116,11 +113,9 @@ class Model
 
     /**
      * Magically call the property
-     *
      * @param  mixed $property
-     * @return mixed
      */
-    public function __get($property)
+    public function __get($property): mixed
     {
         return $this->getProperty($property);
     }
