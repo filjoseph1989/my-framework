@@ -38,6 +38,8 @@
                         @include('docs.model')
 
                         @include('docs.helpers')
+
+                        @include('docs.debugging')
                     </div>
                 </div>
             </div>
