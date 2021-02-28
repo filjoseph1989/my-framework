@@ -6,11 +6,6 @@ use Core\Mapper\Classes\Parser;
 use Core\Mapper\Classes\PrepareData;
 use Core\Model\Database;
 
-/**
- * A trait use by Core\Model\ObjectMapper
- *
- * @author fil beluan <filjoseph22@gmail.com>
- */
 trait ObjectMapperPrepareDataTrait
 {
     private string $currentOperation = '';
@@ -31,12 +26,10 @@ trait ObjectMapperPrepareDataTrait
 
     /**
      * Prepare create
-     * Issue 87
-     *
      * @param array $data
-     * @return object
      */
-    private function performCreate(array &$data = [], $return = false)
+    #[ObjectMapperPrepareDataTrait('performCreate')]
+    private function performCreate(array &$data = [], $return = false): object
     {
         $this->currentOperation = 'create';
 
@@ -48,8 +41,10 @@ trait ObjectMapperPrepareDataTrait
                 $data['updated_at'] = date('Y-m-d H:i:s');
             }
 
-            $this->query = self::prepareInsertQuery($data);
-            $results     = $this->database->query($this->query);
+            $data = new PrepareData($this->model, $this->database, $data);
+            $data->create();
+
+            $results     = $this->database->query($this->query = $data->getQueryString());
             $this->count = $this->database->count();
             $this->id    = $this->database->insertId();
 
@@ -75,24 +70,21 @@ trait ObjectMapperPrepareDataTrait
 
     /**
      * Prepare updating table
-     *
      * @param  object  $model
      * @param  array   $data
      * @param  boolean $return
-     * @return object
      */
-    private function performUpdate(object &$model, array &$data = [], $return = false)
+    private function performUpdate(object &$model, array &$data = [], $return = false): bool #Todo-13
     {
         if ($this->database->isConnected()) {
-            // $condition = self::prepareWhere($model);
-            $prepareData = new PrepareData($model, $this->database, $this->table, $data);
+            if (!isset($data['updated_at'])) {
+                $data['updated_at'] = date('Y-m-d H:i:s');
+            }
+
+            $prepareData = new PrepareData($model, $this->database, $data);
 
             if (self::isColumnEmpty($prepareData)) {
                 return false;
-            }
-
-            if (!isset($data['updated_at'])) {
-                $data['updated_at'] = date('Y-m-d H:i:s');
             }
 
             $prepareData->updateData();
@@ -119,7 +111,7 @@ trait ObjectMapperPrepareDataTrait
     private function prepareGet(object &$model): object|null
     {
         if ($this->database->isConnected()) {
-            $data = new PrepareData($model, $this->database, $this->table);
+            $data = new PrepareData($model, $this->database);
             $data->where();
             $data->order();
             $data->limit();
@@ -149,7 +141,7 @@ trait ObjectMapperPrepareDataTrait
     private function prepareFind(int &$value): object|null
     {
         if ($this->database->isConnected()) {
-            $data = new PrepareData($this->model, $this->database, $this->table);
+            $data = new PrepareData($this->model, $this->database);
             $data->setCondition("{$this->primaryKey}='{$value}'");
             $data->select();
 
