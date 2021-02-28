@@ -4,14 +4,13 @@ namespace Core\Traits;
 
 trait DebugTrait
 {
-    /**
-     * Container for available methods
-     * @var array
-     */
     protected array $availableMethods = [];
 
-    # Print available methods
-    public function availableMethods(): void
+    /**
+     * Display or print on file the object available methods
+     * @param boolean $printOnFile
+     */
+    public function availableMethods(bool $printOnFile=false): void
     {
         $class_methods = get_class_methods($this);
 
@@ -20,7 +19,11 @@ trait DebugTrait
             $this->availableMethods[] = $reflection->getFileName() . ':' . $reflection->getStartLine() . " " . $reflection->getName();
         }
 
-        dump($this->availableMethods);
+        if ($printOnFile) {
+            self::printOnFile(false);
+        } else {
+            dump($this->availableMethods);
+        }
     }
 
     /**
