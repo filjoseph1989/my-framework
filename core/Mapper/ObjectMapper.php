@@ -6,64 +6,31 @@ use Core\Contracts\ObjectMapperInterface;
 use Core\Mapper\Traits\ObjectMapperTrait;
 use Core\Model\Database;
 
-/**
- * Map database as object
- *
- * @author Fil Beluan
- */
 class ObjectMapper implements ObjectMapperInterface
 {
     use ObjectMapperTrait;
 
-    /**
-     * The model to map with
-     * @var object
-     */
     public object $model;
-
-    /**
-     * The model table name
-     * @var string
-     */
-    protected string $table      = '';
-
-    /**
-     * Model primary key
-     * @var string
-     */
+    protected string $table = '';
     protected string $primaryKey = '';
-
-    /**
-     * Collection of model foreign keys
-     * @var array
-     */
-    protected array $foreignKeys = [];
-
-    /**
-     * Database object container
-     * @var object
-     */
     protected object $database;
-
-    /**
-     * Rows container
-     * @var array
-     */
+    protected array $foreignKeys = [];
     protected array $rows = [];
 
     /**
      * Initiate object mapping
-     *
      * @param object $object The model object
      */
     public function __construct(object $model)
     {
         $this->model = $model;
-        $this->table = $this->model->table;
 
-        $this->database    = new Database();
-        $this->primaryKey  = $this->database->getPrimaryKey(strtolower($this->table));
-        $this->foreignKeys = $this->database->getForeignKey(strtolower($this->table));
+        if (!is_null($this->model->table)) {
+            $this->database    = new Database();
+            $this->table       = $this->model->table;
+            $this->primaryKey  = $this->database->getPrimaryKey(strtolower($this->table));
+            $this->foreignKeys = $this->database->getForeignKey(strtolower($this->table));
+        }
     }
 
     /**
@@ -73,17 +40,31 @@ class ObjectMapper implements ObjectMapperInterface
      */
     public function map(object &$model, object $row): object
     {
-        $relations = self::relation($row);
+        $hasOne = self::hasOneRelation($row);
+
+        if (!is_null($model)) {
+            $belongsTo = self::hasBelongsToRelation($model);
+        }
 
         foreach ($row as $key => $value) {
-            if (isset($relations[$key]) && !empty($relations[$key])) {
-                $linkedClassName = $model->relations[$key];
+            if (isset($hasOne[$key]) && !empty($hasOne[$key])) {
+                $relatedModel = $model->hasOne[$key] ?? '';
+                if (empty($relatedModel)) continue;
 
-                if (class_exists($linkedClassName)) {
-                    unset($relations[$key]);
-                    $key       = str_replace('_id', '', $key);
-                    $row->$key = new $linkedClassName();
-                    $row->$key->find($value); # Issue 66
+                if (class_exists($relatedModel)) {
+                    $property       = str_replace('_id', '', $key);
+                    $row->$property = new $relatedModel();
+                    $row->$property->find($value);
+                }
+
+                unset($hasOne[$key]);
+            }
+
+            if (isset($belongsTo[$key]) && !empty($belongsTo[$key])) {
+                if (class_exists($model->belongsTo[$key])) {
+                    $property       = str_replace('_id', '', $key);
+                    $row->$property = new $model->belongsTo[$key]();
+                    $row->$property->find($value);
                 }
             }
         }
@@ -91,11 +72,8 @@ class ObjectMapper implements ObjectMapperInterface
         return $row;
     }
 
-    /**
-     * Return the connected to database object
-     * @return object
-     */
-    public function getDatabaseConnection()
+    // Return the connected to database object
+    public function getDatabaseConnection(): object
     {
         return $this->database;
     }
@@ -104,14 +82,23 @@ class ObjectMapper implements ObjectMapperInterface
      * Collect relation IDs and return
      * @param  array  $rows
      */
-    private function relation(object &$rows): array
+    private function hasOneRelation(object &$rows): array
     {
-        $relations = [];
-
         foreach ($this->foreignKeys as $key => $foreignKey) {
             $relations[$foreignKey] = $rows->$foreignKey;
         }
 
-        return $relations;
+        return $relations ?? [];
+    }
+
+    private function hasBelongsToRelation(object &$model): array
+    {
+        if (property_exists($model, 'belongsTo')) {
+            foreach ($model->belongsTo as $key => $value) {
+                $relations[$key] = $value;
+            }
+        }
+
+        return $relations ?? [];
     }
 }
