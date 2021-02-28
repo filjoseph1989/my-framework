@@ -63,7 +63,7 @@ trait ObjectMapperUtilityTrait
             $rows[$key] = self::map($this->model, $row);
         }
 
-        $this->model->setModelRows('rows', $rows);
+        $this->model->setProperty('rows', $rows);
     }
 
     /**
