@@ -51,11 +51,7 @@ class App extends Core
         ]);
     }
 
-    /**
-     * Run the application
-     *
-     * @return null
-     */
+    //  Run the application
     public function run()
     {
         $this->router = $this->container->router;
