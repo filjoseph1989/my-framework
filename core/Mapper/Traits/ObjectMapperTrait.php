@@ -5,7 +5,6 @@ namespace Core\Mapper\Traits;
 use Core\Model\Database;
 use Core\Mapper\Classes\Parser;
 use Core\Mapper\Classes\PrepareData;
-use Core\Mapper\Traits\ObjectMapperParserTrait;
 use Core\Mapper\Traits\ObjectMapperPrepareDataTrait;
 use Core\Mapper\Traits\ObjectMapperQueriesTrait;
 use Core\Mapper\Traits\ObjectMapperUtilityTrait;
@@ -17,7 +16,6 @@ use Core\Mapper\Traits\ObjectMapperUtilityTrait;
  */
 trait ObjectMapperTrait
 {
-    use ObjectMapperParserTrait;
     use ObjectMapperPrepareDataTrait;
     use ObjectMapperQueriesTrait;
     use ObjectMapperUtilityTrait;
@@ -82,7 +80,7 @@ trait ObjectMapperTrait
     {
         if (!self::exists($columns)) {
             $prepareData = new PrepareData($this->model, $this->database, $this->table, $columns[0]);
-            $prepareData->create();
+            $prepareData->produce();
             return self::find($prepareData->insertedId());
         }
     }
@@ -164,12 +162,10 @@ trait ObjectMapperTrait
 
     /**
      * Create new record
-     *
      * @param array $wheres
      * @param array $data
-     * @return object
      */
-    public function create(array $data = [], $return = false)
+    public function create(array $data = [], $return = false): object
     {
         return self::performCreate($data[0], $return);
     }
