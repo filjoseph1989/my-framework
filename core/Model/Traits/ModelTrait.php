@@ -45,6 +45,21 @@ trait ModelTrait
      */
     protected bool $exists = false;
 
+    // Return the query result
+    public function queryResult(): object
+    {
+        return $this->queryResult;
+    }
+
+    // Return query data
+    #[ModelTrait('fetch')]
+    public function fetch()
+    {
+        $rows = $this->fetchRows();
+        $this->setProperty('rows', $rows);
+        return $this;
+    }
+
     /**
      * Check if the row exists
      *
@@ -65,11 +80,9 @@ trait ModelTrait
 
     /**
      * Find rows
-     *
      * @param integer $id
-     * @return object
      */
-    public function find(int $id)
+    public function find(int $id): object
     {
         $model = $this->mapper->find($id);
 
@@ -221,13 +234,10 @@ trait ModelTrait
 
     /**
      * Return a model or rows containing it's many relations
-     * @param  string  $table
      * @param  boolean $returnModel
      */
-    public function withMany(string $table, bool $returnModel=false): array|object
+    public function withMany(bool $returnModel=false): array|object
     {
-        $this->withMany = $table;
-
         foreach (new HasManyRowIterator($this) as $key => $row) {
             foreach ($row as $secondKey => $value) {
                 $this->rows[$key]->$secondKey = $value;
