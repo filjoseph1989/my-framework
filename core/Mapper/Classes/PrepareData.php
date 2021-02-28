@@ -2,18 +2,13 @@
 
 namespace Core\Mapper\Classes;
 
-use Core\Mapper\Traits\ObjectMapperParserTrait;
-
 class PrepareData
 {
-    use ObjectMapperParserTrait;
-
     private array $data;
     private object $database;
     private object $model;
     private int $count;
     private int $int;
-    private string $table;
     private string $query;
     private string $wherecondition = "";
     private string $updateCondition = "";
@@ -24,12 +19,10 @@ class PrepareData
     public function __construct(
         object &$model,
         object &$database,
-        string $table,
         array $data=[]
     ) {
         $this->data     = $data;
         $this->database = $database;
-        $this->table    = $table;
         $this->model    = $model;
     }
 
@@ -67,7 +60,7 @@ class PrepareData
     #[PrepareData('select')]
     public function select(): void
     {
-        $this->query = "SELECT * FROM {$this->table}";
+        $this->query = "SELECT * FROM {$this->model->table}";
 
         if (!empty($this->whereCondition)) {
             $this->query = "{$this->query} WHERE {$this->whereCondition}";
@@ -144,18 +137,27 @@ class PrepareData
      * Prepare update query
      * @param  string $updateData
      */
+    #[PrepareData('update')]
     public function update()
     {
-        $this->query = "UPDATE {$this->table} SET {$this->updateCondition}";
+        $this->query = "UPDATE {$this->model->table} SET {$this->updateCondition}";
 
         if ($this->whereCondition != "") {
             $this->query = "{$this->query} WHERE {$this->whereCondition}";
         }
     }
 
-    # Issue 87
+    // Form a create or insert string
     #[PrepareData('create')]
     public function create()
+    {
+        $newData = self::prepareCreateData();
+        $this->query = "INSERT INTO {$this->model->table} ({$newData['keys']}) VALUES ({$newData['values']})";
+    }
+
+    // Create new record
+    #[PrepareData('produce')]
+    public function produce() #Todo-14
     {
         if ($this->database->isConnected()) {
             if (!isset($this->data['created_at'])) {
@@ -166,8 +168,8 @@ class PrepareData
                 $this->data['updated_at'] = date('Y-m-d H:i:s');
             }
 
-            $newData     = self::prepareInsertData($this->data);
-            $this->query = "INSERT INTO {$this->table} ({$newData['keys']}) VALUES ({$newData['values']})";
+            $newData     = self::prepareInsertData($this->data); #Todo-15
+            $this->query = "INSERT INTO {$this->model->table} ({$newData['keys']}) VALUES ({$newData['values']})";
             $results     = $this->database->query($this->query);
 
             if (!$results) {
@@ -192,5 +194,24 @@ class PrepareData
     public function insertedId(): int
     {
         return $this->id;
+    }
+
+    // Construct the data for create or insert
+    #[PrepareData('prepareCreateData')]
+    private function prepareCreateData(): array
+    {
+        $keys   = [];
+        $values = [];
+
+        foreach ($this->data as $key => $value) {
+            $value    = $this->database->scape($value);
+            $values[] = "'{$value}'";
+            $keys[]   = $key;
+        }
+
+        return [
+            'keys'   => implode(',', $keys),
+            'values' => implode(',', $values)
+        ];
     }
 }
