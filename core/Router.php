@@ -97,12 +97,8 @@ class Router
         return $this->requestMethod;
     }
 
-    /**
-     * Return handler
-     *
-     * @return string
-     */
-    public function getHandler()
+    // Return handler
+    public function getHandler(): array
     {
         # Return cached
         if (isset($this->handler[$this->uri])) {
@@ -123,12 +119,8 @@ class Router
         return $this->routes[$this->uri][$this->requestMethod];
     }
 
-    /**
-     * Check if has route uri
-     *
-     * @return boolean|int
-     */
-    private function hasUri()
+    // Check if has route uri
+    private function hasUri(): bool|int
     {
         if (! isset($this->routes[$this->uri])) {
             $this->uri = self::lookForPattern();
