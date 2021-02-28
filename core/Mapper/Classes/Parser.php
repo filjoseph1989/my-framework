@@ -19,6 +19,7 @@ class Parser
     public function buildQueryCondition()
     {
         $condition = "";
+
         if (count($this->data) > 0) {
             foreach ($this->data as $key => $column) {
                 $condition .= "$key='{$column}'";
