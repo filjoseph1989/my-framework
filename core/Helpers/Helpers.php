@@ -65,7 +65,7 @@ if (!function_exists('token')) {
  * Return asset version
  */
 if (!function_exists('asset_version')) {
-    function asset_version(): float {
+    function asset_version(): string {
         return $_ENV['ASSET'];
     }
 }
@@ -74,9 +74,9 @@ if (!function_exists('asset_version')) {
  * Print variable value on file
  */
 if (!function_exists('debug_print')) {
-    function debug_print($var)
+    function debug_print(mixed $var, string $filename='debug.log'): void
     {
-        file_put_contents('debug.log', print_r($var, true));
+        file_put_contents($filename, print_r($var, true));
     }
 }
 
