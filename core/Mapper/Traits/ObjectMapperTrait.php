@@ -11,7 +11,6 @@ use Core\Mapper\Traits\ObjectMapperUtilityTrait;
 
 /**
  * A trait use by Core\Model\ObjectMapper
- *
  * @author fil beluan <filjoseph22@gmail.com>
  */
 trait ObjectMapperTrait
@@ -20,29 +19,64 @@ trait ObjectMapperTrait
     use ObjectMapperQueriesTrait;
     use ObjectMapperUtilityTrait;
 
-    /**
-     * Count container of successfull query
-     * @var int
-     */
-    protected int $count    = 0;
+    private string $currentOperation = '';
+    private int $id;
 
-    /**
-     * The query string container
-     * @var string
-     */
+    # Count container of successfull query
+    protected int $count = 0;
+
+    # The query string container
     protected string $query = "";
 
-    /**
-     * Tell if return array or object
-     *
-     * @var boolean
-     */
-    protected $toArray = false;
+    # Tell if return array or object
+    protected bool $toArray = false;
+
+    # Containers of query result
+    protected array $rows = [];
 
     /**
-     * Containers of query result
+     * Create new record
+     * @param array $wheres
+     * @param array $data
      */
-    protected array $rows = [];
+    #[ObjectMapperTrait('create')]
+    public function create(array $data = [], $return = false): object
+    {
+        $data = $data[0];
+        $this->currentOperation = 'create';
+
+        if ($this->database->isConnected()) {
+            self::setDates($data);
+
+            $data = new PrepareData($this->model, $this->database, $data);
+            $data->create();
+
+            $results     = $this->database->query($this->query = $data->getQueryString());
+            $this->count = $this->database->count();
+            $this->id    = $this->database->insertId();
+
+            if ($this->count <= 0) {
+                return self::addToLog("Create is not successfull");
+            }
+
+            if (!$results) {
+                return self::addToLog("Create is not successfull");
+            }
+
+            if ($return) {
+                return array_shift(self::get());
+            }
+
+            return self::find($this->id);
+        }
+    }
+
+    # Return the last generated ID when create method was called
+    #[ObjectMapperTrait('getCreatedId')]
+    public function getCreatedId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * Delete row in a table
@@ -61,11 +95,10 @@ trait ObjectMapperTrait
 
     /**
      * Find row using ID
-     *
      * @param  int $id Table ID
-     * @return object
      */
-    public function find(int $value)
+    #[ObjectMapperTrait('find')]
+    public function find(int $value): object
     {
         return self::prepareFind($value);
     }
@@ -160,23 +193,23 @@ trait ObjectMapperTrait
         return self::performUpdate($model, $data, $return);
     }
 
-    /**
-     * Create new record
-     * @param array $wheres
-     * @param array $data
-     */
-    public function create(array $data = [], $return = false): object
+    # Return query string run previously
+    public function query(): string
     {
-        return self::performCreate($data[0], $return);
+        return $this->query;
     }
 
     /**
-     * Return query string run previously
-     *
-     * @return string
+     * Set default date created_at and updated_at
+     * @param array $data
      */
-    public function query()
+    private function setDates(array &$data): void
     {
-        return $this->query;
+        if (!isset($data['created_at'])) {
+            $data['created_at'] = date('Y-m-d H:i:s');
+        }
+        if (!isset($data['updated_at'])) {
+            $data['updated_at'] = date('Y-m-d H:i:s');
+        }
     }
 }
