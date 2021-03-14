@@ -65,10 +65,9 @@ class Request implements RequestInterface
      * Here we accept an object $validator
      * and use $validator to evaluate every input gathered
      * by the request
-     *
-     * @return void
      */
-    public function validate(object $app, object $validator)
+    #[Request('validate')]
+    public function validate(object $app, object $validator): mixed
     {
         $this->app = $app;
 
@@ -139,12 +138,9 @@ class Request implements RequestInterface
         return $this->preservedFilesCount;
     }
 
-    /**
-     * Set submitted post data as request property
-     *
-     * @return void
-     */
-    private function setProperty()
+    # Set submitted post data as request property
+	#[Request('setProperty')]
+    private function setProperty(): void
     {
         $this->preservedInputs      = $_POST;
         $this->preservedFiles       = $_FILES;
@@ -183,12 +179,9 @@ class Request implements RequestInterface
         }
     }
 
-    /**
-     * Return the app instance
-     *
-     * @return object
-     */
-    private function app()
+    # Return the app instance
+    #[Request('app')]
+    private function app(): object
     {
         return $this->app;
     }

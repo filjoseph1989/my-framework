@@ -52,7 +52,7 @@ class Database
         return null;
     }
 
-    // Return the last insert ID
+    # Return the last insert ID
     #[Database('insertId')]
     public function insertId(): int
     {

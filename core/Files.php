@@ -104,6 +104,7 @@ class Files
     }
 
     # Set property
+    #[Files('setProperty')]
     private function setProperty(): bool
     {
         if (!isset($this->file['error']) || is_array($this->file['error'])) {
@@ -125,6 +126,7 @@ class Files
     }
 
     # Check every error
+	#[Files('hasFileErrors')]
     private function hasFileErrors(): bool
     {
         $this->error = false;

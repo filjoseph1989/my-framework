@@ -11,10 +11,10 @@ class Model
     use ModelTrait;
     use DebugTrait;
 
-    // The mapping object
+    # The mapping object
     protected object $mapper;
     protected array $rows = [];
-    public $wasRecentlyCreated = false;
+    public bool $wasRecentlyCreated = false;
 
     public function __construct()
     {

@@ -95,11 +95,7 @@ trait ModelTrait
         return $this;
     }
 
-    /**
-     * Delete row
-     *
-     * @return boolean
-     */
+    # Delete row
     public function delete()
     {
         return $this->mapper->delete($this);

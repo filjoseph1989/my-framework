@@ -35,11 +35,9 @@ class Container
 
     /**
      * Return item
-     *
      * @param  mixed $key
-     * @return mixed
      */
-    public function getItem($key)
+    public function getItem($key): mixed
     {
         if (!isset($this->items[$key])) {
             return null;

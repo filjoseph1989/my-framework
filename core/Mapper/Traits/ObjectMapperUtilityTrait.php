@@ -94,7 +94,6 @@ trait ObjectMapperUtilityTrait
 
     /**
      * Set model property
-     *
      * @param array $rows
      */
     private function setModelProperty(array $rows = [])

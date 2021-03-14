@@ -147,7 +147,7 @@ class PrepareData
         }
     }
 
-    // Form a create or insert string
+    # Form a create or insert string
     #[PrepareData('create')]
     public function create()
     {
@@ -196,7 +196,7 @@ class PrepareData
         return $this->id;
     }
 
-    // Construct the data for create or insert
+    # Construct the data for create or insert
     #[PrepareData('prepareCreateData')]
     private function prepareCreateData(): array
     {

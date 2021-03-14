@@ -16,7 +16,6 @@ if (!function_exists('tracing')) {
 
 /**
  * Return user's data
- * @var string
  */
 if (!function_exists('user')) {
     function user() {
