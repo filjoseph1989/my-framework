@@ -5,10 +5,11 @@ namespace Core\Mapper\Traits;
 use Core\Mapper\Classes\Parser;
 use Core\Mapper\Classes\PrepareData;
 use Core\Model\Database;
+use Core\Traits\LogTrait;
 
 trait ObjectMapperPrepareDataTrait
 {
-    private string $currentOperation = '';
+    use LogTrait;
 
     /**
      * Prepare delete
@@ -21,50 +22,6 @@ trait ObjectMapperPrepareDataTrait
         if ($this->database->isConnected()) {
             $this->query = self::prepareDeleteQuery($model);
             return $this->database->query($this->query);
-        }
-    }
-
-    /**
-     * Prepare create
-     * @param array $data
-     */
-    #[ObjectMapperPrepareDataTrait('performCreate')]
-    private function performCreate(array &$data = [], $return = false): object
-    {
-        $this->currentOperation = 'create';
-
-        if ($this->database->isConnected()) {
-            if (!isset($data['created_at'])) {
-                $data['created_at'] = date('Y-m-d H:i:s');
-            }
-            if (!isset($data['updated_at'])) {
-                $data['updated_at'] = date('Y-m-d H:i:s');
-            }
-
-            $data = new PrepareData($this->model, $this->database, $data);
-            $data->create();
-
-            $results     = $this->database->query($this->query = $data->getQueryString());
-            $this->count = $this->database->count();
-            $this->id    = $this->database->insertId();
-
-            if ($this->count <= 0) {
-                debug_print_append("\nCreate is not successfull\n");
-                debug_print_append(trace(true));
-                return false;
-            }
-
-            if (!$results) {
-                debug_print_append("\nCreate is not successfull\n");
-                debug_print_append(trace(true));
-                return false;
-            }
-
-            if ($return) {
-                return array_shift(self::get());
-            }
-
-            return self::find($this->id);
         }
     }
 
@@ -138,6 +95,7 @@ trait ObjectMapperPrepareDataTrait
      * Prepare find
      * @param array $value
      */
+    #[ObjectMapperPrepareDataTrait('prepareFind')]
     private function prepareFind(int &$value): object|null
     {
         if ($this->database->isConnected()) {
