@@ -155,7 +155,6 @@ class App extends Core
 
     /**
      * Return action
-     *
      * @return string
      */
     public function getAction()
@@ -229,9 +228,7 @@ class App extends Core
 
     /**
      * Response as json
-     *
      * @param array $data
-     * @return void
      */
     public function json(array $data = [])
     {
@@ -241,7 +238,7 @@ class App extends Core
             return $data;
         }
 
-        return $this->container->response->json($data);
+        $this->container->response->json($data);
     }
 
     /**
