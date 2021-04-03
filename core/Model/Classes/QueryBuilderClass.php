@@ -4,7 +4,7 @@ namespace Core\Model\Classes;
 
 use Core\Contracts\QueryBuilder;
 
-// A Query Builder
+# A Query Builder
 class QueryBuilderClass implements QueryBuilder
 {
     private string $query = "";
@@ -14,7 +14,7 @@ class QueryBuilderClass implements QueryBuilder
     private array $selectColumns = [];
     private array $join = [];
 
-    // Return query string
+    # Return query string
     #[QueryBuilderClass('get')]
     public function get(): string
     {
@@ -30,7 +30,10 @@ class QueryBuilderClass implements QueryBuilder
         return $query;
     }
 
-    // Set a limit rows to get in the table
+    /**
+     * Set a limit rows to get in the table
+     * @param string $limit
+     */
     #[QueryBuilderClass('take')]
     public function take(string $limit=''): void
     {
@@ -95,7 +98,7 @@ class QueryBuilderClass implements QueryBuilder
         $this->join[] = "JOIN {$table1} AS {$table1Alias} ON {$table1Alias}.{$condition[0]}=$table2Alias.{$condition[1]}";
     }
 
-    // Clean properties that affects building queries
+    # Clean properties that affects building queries
     #[QueryBuilderClass('clean')]
     private function clean(): void
     {

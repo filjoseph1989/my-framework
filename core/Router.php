@@ -58,7 +58,6 @@ class Router
 
     /**
      * Set route URI
-     *
      * @param string $uri
      */
     public function setUri($uri)
@@ -78,7 +77,6 @@ class Router
 
     /**
      * Set the request method
-     *
      * @param string $action
      */
     public function setAction($action)
