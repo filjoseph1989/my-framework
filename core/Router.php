@@ -12,39 +12,18 @@ class Router
 {
     use DebugTrait;
 
-    /**
-     * URI string
-     * @var string
-     */
     protected string $uri = '';
-
-    /**
-     * Request method get|post
-     * @var string
-     */
     protected string $requestMethod;
-
-    /**
-     * Route container
-     * @var array
-     */
     protected array $routes = [];
-
-    /**
-     * Handler cache
-     * @ver array
-     */
     protected array $handler = [];
 
     /**
      * Add route to route container
-     *
      * @param  string $uri
-     * @param  array $handler
-     * @param  string $method
-     * @return void
+     * @param  array $handler   A controller and method
+     * @param  string $httpverb HTTP Request verb (e.g POST, GET)
      */
-    public function registerRoute($uri, $handler, $method)
+    public function registerRoute($uri, $handler, $httpverb)
     {
         $slash_found = preg_match('/^\//', $uri);
 
@@ -53,7 +32,7 @@ class Router
             $uri = '/' . $uri;
         }
 
-        $this->routes[$uri][$method] = $handler;
+        $this->routes[$uri][$httpverb] = $handler;
     }
 
     /**
@@ -65,12 +44,8 @@ class Router
         $this->uri = $uri;
     }
 
-    /**
-     * Return uri
-     *
-     * @return string
-     */
-    public function getUri()
+    # Return URI
+    public function getUri(): string
     {
         return $this->uri;
     }
@@ -86,23 +61,21 @@ class Router
 
     /**
      * Return request method
-     *
      * @param string
-     * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->requestMethod;
     }
 
-    // Return handler
-    public function getHandler(): array
+    # Return handler
+    public function getHandler(): array|int
     {
         # Return cached
         if (isset($this->handler[$this->uri])) {
             return $this->handler[$this->uri];
         }
-        
+
         if (($result = self::hasUri()) !== true) {
             return $result;
         }
@@ -117,7 +90,7 @@ class Router
         return $this->routes[$this->uri][$this->requestMethod];
     }
 
-    // Check if has route uri
+    # Check if has route uri
     private function hasUri(): bool|int
     {
         if (! isset($this->routes[$this->uri])) {
@@ -132,12 +105,8 @@ class Router
         return true;
     }
 
-    /**
-     * Check if has method
-     *
-     * @return boolean|int
-     */
-    private function hasUriMethod()
+    # Check if has method
+    private function hasUriMethod(): bool|int
     {
         if ( ! isset($this->routes[$this->uri][$this->requestMethod])) {
             if ($this->requestMethod === 'GET') {
@@ -151,27 +120,20 @@ class Router
         return true;
     }
 
-    /**
-     * Look for true route pattern
-     *
-     * @return string|empty
-     */
-    private function lookForPattern()
+    # Look for true route pattern
+    private function lookForPattern(): string
     {
         $keys = [];
 
         foreach ($this->routes as $key => $value) {
             # Here we breakdown the request uri into segments and same with key in $this->routes
             # get their count and compare if it match.
-            #
+
             # This way, we will capture routes the has the same structure with the current
             # request uri.
             if (count($uriExploded = explode('/', $this->uri)) == count($keyExploded = explode('/', $key))) {
                 $catch = self::matchBaseOnRoute($uriExploded, $keyExploded);
-
-                if ($catch) {
-                    $keys[] = $key;
-                }
+                if ($catch) { $keys[] = $key; }
             }
         }
 
@@ -180,12 +142,10 @@ class Router
 
     /**
      * Match the given uri to the routes
-     *
      * @param array $uriExploded
      * @param array $keyExploded
-     * @return string|empty
      */
-    private function matchBaseOnRoute(array &$uriExploded = [], array &$keyExploded = [])
+    private function matchBaseOnRoute(array &$uriExploded = [], array &$keyExploded = []): bool
     {
         for ($i=0; $i < count($keyExploded); $i++) {
             if (empty($keyExploded) && empty($uriExploded)) {
@@ -208,12 +168,10 @@ class Router
 
     /**
      * Determine the truthines of the route catch
-     *
      * @param array $keys
      * @param array $uriExploded
-     * @return string|empty
      */
-    private function truthinessValue(array $keys = [], array $uriExploded = [])
+    private function truthinessValue(array $keys = [], array $uriExploded = []): string
     {
         $truthiness      = 0;
         $truthinessValue = '';

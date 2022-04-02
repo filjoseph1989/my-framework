@@ -4,6 +4,26 @@ use Core\Iterators\ModelRowIterator;
 use Hashids\Hashids;
 
 /**
+ * List all methods and where they have been located
+ *
+ * @var [type]
+ */
+if (! function_exists('listAllMethods')) {
+    function listAllMethods($object, $filename = 'debug.log', $delimeter = '') {
+        $class_methods = get_class_methods($object);
+
+        foreach ($class_methods as $key => $value) {
+            $reflFunc = new \ReflectionMethod($object, $value);
+            $result   = $reflFunc->getFileName() . ':' . $reflFunc->getStartLine();
+
+            file_put_contents("{$filename}", "\n{$delimeter}method: $value -- " . print_r($result, true), FILE_APPEND);
+        }
+
+        file_put_contents("{$filename}", "\n", FILE_APPEND);
+    }
+}
+
+/**
  * This function is used determining where to look in trace log
  * Example: setting on xdebug. xdebug.mode=trace
  * @var [type]

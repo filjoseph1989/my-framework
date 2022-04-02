@@ -13,6 +13,7 @@ class Database
     protected string $Database = '';
     protected string $User = '';
     protected string $Password = '';
+    protected string $Driver = '';
     protected string $sql = '';
     protected object $Instance;
     protected bool $connected = false;
@@ -21,20 +22,30 @@ class Database
     // Instanciate database
     public function __construct()
     {
-        $this->Host     = $_ENV["DB_HOST"];
+        $this->Host     = $_ENV["DB_HOST"]; 
         $this->User     = $_ENV["DB_USERNAME"];
         $this->Password = $_ENV["DB_PASSWORD"];
         $this->Database = $_ENV["DB_DATABASE"];
         $this->Port     = $_ENV["DB_PORT"];
+        $this->Driver   = $_ENV["DB_DRIVER"];
 
         self::connect();
+    }
+
+    /**
+     * Return database driver
+     *
+     * @return string
+     */
+    public function getDatabaseDriver(): string
+    {
+        return $this->Driver;
     }
 
     /**
      * Run direct query
      * @param  string $query
      */
-    #[Database('query')]
     public function query(string $query): mixed
     {
         if ($_ENV["DEBUG_QUERY"] == 'true') {
@@ -42,9 +53,19 @@ class Database
         }
 
         if ($this->connected === true) {
-            $results = $this->Instance->query($this->sql = $query);
-            if ($results !== false) {
-                return $results;
+            switch ($this->Driver) {
+                case 'psql':
+                    $this->sql = $query;
+                    return self::makePsqlQuery();
+                    break;
+                
+                default:
+                    $this->sql = $query;
+                    $results = self::makeMysqlQuery();
+                    if ($results !== false) {
+                        return $results;
+                    }
+                    break;
             }
         }
 
@@ -53,7 +74,6 @@ class Database
     }
 
     # Return the last insert ID
-    #[Database('insertId')]
     public function insertId(): int
     {
         return $this->Instance->insert_id;
@@ -92,22 +112,10 @@ class Database
             return;
         }
 
-        $con = mysqli_connect(
-            $this->Host,
-            $this->User,
-            $this->Password,
-            $this->Database,
-            $this->Port
-        );
-
-        if (mysqli_connect_errno()) {
-            file_put_contents('sql.log', print_r(mysqli_connect_error(), true)."\n", FILE_APPEND);
-        }
-
-        if (!is_object($con)) return;
-
-        $this->Instance = $con;
-        $this->connected = true;
+        match ($this->Driver) {
+            "mysql" => self::connectToMysql(),
+            "psql"  => self::connectToPsql()
+        };     
     }
 
     # Check if database connected
@@ -140,15 +148,10 @@ class Database
 
         $this->sql = "SHOW COLUMNS FROM {$table}";
 
-        $results = $this->Instance->query($this->sql);
-
-        if ($results === false) return false;
-
-        foreach ($results as $row) {
-            if ($row["Key"] == "PRI") {
-                return $row["Field"];
-            }
-        }
+        match ($this->Driver) {
+            'mysql' => self::makeMysqlQuery(),
+            'psql'  => self::makePsqlQuery()
+        };
     }
 
     /**
@@ -199,4 +202,84 @@ class Database
 
         return false;
     }
+
+    /**
+     * Create a connection to mysql database
+     *
+     * @return void
+     */
+    private function connectToMysql()
+    {
+        $con = mysqli_connect(
+            $this->Host,
+            $this->User,
+            $this->Password,
+            $this->Database,
+            $this->Port
+        );
+
+        if (mysqli_connect_errno()) {
+            file_put_contents('sql.log', print_r(mysqli_connect_error(), true)."\n", FILE_APPEND);
+        }
+
+        if (!is_object($con)) return;
+
+        $this->Instance = $con;
+        $this->connected = true;
+    }
+
+    /**
+     * Create a connection postgre sql
+     *
+     * @return void
+     */
+    private function connectToPsql()
+    {
+        $this->Instance = pg_connect("host={$this->Host} port={$this->Port} dbname={$this->Database} user={$this->User} password={$this->Password}");
+        $this->connected = true;
+    }
+
+    /**
+     * Run a psql query
+     *
+     * @return array|null
+     * @todo Todo-1
+     */
+    private function makePsqlQuery()
+    {
+        $result = pg_query($this->Instance, "{$this->sql};");
+        
+        if  (!$result) {
+            return null;
+        }
+        
+        $rows = pg_fetch_assoc($result);
+        
+        if (!$rows) {
+            return null;
+        }
+
+        return $rows;
+    }
+    
+    /**
+     * Run a mysql query
+     *
+     * @return array|null
+     * @todo Todo-1
+     */
+    private function makeMysqlQuery()
+    {
+        $results = $this->Instance->query($this->sql);
+        
+        if ($results === false) return false;
+
+        foreach ($results as $row) {
+            if ($row["Key"] == "PRI") {
+                return $row["Field"];
+            }
+        }
+
+        return null;
+    }    
 }

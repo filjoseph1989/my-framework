@@ -2,8 +2,9 @@
 
 namespace Core\Iterators;
 
-class ModelRowIterator implements \Iterator
+class ModelIterator implements \Iterator
 {
+    protected int $position = 0;
     protected array $rows = [];
 
     /**
@@ -12,37 +13,37 @@ class ModelRowIterator implements \Iterator
      */
     public function __construct(object $model)
     {
-        $this->rows = $model->rows;
+        $this->rows = $model->collections;
     }
 
     // Reset index to zero (0)
-    public function rewind(): mixed
+    public function rewind(): void
     {
-        return reset($this->rows);
+        $this->position = 0;
     }
 
     // Modify values of current index of row
-    public function current(): mixed 
+    public function current(): mixed
     {
-        return current($this->rows);
+        return $this->rows[$this->position];
     }
 
     // Return current array index position
     public function key(): mixed
     {
-        return key($this->rows);
+        return $this->position;
     }
 
     // Return the next index of rows
-    public function next(): mixed
+    public function next(): void
     {
-        return next($this->rows);
+        ++$this->position;
     }
 
     // Return boolean if index exists or not
-    public function valid(): mixed
+    public function valid(): bool
     {
-        return key($this->rows) !== null;
+        return isset($this->rows[$this->position]);
     }
 
     // Return the count of rows

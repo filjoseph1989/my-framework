@@ -45,13 +45,13 @@ trait ModelTrait
      */
     protected bool $exists = false;
 
-    // Return the query result
-    public function queryResult(): object
+    # Return the query result
+    public function queryResult(): mixed
     {
         return $this->queryResult;
     }
 
-    // Return query data
+    # Return query data
     #[ModelTrait('fetch')]
     public function fetch()
     {
@@ -151,12 +151,12 @@ trait ModelTrait
         $this->wheres[$columnName] = $value;
     }
 
-    # Return the the model with resulting data
-    #[ModelTrait('get')]
-    public function get(): object|null
-    {
-        return $this->mapper->get($this);
-    }
+    # Return the the model with resulting data Todo-3
+    // #[ModelTrait('get')]
+    // public function get(): object|null
+    // {
+    //     return $this->mapper->get($this);
+    // }
 
     /**
      * Return the first index of the array or
@@ -245,6 +245,19 @@ trait ModelTrait
         }
 
         return $this->rows;
+    }
+
+    /**
+     * Return property
+     * @param string $property
+     */
+    private function getProperty(string $property = ''): mixed
+    {
+        if (isset($this->$property)) {
+            return $this->$property;
+        }
+
+        return null;
     }
 
     /**

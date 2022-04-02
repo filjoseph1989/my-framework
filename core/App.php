@@ -51,7 +51,7 @@ class App extends Core
         ]);
     }
 
-    //  Run the application
+    # Run the application
     public function run()
     {
         $this->router = $this->container->router;
@@ -230,6 +230,7 @@ class App extends Core
      * Response as json
      * @param array $data
      */
+    #[App('json')]
     public function json(array $data = [])
     {
         self::setResponse($data);
@@ -238,7 +239,7 @@ class App extends Core
             return $data;
         }
 
-        $this->container->response->json($data);
+        return $this->container->response->json($data);
     }
 
     /**
@@ -344,6 +345,7 @@ class App extends Core
      *
      * @param void
      */
+    #[App('setAuth')]
     private function setAuth(&$data)
     {
         $data['user'] = $_SESSION['user'] ?? null;;
@@ -354,6 +356,7 @@ class App extends Core
      *
      * @param array $data
      */
+    #[App('setToken')]
     private function setToken(&$data)
     {
         $data['token'] = $_SESSION['token'] ?? '';
@@ -364,6 +367,7 @@ class App extends Core
      *
      * @param array $data
      */
+    #[App('setErrors')]
     private function setErrors(&$data)
     {
         if (isset($data['with']['errors'])) {
@@ -377,6 +381,7 @@ class App extends Core
      *
      * @param array $data
      */
+    #[App('setWith')]
     private function setWith(&$data)
     {
         if (isset($_SESSION['with'])) {
@@ -391,6 +396,7 @@ class App extends Core
      * @param array $data
      * @return void
      */
+    #[App('setInputs')]
     private function setInputs(&$data)
     {
         if (isset($_SESSION['inputs'])) {
@@ -407,6 +413,7 @@ class App extends Core
      * @param string $view
      * @return void
      */
+    #[App('setInputs')]
     private function setCurrentPage(&$data, string &$view)
     {
         $_SESSION['current_page'] = $view; # Issue 48
